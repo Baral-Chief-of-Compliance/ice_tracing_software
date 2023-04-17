@@ -11,7 +11,7 @@ json_for_geo = {
       "properties": {},
       "geometry": {
         "coordinates": [],
-        "type": "LineString"
+        "type": "Polygon"
       }
     }
   ]
@@ -44,7 +44,7 @@ def create_test_data(width, height):
                     elif (y < b) and (x < a):
                         x_c = x - a
                         y_c = b - y
-                        f = np.degrees(np.arctan(y_c / x_c))
+                        f = 360 + np.degrees(np.arctan(y_c / x_c))
 
                     # 3 квадрант
                     elif (y > b) and (x < a):
@@ -209,9 +209,8 @@ print("\n\n")
 
 print(list_cords)
 
-json_for_geo["features"][0]["geometry"]["coordinates"] = list_cords
+json_for_geo["features"][0]["geometry"]["coordinates"].append(list_cords)
 
 with open('coords_of_polygon.json', 'w') as f:
     json.dump(json_for_geo, f)
 
-sharp_massiv[0-1][4]
