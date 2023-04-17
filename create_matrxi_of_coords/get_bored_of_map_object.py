@@ -1,4 +1,21 @@
 import numpy as np
+from create_polygon import clean_map
+import json
+from create_massiv_of_sharp import create_massiv
+
+json_for_geo = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [],
+        "type": "LineString"
+      }
+    }
+  ]
+}
 
 
 def create_test_data(width, height):
@@ -8,7 +25,7 @@ def create_test_data(width, height):
     EPSILON = 2.2
     latitude = 90.0
     for r in range(width // 2):
-        EPSILON = EPSILON + 0.1
+        EPSILON = EPSILON + 0.2
 
         # draw the circle
         for y in range(height):
@@ -17,51 +34,51 @@ def create_test_data(width, height):
                 if abs((x - a) ** 2 + (y - b) ** 2 - r ** 2) < EPSILON ** 2:
                     map_[y][x] = '#'
 
-                    # 1 квадрант
-                    # if (y < b) and (x > a):
-                    #     x_c = x - a
-                    #     y_c = b - y
-                    #     f = 180 + np.degrees(np.arctan(y_c / x_c))
-                    #
-                    # # 2 квадрант
-                    # elif (y < b) and (x < a):
-                    #     x_c = x - a
-                    #     y_c = b - y
-                    #     f = np.degrees(np.arctan(y_c / x_c))
-                    #
-                    # # 3 квадрант
-                    # elif (y > b) and (x < a):
-                    #     x_c = x - a
-                    #     y_c = b - y
-                    #     f = np.degrees(np.arctan(y_c / x_c))
-                    #
-                    # # 4 квадрант
-                    # elif (y > b) and (x > a):
-                    #     x_c = x - a
-                    #     y_c = b - y
-                    #     f = 180 + (np.degrees(np.arctan(y_c / x_c)))
-                    #
-                    # elif (x == a) and (y > b):
-                    #     x_c = 0
-                    #     y_c = b - y
-                    #     f = 90
-                    #
-                    # elif (x == a) and (y < b):
-                    #     x_c = 0
-                    #     y_c = b - y
-                    #     f = 270
-                    #
-                    # elif (y == b) and (x > a):
-                    #     x_c = x - a
-                    #     y_c = 0
-                    #     f = 180
-                    #
-                    # elif (y == b) and (x < a):
-                    #     x_c = x - a
-                    #     y_c = 0
-                    #     f = 0
-                    #
-                    # map_[y][x] = f'{f}'
+                    #1 квадрант
+                    if (y < b) and (x > a):
+                        x_c = x - a
+                        y_c = b - y
+                        f = 180 + np.degrees(np.arctan(y_c / x_c))
+
+                    # 2 квадрант
+                    elif (y < b) and (x < a):
+                        x_c = x - a
+                        y_c = b - y
+                        f = np.degrees(np.arctan(y_c / x_c))
+
+                    # 3 квадрант
+                    elif (y > b) and (x < a):
+                        x_c = x - a
+                        y_c = b - y
+                        f = np.degrees(np.arctan(y_c / x_c))
+
+                    # 4 квадрант
+                    elif (y > b) and (x > a):
+                        x_c = x - a
+                        y_c = b - y
+                        f = 180 + (np.degrees(np.arctan(y_c / x_c)))
+
+                    elif (x == a) and (y > b):
+                        x_c = 0
+                        y_c = b - y
+                        f = 90
+
+                    elif (x == a) and (y < b):
+                        x_c = 0
+                        y_c = b - y
+                        f = 270
+
+                    elif (y == b) and (x > a):
+                        x_c = x - a
+                        y_c = 0
+                        f = 180
+
+                    elif (y == b) and (x < a):
+                        x_c = x - a
+                        y_c = 0
+                        f = 0
+
+                    map_[y][x] = [f, 75.18776700960646]
 
     return map_
 
@@ -74,36 +91,69 @@ def clear(map_, width, height):
         for x in range(width):
             if map_[y][x] != '.':
                 if y == 0:
-                    if(
-                            map_[y][x - 1] != '.'
-                            and map_[y][x + 1] != '.'
-                            and map_[y + 1][x] != '.'
-                            and map_[y + 1][x - 1] != '.'
-                            and map_[y + 1][x + 1] != '.'
-                    ):
-                        index_delete_point.append((y, x))
-                    elif(
-                            map_[y][x - 1] != '.'
-                            and map_[y][x + 1] != '.'
-                            and map_[y + 1][x] != '.'
-                    ):
-                        index_delete_point.append((y, x))
+                    # if(
+                    #         map_[y][x - 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y + 1][x] != '.'
+                    #         and map_[y + 1][x - 1] != '.'
+                    #         and map_[y + 1][x + 1] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    # elif(
+                    #         map_[y][x - 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y + 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    pass
 
                 elif y == height-1:
-                    if(
-                            map_[y][x - 1] != '.'
-                            and map_[y][x + 1] != '.'
-                            and map_[y - 1][x] != '.'
-                            and map_[y - 1][x - 1] != '.'
-                            and map_[y - 1][x + 1] != '.'
-                    ):
-                        index_delete_point.append((y, x))
-                    elif(
-                            map_[y][x - 1] != '.'
-                            and map_[y][x + 1] != '.'
-                            and map_[y - 1][x] != '.'
-                    ):
-                        index_delete_point.append((y, x))
+                    # if(
+                    #         map_[y][x - 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y - 1][x] != '.'
+                    #         and map_[y - 1][x - 1] != '.'
+                    #         and map_[y - 1][x + 1] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    # elif(
+                    #         map_[y][x - 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y - 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    pass
+
+                elif x == 0:
+                    # if (
+                    #         map_[y + 1][x + 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y + 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    # elif (
+                    #         map_[y - 1][x + 1] != '.'
+                    #         and map_[y][x + 1] != '.'
+                    #         and map_[y - 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    pass
+
+                elif x == width-1:
+                    # if (
+                    #         map_[y + 1][x - 1] != '.'
+                    #         and map_[y][x - 1] != '.'
+                    #         and map_[y + 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    # elif (
+                    #         map_[y - 1][x - 1] != '.'
+                    #         and map_[y][x - 1] != '.'
+                    #         and map_[y - 1][x] != '.'
+                    # ):
+                    #     index_delete_point.append((y, x))
+                    pass
+
                 else:
                     if (
                             map_[y][x - 1] != '.'
@@ -115,7 +165,7 @@ def clear(map_, width, height):
                             and map_[y - 1][x - 1] != '.'
                             and map_[y - 1][x + 1] != '.'
                     ):
-                        index_delete_point.append((y,x))
+                        index_delete_point.append([y, x])
 
                     elif (
                             map_[y][x - 1] != '.'
@@ -123,7 +173,7 @@ def clear(map_, width, height):
                             and map_[y - 1][x] != '.'
                             and map_[y + 1][x] != '.'
                     ):
-                        index_delete_point.append((y, x))
+                        index_delete_point.append([y, x])
 
     for i in index_delete_point:
         map_[i[0]][i[1]] = '.'
@@ -131,17 +181,37 @@ def clear(map_, width, height):
     return map_
 
 
-test_map = create_test_data(129,89)
+test_map = create_test_data(11,11)
 
 for line in test_map:
-    print (' '.join(line))
+    print (line)
 
-new_test = clear(test_map, 129, 89)
+
+
+print("\n\n")
+
+
+new_test = clear(test_map, 11, 11)
+
 
 for line in new_test:
+    print (line)
+
+list_cords = clean_map(new_test, 11, 11)
+
+print("\n\n")
+sharp_massiv = create_massiv(11,11)
+for line in sharp_massiv:
     print (' '.join(line))
 
 
+print("\n\n")
 
+print(list_cords)
 
+json_for_geo["features"][0]["geometry"]["coordinates"] = list_cords
 
+with open('coords_of_polygon.json', 'w') as f:
+    json.dump(json_for_geo, f)
+
+sharp_massiv[0-1][4]
