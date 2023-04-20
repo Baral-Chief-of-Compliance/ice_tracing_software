@@ -2,6 +2,8 @@ import numpy as np
 from create_polygon import clean_map
 import json
 from create_massiv_of_sharp import create_massiv
+import shapely.geometry as sg
+
 
 json_for_geo = {
   "type": "FeatureCollection",
@@ -9,10 +11,7 @@ json_for_geo = {
     {
       "type": "Feature",
       "properties": {},
-      "geometry": {
-        "coordinates": [],
-        "type": "Polygon"
-      }
+      "geometry": []
     }
   ]
 }
@@ -76,7 +75,7 @@ def create_test_data(width, height):
                     elif (y == b) and (x < a):
                         x_c = x - a
                         y_c = 0
-                        f = 0
+                        f = 360
 
                     map_[y][x] = [f, 75.18776700960646]
 
@@ -209,7 +208,8 @@ print("\n\n")
 
 print(list_cords)
 
-json_for_geo["features"][0]["geometry"]["coordinates"].append(list_cords)
+polygon = sg.MultiPoint(list_cords).convex_hull
+json_for_geo["features"][0]["geometry"] = sg.mapping(polygon)
 
 with open('coords_of_polygon.json', 'w') as f:
     json.dump(json_for_geo, f)

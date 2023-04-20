@@ -330,5 +330,5 @@ def clean_map(map_, width, height):
                 print(map_[y][x])
                 crete_list_coords(map_, y, x, list_cords, width, height)
 
-    list_cords.append(list_cords[0])
+    # list_cords.append(list_cords[0])
     return list_cords
