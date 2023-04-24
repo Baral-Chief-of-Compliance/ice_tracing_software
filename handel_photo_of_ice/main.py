@@ -3,6 +3,7 @@ import numpy as np
 from math import sqrt
 import create_geojson_from_photo
 from create_parameters_for_dict import create_longitude
+from map_object_border import clear
 
 
 img = Image.open("./photos/test_3.jpg")
@@ -26,20 +27,11 @@ img_RGB = np.asarray(img.convert('RGB'))
 
 map_ = [['.' for x in range(length)] for y in range(width)]
 
-with open("test_map_.txt", "w") as file:
-    for y in range(width):
-        for x in range(length):
-            file.write(str(map_[y][x]))
-        file.write("\n")
-
-file.close()
-
-
 for y in range(width):
     for x in range(length):
-        if ((img_RGB[y][x][0] >= 230 and img_RGB[y][x][0] <= 260) and
-            (img_RGB[y][x][1] >= 0 and img_RGB[y][x][1] <= 20) and
-            (img_RGB[y][x][2] >= 230 and img_RGB[y][x][2] <= 250)
+        if ((img_RGB[y][x][0] >= 227 and img_RGB[y][x][0] <= 267) and
+            (img_RGB[y][x][1] >= 0 and img_RGB[y][x][1] <= 40) and
+            (img_RGB[y][x][2] >= 229 and img_RGB[y][x][2] <= 269)
         ):
 
             map_[y][x] = {
@@ -93,24 +85,24 @@ for y in range(width):
 
             map_[y][x] = create_longitude(map_[y][x])
 
-        # elif ((img_RGB[y][x][0] >= 0 and img_RGB[y][x][0] <= 20) and
-        #
-        #       (img_RGB[y][x][1] >= 0 and img_RGB[y][x][1] <= 20) and
-        #
-        #       (img_RGB[y][x][2] >= 0 and img_RGB[y][x][2] <= 20)
-        #
-        # ):
-        #     # map_[y][x]= '#'
-        #     map_[y][x] = {
-        #         "type": "nilas",
-        #         "x": x-a,
-        #         "y": b-y,
-        #         "latitude": 90 - sqrt(((x-a)**2 + (y-b)**2))*step_latitude
-        #     }
-        #
-        #     map_[y][x] = create_longitude(map_[y][x])
+        elif ((img_RGB[y][x][0] >= 0 and img_RGB[y][x][0] <= 20) and
 
-map_[b][a] = '.'
+              (img_RGB[y][x][1] >= 0 and img_RGB[y][x][1] <= 20) and
+
+              (img_RGB[y][x][2] >= 0 and img_RGB[y][x][2] <= 20)
+
+        ):
+            # map_[y][x]= '#'
+            map_[y][x] = {
+                "type": "nilas",
+                "x": x-a,
+                "y": b-y,
+                "latitude": 90 - sqrt(((x-a)**2 + (y-b)**2))*step_latitude
+            }
+
+            map_[y][x] = create_longitude(map_[y][x])
+
+# map_[b][a] = '.'
 
 
 with open("map.txt", 'w') as file:
@@ -119,6 +111,7 @@ with open("map.txt", 'w') as file:
             file.write(str(map_[y][x]))
         file.write("\n")
 
+map_ = clear(map_, width, length)
 create_geojson_from_photo.create_geojson(map_, width, length)
 
 

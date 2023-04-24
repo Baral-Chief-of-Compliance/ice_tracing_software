@@ -1,0 +1,1 @@
+import get_bored_of_map_object
