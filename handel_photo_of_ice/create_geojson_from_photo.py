@@ -11,7 +11,7 @@ def create_geojson(map_, width, length):
     for y in range(width):
         for x in range(length):
             if map_[y][x] != '.':
-                # if map_[y][x]["type"] == "young":
+                if map_[y][x]["type"] == "young":
                     geojson["features"].append(
                         {
                             "type": "Feature",
