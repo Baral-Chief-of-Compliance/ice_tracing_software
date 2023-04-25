@@ -1,11 +1,11 @@
-def clear(map_, width, length):
+def clear(map_, width, length, type_of_ice):
 
     index_delete_point = []
 
     for y in range(width):
         for x in range(length):
             if map_[y][x] != '.':
-                if map_[y][x]["type"] == "young":
+                if map_[y][x]["type"] == type_of_ice:
                     if y == 0:
                         # if(
                         #         map_[y][x - 1] != '.'
