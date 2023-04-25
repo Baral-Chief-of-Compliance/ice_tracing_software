@@ -4,7 +4,12 @@ from math import sqrt
 import create_geojson_from_photo
 from create_parameters_for_dict import create_longitude
 from map_object_border import clear
+from create_polygon import clean_map
+import json
+import sys
 
+
+sys.setrecursionlimit(2000)
 
 img = Image.open("./photos/test_3.jpg")
 
@@ -113,5 +118,8 @@ with open("map.txt", 'w') as file:
 
 map_ = clear(map_, width, length)
 create_geojson_from_photo.create_geojson(map_, width, length)
+geojson = clean_map(map_, length, width)
 
 
+with open("geo_json_young_ice_polygon.json", "w") as file:
+    json.dump(geojson, file)
