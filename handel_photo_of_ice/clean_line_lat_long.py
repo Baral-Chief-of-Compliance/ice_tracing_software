@@ -255,3 +255,35 @@ def clean_map(map_, width, height, type_of_ice):
 
     # list_cords.append(list_cords[0])
     return geojson
+
+
+def convert_to_ice_type(map_, width, length, type_of_ice, type_of_line):
+    for y in range(width):
+        for x in range(length):
+            if map_[y][x] != '.':
+                if map_[y][x]["type"] == type_of_line:
+                    if map_[y - 1][x - 1] != '.' and map_[y - 1][x - 1]["type"] == type_of_ice:
+                        map_[y - 1][x - 1]["type"] = type_of_ice
+
+                    elif map_[y - 1][x] != '.' and map_[y - 1][x]["type"] == type_of_ice:
+                        map_[y - 1][x]["type"] = type_of_ice
+
+                    elif map_[y - 1][x + 1] != '.' and map_[y - 1][x + 1]["type"] == type_of_ice:
+                        map_[y - 1][x + 1]["type"] = type_of_ice
+
+                    elif map_[y][x + 1] != '.' and map_[y][x + 1]["type"] == type_of_ice:
+                        map_[y][x + 1]["type"] = type_of_ice
+
+                    elif map_[y + 1][x + 1] != '.' and map_[y + 1][x + 1]["type"] == type_of_ice:
+                        map_[y + 1][x + 1]["type"] = type_of_ice
+
+                    elif map_[y + 1][x] != '.' and map_[y + 1][x]["type"] == type_of_ice:
+                        map_[y + 1][x]["type"] = type_of_ice
+
+                    elif map_[y + 1][x - 1] != '.' and map_[y + 1][x - 1]["type"] == type_of_ice:
+                        map_[y + 1][x - 1]["type"] = type_of_ice
+
+                    elif map_[y][x - 1] != '.' and map_[y][x - 1]["type"] == type_of_ice:
+                        map_[y][x - 1]["type"] = type_of_ice
+
+    return map_

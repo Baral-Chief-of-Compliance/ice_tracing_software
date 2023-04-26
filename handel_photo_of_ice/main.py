@@ -12,7 +12,7 @@ import clean_line_lat_long
 
 sys.setrecursionlimit(2000)
 
-img = Image.open("./photos/test_3.jpg")
+img = Image.open("./photos/test_13.jpg")
 
 size = img.size
 
@@ -35,6 +35,21 @@ map_ = [['.' for x in range(length)] for y in range(width)]
 
 for y in range(width):
     for x in range(length):
+
+        # if ((img_RGB[y][x][0] >= 18 and img_RGB[y][x][0] <= 80) and
+        #     (img_RGB[y][x][1] >= 158 and img_RGB[y][x][1] <= 187) and
+        #     (img_RGB[y][x][2] >= 139 and img_RGB[y][x][2] <= 154)
+        # ):
+        #     map_[y][x] = {
+        #         "type": "line",
+        #         "x": x-a,
+        #         "y": b-y,
+        #         "latitude": 90 - sqrt(((x-a)**2 + (y-b)**2))*step_latitude
+        #     }
+        #
+        #     map_[y][x] = create_longitude(map_[y][x])
+
+
         if ((img_RGB[y][x][0] >= 227 and img_RGB[y][x][0] <= 267) and
             (img_RGB[y][x][1] >= 0 and img_RGB[y][x][1] <= 40) and
             (img_RGB[y][x][2] >= 229 and img_RGB[y][x][2] <= 269)
@@ -64,9 +79,9 @@ for y in range(width):
             map_[y][x] = create_longitude(map_[y][x])
 
 
-        elif ((img_RGB[y][x][0] >= 0 and img_RGB[y][x][0] <= 5) and
-            (img_RGB[y][x][1] >= 195 and img_RGB[y][x][1] <= 205) and
-            (img_RGB[y][x][2] >= 156 and img_RGB[y][x][2] <= 166)
+        elif ((img_RGB[y][x][0] >= 0 and img_RGB[y][x][0] <= 40) and
+            (img_RGB[y][x][1] >= 180 and img_RGB[y][x][1] <= 220) and
+            (img_RGB[y][x][2] >= 140 and img_RGB[y][x][2] <= 181)
         ):
             map_[y][x] = {
                 "type": "first-year",
@@ -91,19 +106,6 @@ for y in range(width):
 
             map_[y][x] = create_longitude(map_[y][x])
 
-
-        elif ((img_RGB[y][x][0] >= 18 and img_RGB[y][x][0] <= 80) and
-            (img_RGB[y][x][1] >= 163 and img_RGB[y][x][1] <= 187) and
-            (img_RGB[y][x][2] >= 139 and img_RGB[y][x][2] <= 154)
-        ):
-            map_[y][x] = {
-                "type": "line",
-                "x": x-a,
-                "y": b-y,
-                "latitude": 90 - sqrt(((x-a)**2 + (y-b)**2))*step_latitude
-            }
-
-            map_[y][x] = create_longitude(map_[y][x])
 
         # elif ((img_RGB[y][x][0] >= 0 and img_RGB[y][x][0] <= 20) and
         #
@@ -132,11 +134,18 @@ with open("map.txt", 'w') as file:
         file.write("\n")
 
 
-# map_ = clear(map_, width, length, "first-year")
-# create_geojson_from_photo.create_geojson(map_, width, length)
-# geojson = clean_map(map_, length, width, "first-year")
+# map_ = clean_line_lat_long.convert_to_ice_type(map_, width, length, "first-year", "line")
+map_ = clear(map_, width, length, "first-year")
+create_geojson_from_photo.create_geojson(map_, width, length)
+geojson = clean_map(map_, length, width, "first-year")
 
-geojson = clean_line_lat_long.clean_map(map_, length, width, "line")
 
-with open("geo_json_map_line.json", "w") as file:
+with open("geo_json_first_year_ice_polygon.json", "w") as file:
     json.dump(geojson, file)
+
+
+# map_ = clean_line_lat_long.convert_to_ice_type(map_, width, length, "first-year", "line")
+# geojson = clean_line_lat_long.clean_map(map_, length, width, "line")
+
+# with open("geo_json_map_line.json", "w") as file:
+#     json.dump(geojson, file)
