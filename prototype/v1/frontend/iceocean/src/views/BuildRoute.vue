@@ -52,8 +52,60 @@
 
         <v-container v-if="stage === 1">
             <div class="text-h5 mx-10">2 ШАГ: Выбрать начало и конец маршрута</div>
+            <v-form>
+                <v-container>
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <div class="d-flex justify-center pt-7">
+                                <v-icon color="blue" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
+                                <span class="text-h6">Исходный пункт:</span>
+                            </div>
+                        </v-col>
 
-            <v-btn block class="mx-8 pa-5 text-h6" color="purple-darken-4">
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field v-model="start_longitude" color="blue" label="Долгота"></v-text-field>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field v-model="start_latitude" color="blue" label="Широта"></v-text-field>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <div class="d-flex justify-center pt-7">
+                                <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
+                                <span class="text-h6">Пункт назначения:</span>
+                            </div>
+                        </v-col>
+
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field v-model="end_longitude" color="red" label="Долгота"></v-text-field>
+                        </v-col>
+                        <v-col
+                            cols="12"
+                            md="4"
+                        >
+                            <v-text-field v-model="end_latitude" color="red" label="Широта"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-form>
+            <v-btn block class="mx-8 pa-5 text-h6" color="purple-darken-4" @click="send_data">
                 Построить маршрут
             </v-btn>
         </v-container>
@@ -71,11 +123,20 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 
 export default{
+
     data: () => ({
         stage: 0,
+
         iceclass: "",
+        start_longitude: "",
+        start_latitude: "",
+        end_longitude: "",
+        end_latitude: "",
+
         iceclasses: [
             ['Ice1', 'ЛУ1', 'Самостоятельное эпизодическое плавание в мелкобитом разреженном льду неарктических морей и в сплошном льду в канале за ледоколом при толщине льда до 0,4 м'],
             ['Ice2', 'ЛУ2', 'Самостоятельное плавание в мелкобитом разреженном льду неарктических морей и в сплошном льду в канале за ледоколом при толщине льда до 0,55 м'],
@@ -98,6 +159,17 @@ export default{
         },
         getIceClass(iceclass){
             alert(iceclass)
+        },
+        send_data(){
+            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/generate_route", 
+            {
+                iceclass: this.iceclass,
+                start_longitude: this.start_longitude,
+                start_latitude: this.start_latitude,
+                end_longitude: this.end_longitude,
+                end_latitude: this.end_latitude
+            }
+            )
         }
     }
 }
