@@ -1,3 +1,6 @@
+from create_node import create
+
+
 step = 0.33333
 
 start_latitude = 90.0
@@ -38,86 +41,31 @@ for y in range(width):
     for x in range(length):
 
         if y == 0 and x == 0:
-            map_[y][x] = {
-                "longitude": -180.0,
-                "latitude": 90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(-180.0, 90.0, False, False, "")
 
         elif y == 0 and x == length - 1:
-            map_[y][x] = {
-                "longitude": 180.0,
-                "latitude": 90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(180.0, 90.0, False, False, "")
 
         elif y == width - 1 and x == 0:
-            map_[y][x] = {
-                "longitude": -180.0,
-                "latitude": -90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(-180.0, -90.0, False, False, "")
 
         elif y == width - 1 and x == length - 1:
-            map_[y][x] = {
-                "longitude": 180.0,
-                "latitude": -90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(180.0, -90.0, False, False, "")
 
         elif y == 0:
-            map_[y][x] = {
-                "longitude": start_longitude + x * step,
-                "latitude": 90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(start_longitude + x * step, 90.0, False, False, "")
 
         elif y == width - 1:
-            map_[y][x] = {
-                "longitude": start_longitude + x * step,
-                "latitude": -90.0,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(start_longitude + x * step, -90.0, False, False, "")
 
         elif x == 0:
-            map_[y][x] = {
-                "longitude": -180,
-                "latitude": start_latitude - y * step,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(-180, start_latitude - y * step, False, False, "")
 
         elif x == length - 1:
-            map_[y][x] = {
-                "longitude": 180,
-                "latitude": start_latitude - y * step,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
+            map_[y][x] = create(180, start_latitude - y * step, False, False, "")
 
         else:
-            map_[y][x] = {
-                "longitude": start_longitude + x * step,
-                "latitude": start_latitude - y * step,
-                "start": False,
-                "end": False,
-                "type_of_ice": ""
-            }
-
+            map_[y][x] = create(start_longitude + x * step, start_latitude - y * step, False, False, "")
 
 with open("map.txt", "w") as file:
     for line in map_:
