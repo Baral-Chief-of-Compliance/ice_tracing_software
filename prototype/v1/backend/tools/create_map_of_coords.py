@@ -1,4 +1,5 @@
 from create_node import create
+import json
 
 
 step = 0.33333
@@ -67,7 +68,12 @@ for y in range(width):
         else:
             map_[y][x] = create(start_longitude + x * step, start_latitude - y * step, False, False, "")
 
-with open("map.txt", "w") as file:
-    for line in map_:
-        file.write(str(line))
-        file.write("\n")
+
+# with open("map.txt", "w") as file:
+#     for line in map_:
+#         file.write(str(line))
+#         file.write("\n")
+
+
+with open("map.json", "w") as file:
+    json.dump(map_, file)
