@@ -21,6 +21,11 @@ end_latitude = 74.67013839379428
 
 area = build(map_, width, length, start_longitude, start_latitude, end_longitude, end_latitude)
 
+# with open("area_check.txt", "w") as file:
+#     for line in area:
+#         file.write(str(line))
+#         file.write("\n")
+
 graph = create(area)
 src, dest = create_src_dest(area)
 print(src)
