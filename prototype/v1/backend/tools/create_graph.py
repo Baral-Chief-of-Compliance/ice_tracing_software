@@ -92,6 +92,40 @@ def create(area):
 
                 graph[f"{area[y][x]['longitude']}|{area[y][x]['latitude']}"] = nodes
 
+            elif x == 0:
+                area[y - 1][x]['weight'] = 1
+                area[y][x + 1]['weight'] = 1
+                area[y + 1][x]['weight'] = 1
+                area[y + 1][x + 1]['weight'] = 1.41
+                area[y - 1][x + 1]['weight'] = 1.41
+
+                nodes = {
+                    f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
+                    f"{area[y][x + 1]['longitude']}|{area[y][x + 1]['latitude']}": area[y][x + 1]['weight'],
+                    f"{area[y + 1][x]['longitude']}|{area[y + 1][x]['latitude']}": area[y + 1][x]['weight'],
+                    f"{area[y + 1][x + 1]['longitude']}|{area[y + 1][x + 1]['latitude']}": area[y + 1][x + 1]['weight'],
+                    f"{area[y - 1][x + 1]['longitude']}|{area[y - 1][x + 1]['latitude']}": area[y - 1][x + 1]['weight']
+                }
+
+                graph[f"{area[y][x]['longitude']}|{area[y][x]['latitude']}"] = nodes
+
+            elif x == length - 1:
+                area[y - 1][x]['weight'] = 1
+                area[y][x - 1]['weight'] = 1
+                area[y + 1][x]['weight'] = 1
+                area[y - 1][x - 1]['weight'] = 1.41
+                area[y + 1][x - 1]['weight'] = 1.41
+
+                nodes = {
+                    f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
+                    f"{area[y][x - 1]['longitude']}|{area[y][x - 1]['latitude']}": area[y][x - 1]['weight'],
+                    f"{area[y + 1][x]['longitude']}|{area[y + 1][x]['latitude']}": area[y + 1][x]['weight'],
+                    f"{area[y - 1][x - 1]['longitude']}|{area[y - 1][x - 1]['latitude']}": area[y - 1][x - 1]['weight'],
+                    f"{area[y + 1][x - 1]['longitude']}|{area[y + 1][x - 1]['latitude']}": area[y + 1][x - 1]['weight']
+                }
+
+                graph[f"{area[y][x]['longitude']}|{area[y][x]['latitude']}"] = nodes
+
             else:
                 area[y][x - 1]['weight'] = 1
                 area[y][x + 1]['weight'] = 1
