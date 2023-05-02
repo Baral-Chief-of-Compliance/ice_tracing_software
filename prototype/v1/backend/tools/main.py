@@ -7,7 +7,7 @@ import json
 
 sys.setrecursionlimit(2000)
 
-with open("map.json", "r") as file:
+with open("../ice/json/map_test.json", "r") as file:
     map_ = json.load(file)
 
 width = len(map_)
@@ -19,6 +19,8 @@ start_latitude = 68.91316126089126
 end_longitude = 64.89570320937713
 end_latitude = 74.67013839379428
 
+iceclass = "Ice1"
+
 area = build(map_, width, length, start_longitude, start_latitude, end_longitude, end_latitude)
 
 # with open("area_check.txt", "w") as file:
@@ -26,7 +28,7 @@ area = build(map_, width, length, start_longitude, start_latitude, end_longitude
 #         file.write(str(line))
 #         file.write("\n")
 
-graph = create(area)
+graph = create(area, iceclass)
 src, dest = create_src_dest(area)
 print(src)
 print(dest)

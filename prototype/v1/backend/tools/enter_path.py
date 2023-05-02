@@ -22,5 +22,5 @@ def enter_path(path):
         latitude = float(new_list[1])
         geo_json["features"][0]["geometry"]["coordinates"].append([longitude, latitude])
 
-    with open("path.json", "w") as file:
+    with open("pathICE1.json", "w") as file:
         json.dump(geo_json, file)

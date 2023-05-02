@@ -21,6 +21,9 @@ with open("../tools/map.json", "r") as file:
 #
 #
 map_ = create_ice(map_)
+
+with open("json/map_test.json", "w") as file:
+    json.dump(map_, file)
 # map_ = clear(map_, "old_ice")
 # with open("map_test.txt", "w") as file:
 #     for line in map_:
