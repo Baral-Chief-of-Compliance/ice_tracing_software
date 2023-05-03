@@ -1,4 +1,5 @@
 from global_land_mask import globe
+import numpy as np
 
 
 def get_weight_based_ice_class(elem, iceclass):
@@ -147,9 +148,24 @@ def get_weight_based_ice_class(elem, iceclass):
             return 0
 
 
-def get_weight(elem, iceclass):
-    if globe.is_land(elem["latitude"], elem["longitude"]):
-        return 99
+def get_weight(previous_elem, elem, iceclass):
+    lat = np.linspace(
+        previous_elem["latitude"],
+        elem["latitude"],
+        100
+        )
+
+    lon = np.linspace(
+        previous_elem["longitude"],
+        elem["longitude"],
+        100
+    )
+
+    is_in_land = globe.is_land(lat, lon)
+    count_land = np.count_nonzero(is_in_land == True)
+
+    if count_land > 0:
+        return 9999
 
     else:
         result = get_weight_based_ice_class(elem, iceclass)
