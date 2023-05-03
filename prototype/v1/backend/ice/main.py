@@ -1,4 +1,4 @@
-from test import create_ice
+from test_form_jupyter import create_ice
 from ice_object_border import clear
 from create_polygon import clean_map
 import json
@@ -18,8 +18,8 @@ def create_geojson(map_, type_of_ice):
 
 with open("../tools/map.json", "r") as file:
     map_ = json.load(file)
-#
-#
+
+
 map_ = create_ice(map_)
 
 with open("json/map_test.json", "w") as file:

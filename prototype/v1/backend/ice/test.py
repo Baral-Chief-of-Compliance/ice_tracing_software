@@ -1,10 +1,11 @@
 import noise
 import numpy as np
 from PIL import Image
+import json
 
 
 class Config:
-    blue = [0, 199, 254]
+    blue = [65, 105, 225]
     first_year_ice = [0, 200, 161]
     young_ice = [247, 8, 249]
     old_ice = [144, 0, 1]
@@ -70,38 +71,46 @@ def create_ice(map_):
                                         repeaty=shape[1],
                                         base=seed)
 
-    color_world = add_color(world)
-
-    for y in range(width):
-        for x in range(length):
-            if color_world[y, x][0] == Config.old_ice[0] \
-                    and color_world[y, x][1] == Config.old_ice[1] \
-                    and color_world[y, x][2] == Config.old_ice[2]:
-                map_[y][x]["type_of_ice"] = "old_ice"
-
-            elif color_world[y, x][0] == Config.young_ice[0] \
-                    and color_world[y, x][1] == Config.young_ice[1] \
-                    and color_world[y, x][2] == Config.young_ice[2]:
-                map_[y][x]["type_of_ice"] = "young_ice"
-
-            elif color_world[y, x][0] == Config.first_year_ice[0] \
-                    and color_world[y, x][1] == Config.first_year_ice[1] \
-                    and color_world[y, x][2] == Config.first_year_ice[2]:
-                map_[y][x]["type_of_ice"] = "first_year_ice"
-
-            elif color_world[y, x][0] == Config.nilas_ice[0] \
-                    and color_world[y, x][1] == Config.nilas_ice[1] \
-                    and color_world[y, x][2] == Config.nilas_ice[2]:
-                map_[y][x]["type_of_ice"] = "nilas_ice"
-
-            elif color_world[y, x][0] == Config.fast_ice[0] \
-                    and color_world[y, x][1] == Config.fast_ice[1] \
-                    and color_world[y, x][2] == Config.fast_ice[2]:
-                map_[y][x]["type_of_ice"] = "fast_ice"
-
-            elif color_world[y, x][0] == Config.ice_field[0] \
-                    and color_world[y, x][1] == Config.ice_field[1] \
-                    and color_world[y, x][2] == Config.ice_field[2]:
-                map_[y][x]["type_of_ice"] = "ice_field"
-
+    color_world = add_color(world).astype(np.uint8)
+    Image.fromarray(color_world).show()
+    #
+    # for y in range(width):
+    #     for x in range(length):
+    #         if color_world[y, x][0] == Config.old_ice[0] \
+    #                 and color_world[y, x][1] == Config.old_ice[1] \
+    #                 and color_world[y, x][2] == Config.old_ice[2]:
+    #             map_[y][x]["type_of_ice"] = "old_ice"
+    #
+    #         elif color_world[y, x][0] == Config.young_ice[0] \
+    #                 and color_world[y, x][1] == Config.young_ice[1] \
+    #                 and color_world[y, x][2] == Config.young_ice[2]:
+    #             map_[y][x]["type_of_ice"] = "young_ice"
+    #
+    #         elif color_world[y, x][0] == Config.first_year_ice[0] \
+    #                 and color_world[y, x][1] == Config.first_year_ice[1] \
+    #                 and color_world[y, x][2] == Config.first_year_ice[2]:
+    #             map_[y][x]["type_of_ice"] = "first_year_ice"
+    #
+    #         elif color_world[y, x][0] == Config.nilas_ice[0] \
+    #                 and color_world[y, x][1] == Config.nilas_ice[1] \
+    #                 and color_world[y, x][2] == Config.nilas_ice[2]:
+    #             map_[y][x]["type_of_ice"] = "nilas_ice"
+    #
+    #         elif color_world[y, x][0] == Config.fast_ice[0] \
+    #                 and color_world[y, x][1] == Config.fast_ice[1] \
+    #                 and color_world[y, x][2] == Config.fast_ice[2]:
+    #             map_[y][x]["type_of_ice"] = "fast_ice"
+    #
+    #         elif color_world[y, x][0] == Config.ice_field[0] \
+    #                 and color_world[y, x][1] == Config.ice_field[1] \
+    #                 and color_world[y, x][2] == Config.ice_field[2]:
+    #             map_[y][x]["type_of_ice"] = "ice_field"
+    #
     return map_
+
+
+# with open("../tools/map.json", "r") as file:
+#     map_ = json.load(file)
+#
+#
+# map_ = create_ice(map_)
