@@ -26,6 +26,18 @@ const routes = [
         component: () => import('@/views/BuildRoute.vue')
       }
     ]
+  },
+  {
+    path: '/generate-ice-conditions',
+    component: () => import('@/layouts/default/Default.vue'),
+    children:[
+      {
+        path: '',
+        name: 'GenerateIceConditions',
+        component: () => import('@/views/GenerateIceConditions.vue')
+      }
+    ]
+
   }
 ]
 

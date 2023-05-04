@@ -1,4 +1,4 @@
-from route_building_area import build
+from route_building_area import build, build_2
 from create_graph import create
 from dijkstra import dijkstra
 from create_src_dest import create_src_dest
@@ -13,15 +13,15 @@ with open("../ice/json/map_test.json", "r") as file:
 width = len(map_)
 length = len(map_[0])
 
-start_longitude = 38.831525324316004
-start_latitude = 68.91316126089126
+start_longitude = 158.65804621207423
+start_latitude = 76.10079999958671
 
-end_longitude = 64.89570320937713
-end_latitude = 74.67013839379428
+end_longitude = 142.46414333404317
+end_latitude = 72.99829163829796
 
-iceclass = "Ice1"
+iceclass = "Arc7"
 
-area = build(map_, width, length, start_longitude, start_latitude, end_longitude, end_latitude)
+area = build_2(map_, width, length, start_longitude, start_latitude, end_longitude, end_latitude)
 
 # with open("area_check.txt", "w") as file:
 #     for line in area:

@@ -152,4 +152,36 @@ def create(area, iceclass):
 
                 graph[f"{area[y][x]['longitude']}|{area[y][x]['latitude']}"] = nodes
 
-    return graph
+    counter = 0
+
+    for k_el, v_el in list(graph.items()):
+        counter = counter + 1
+        for k, v in list(v_el.items()):
+            counter = counter + 1
+
+    print(counter)
+
+    counter = 0
+    new_graph = {}
+    for k_el, v_el in list(graph.items()):
+        new_graph[k_el] = {}
+        for k, v in list(v_el.items()):
+            if v == 10000:
+                pass
+            elif v == 10000.41:
+                pass
+            else:
+                new_graph[k_el][k] = v
+        # for k, value in list(graph[el].items()):
+        #     if value == 10000:
+        #         del graph[el][k]
+        #     elif value == 10000.41:
+        #         del graph[el][k]
+
+    for k_el, v_el in list(new_graph.items()):
+        counter = counter + 1
+        for k, v in list(v_el.items()):
+            counter = counter + 1
+
+    print(counter)
+    return new_graph

@@ -15,7 +15,7 @@
       </v-card-subtitle>
       <v-card-text>
         <v-btn class="mb-3 pa-5" color="purple-darken-4" block :to="{ name: 'BuildRoute'}"  >Построить маршрут</v-btn>
-        <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block>Сгенирировать ледовую обстановку</v-btn>
+        <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'GenerateIceConditions'}">Сгенирировать ледовую обстановку</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block>Загрузить ледовую обстановку</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block>Руководоство</v-btn>
       </v-card-text>

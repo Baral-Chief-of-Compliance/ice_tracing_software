@@ -139,3 +139,38 @@ def build(map_, width, length, start_longitude, start_latitude, end_longitude, e
                     area[y - y_vertex_top][x - x_vertex_left] = map_[y][x]
 
     return area
+
+
+def build_2(map_, width, length, start_longitude, start_latitude, end_longitude, end_latitude):
+    y_start, x_start = nearest(map_, width, length, start_longitude, start_latitude)
+    y_end, x_end = nearest(map_, width, length, end_longitude, end_latitude)
+
+    print(f"старт {y_start}, {x_start}")
+    print(f"финиш {y_end}, {x_end}")
+    map_[y_start][x_start]["start"] = True
+    map_[y_end][x_end]["end"] = True
+
+    area_width, area_length = get_length_area_border(y_start, x_start, y_end, x_end)
+
+
+
+    y_vertex_top, y_vertex_bottom, x_vertex_right, x_vertex_left \
+        = get_vertex_area_border(y_start, x_start, y_end, x_end)
+
+    y_vertex_top = 0
+    area_width = 52
+
+    area = [['.' for x in range(area_length)] for y in range(area_width)]
+
+    print(f"y_vertex_top: {y_vertex_top}")
+    print(f"y_vertex_bottom: {y_vertex_bottom}")
+    print(f"x_vertex_right: {x_vertex_right}")
+    print(f"x_vertex_left: {x_vertex_left}")
+
+    for y in range(width):
+        for x in range(length):
+            if y_vertex_top <= y <= y_vertex_bottom:
+                if x_vertex_left <= x <= x_vertex_right:
+                    area[y - y_vertex_top][x - x_vertex_left] = map_[y][x]
+
+    return area

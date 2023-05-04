@@ -1,7 +1,10 @@
 from enter_path import enter_path
+import sys
+
 
 
 def dijkstra(graph, src, dest, visited=[], distances={}, predecessors={}):
+    sys.setrecursionlimit(10000)
     if src not in graph:
         raise TypeError("The root of the shortest path tree cannot be found")
     if dest not in graph:

@@ -1290,6 +1290,11 @@ vue-router@^4.0.0:
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
+vue-yandex-maps@^0.12.7:
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/vue-yandex-maps/-/vue-yandex-maps-0.12.7.tgz#6c7fbc59af10d8cbe936ee129419bf39561b2383"
+  integrity sha512-xP9juQCF4MQvMUMcPUrPyHQoaKr4ULw/Z1Tcmte4nfcbelg1SXksROxAQYB2woz5EwSOnO5SEEigX0AkWE0suA==
+
 vue@^3.2.0:
   version "3.2.47"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.47.tgz#3eb736cbc606fc87038dbba6a154707c8a34cff0"
