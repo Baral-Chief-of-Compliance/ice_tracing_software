@@ -6,6 +6,7 @@
             <yandex-map
                 :coords="[68.970360, 33.074172]"
                 :zoom="3"
+                :cluster-options="clusterOptions"
             >
                 <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
                     :marker-id="index"
@@ -49,11 +50,17 @@
                     :markerFill="{color: '#900001'}"
                 ></ymap-marker>
 
+                <ymap-marker v-for="(port, index) in ports" :key="index"
+                    :marker-id="index"
+                    cluster-name="1"
+                    :coords="[port.latitude, port.longitude]"
+                    :markerFill="{color: '#900001'}"
+                ></ymap-marker>
+
                 </yandex-map>
 
         </div>
     </v-container>
-
 </template>
 
 <script>
@@ -67,7 +74,23 @@ export default{
             nilas_ice: [],
             young_ice: [],
             first_year_ice: [],
-            old_ice: []
+            old_ice: [],
+            ports: [],
+
+            clusterOptions: {
+        1: {
+            clusterDisableClickZoom: true,
+            clusterOpenBalloonOnClick: true,
+            preset: 'islands#redClusterIcons',
+            clusterBalloonLayout: [
+            '<ul class=list>',
+            '{% for geoObject in properties.geoObjects %}',
+            '<li><a href=# class="list_item">{{ geoObject.properties.balloonContentHeader|raw }}</a></li>',
+            '{% endfor %}',
+            '</ul>',
+            ].join(''),
+        },
+        },
         }
     },
     methods: {
@@ -98,6 +121,11 @@ export default{
         get_old_ice(){
             axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice')
             .then(response => this.old_ice = response.data.polygons)
+        },
+
+        get_all_ports(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/ports')
+            .then(response => this.ports = response.data.ports)
         }
     },
     mounted(){
@@ -107,6 +135,7 @@ export default{
         this.get_young_ice()
         this.get_first_year_ice()
         this.get_old_ice()
+        this.get_all_ports()
     }
 }
 </script>

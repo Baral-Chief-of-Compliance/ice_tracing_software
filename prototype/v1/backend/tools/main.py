@@ -13,8 +13,8 @@ with open("../ice/json/map_test.json", "r") as file:
 width = len(map_)
 length = len(map_[0])
 
-start_longitude = 158.65804621207423
-start_latitude = 76.10079999958671
+start_longitude = 149.46128291758185
+start_latitude = 75.89268171664997
 
 end_longitude = 142.46414333404317
 end_latitude = 72.99829163829796
