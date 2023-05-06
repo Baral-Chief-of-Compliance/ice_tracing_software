@@ -1,6 +1,25 @@
 <template>
     <v-container>
-        <div class="text-h3 py-6 mx-10 text-left">Сгенирировать ледовую обстановку</div>
+        <div class="text-h3 py-6 mx-10 text-left">Сгенирировать ледовую обстановку 
+
+        <v-tooltip
+          v-model="show_tooltip_random"
+          location="end"
+        >
+            <template v-slot:activator="{ props }">
+                <v-btn
+                    color="purple-darken-4"
+                    icon="mdi-reload"
+                    v-bind="props"
+                >
+                </v-btn>
+            </template>
+            <span>Сгенирировать случайнукю ледовую обстановку</span>
+        </v-tooltip>
+        
+        </div> 
+
+        <div class="text-h4 py-6 mx-10 mb-5 text-left">Ледовая обстановка на сегодня</div>
 
         <div class="map">
             <yandex-map
@@ -97,14 +116,14 @@
                             v-model="dialog_nilas_ice"
                             width="auto"
                         >
-                            <template v-slot:activator="{ props }">
-                                <v-btn
-                                color="purple-darken-4"
-                                icon="mdi-information-outline"
-                                v-bind="props"
-                                >
-                                </v-btn>
-                            </template>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                    color="purple-darken-4"
+                                    icon="mdi-information-outline"
+                                    v-bind="props"
+                                    >
+                                    </v-btn>
+                                </template>
 
                             <v-card>
                                 <v-card-text>
@@ -420,6 +439,8 @@ export default{
             dialog_old_ice: false,
             dialog_ice_field: false,
             dialog_fast_ice: false,
+
+            show_tooltip_random: false,
 
             clusterOptions: {
                 1: {
