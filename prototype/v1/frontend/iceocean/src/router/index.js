@@ -17,27 +17,30 @@ const routes = [
     ],
   },
   {
-    path: '/build-route',
+    path: '/iceocean',
     component: () => import('@/layouts/default/Default.vue'),
     children:[
       {
-        path: '',
+        path: 'build-route',
         name: 'BuildRoute',
         component: () => import('@/views/BuildRoute.vue')
-      }
-    ]
-  },
-  {
-    path: '/generate-ice-conditions',
-    component: () => import('@/layouts/default/Default.vue'),
-    children:[
+      },
       {
-        path: '',
+        path: 'generate-ice-conditions',
         name: 'GenerateIceConditions',
         component: () => import('@/views/GenerateIceConditions.vue')
+      },
+      {
+        path: 'routes',
+        name: 'Routes',
+        component: () => import('@/views/Routes.vue')
+      },
+      {
+        path: 'add-route',
+        name: 'AddRoute',
+        component: () => import('@/views/AddRoute.vue')
       }
     ]
-
   }
 ]
 

@@ -1,9 +1,23 @@
 <template>
     <v-container>
-        <div class="text-h3 py-6 mx-10 text-left">Построить маршрут</div>
+        <div class="text-h3 py-6 mx-10 text-left">Добавить маршрут</div>
 
         <v-container v-if="stage === 0">
-            <div class="text-h5 mx-10">1 ШАГ: Выбрать ледовый класс судна</div>
+            <div class="text-h5 mx-10">1.1 ШАГ: Введите имя судна</div>
+
+            <v-row class="ml-5 my-5">
+                <v-col
+                    cols="12"
+                    md="4"
+                >
+                    <v-text-field label="Название судна" color="purple-darken-4" v-model="ship_name">
+
+                    </v-text-field>
+                </v-col>
+            </v-row>
+
+            <div class="text-h5 mx-10 my-5">1.2 ШАГ: Выбрать ледовый класс судна</div>
+
             <v-container>
                 <v-radio-group v-model="iceclass">
                     <v-table>
@@ -36,7 +50,7 @@
                                     {{ old_title }}
                                 </td>
                                 <td width="400">
-                                    <v-expansion-panels>
+                                    <v-expansion-panels >
                                         <v-expansion-panel>
                                             <v-expansion-panel-title>Подробно</v-expansion-panel-title>
                                             <v-expansion-panel-text >{{ description }}</v-expansion-panel-text>
@@ -51,61 +65,76 @@
         </v-container>
 
         <v-container v-if="stage === 1">
-            <div class="text-h5 mx-10">2 ШАГ: Выбрать начало и конец маршрута</div>
-            <v-form>
-                <v-container>
-                    <v-row>
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <div class="d-flex justify-center pt-7">
-                                <v-icon color="blue" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
-                                <span class="text-h6">Исходный пункт:</span>
-                            </div>
-                        </v-col>
+            <div class="text-h5 mx-10 mb-5">2 ШАГ: Выбрать начало и конец маршрута</div>
+           
+            <div class="d-flex ml-10">
+                <div class="map">
+                    <yandex-map
+                        :coords="[68.970360, 33.074172]"
+                        :zoom="3"
+                        @click="onClick"
+                    >
 
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <v-text-field v-model="start_longitude" color="blue" label="Долгота"></v-text-field>
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <v-text-field v-model="start_latitude" color="blue" label="Широта"></v-text-field>
-                        </v-col>
-                    </v-row>
+                    <ymap-marker 
+                        :coords="start_coords" 
+                        marker-id="1" 
+                        hint-content="some hint" 
+                    />
 
-                    <v-row>
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <div class="d-flex justify-center pt-7">
-                                <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
-                                <span class="text-h6">Пункт назначения:</span>
-                            </div>
-                        </v-col>
+                    <ymap-marker 
+                        :coords="end_coords" 
+                        marker-id="2" 
+                        hint-content="some hint" 
+                        :icon="{ color: 'red' }"
+                    />
 
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <v-text-field v-model="end_longitude" color="red" label="Долгота"></v-text-field>
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            md="4"
-                        >
-                            <v-text-field v-model="end_latitude" color="red" label="Широта"></v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </v-form>
-            <v-btn block class="mx-8 pa-5 text-h6" color="purple-darken-4" @click="send_data">
+                    </yandex-map>
+                </div>
+
+                <v-form class="ml-10">
+
+                    <div class="d-flex justify-center pt-7">
+                        <v-icon color="blue" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
+                        <span class="text-h6">Исходный пункт:</span>
+                    </div>
+                    
+
+                    <v-text-field v-model="start_longitude" color="blue" label="Долгота"></v-text-field>
+
+                    <v-text-field v-model="start_latitude" color="blue" label="Широта"></v-text-field>
+
+                    <div class="d-flex justify-center pt-7">
+                        <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
+                        <span class="text-h6">Пункт назначения:</span>
+                    </div>
+
+                    <v-text-field v-model="end_longitude" color="red" label="Долгота"></v-text-field>
+         
+                    <v-text-field v-model="end_latitude" color="red" label="Широта"></v-text-field>
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Отметить на карте:</span>
+                    </div>
+
+                    <v-radio-group v-model="points" class="mt-2">
+                        <v-radio value="start" color="purple-darken-4">
+                            <template v-slot:label>
+                                    <v-icon color="blue" icon="mdi-map-marker" class="mr-2"></v-icon>
+                                    <span class="text-h6">Исходный пункт</span>
+                            </template>
+                        </v-radio>
+
+                        <v-radio value="end" color="purple-darken-4">
+                            <template v-slot:label>
+                                    <v-icon color="red" icon="mdi-map-marker" class="mr-2"></v-icon>
+                                    <span class="text-h6">Пункт назначения</span>
+                            </template>
+                        </v-radio>
+                    </v-radio-group>
+                </v-form>
+            </div>
+
+            <v-btn block class="mx-8 pa-5 mt-8 text-h6" color="purple-darken-4" @click="send_data">
                 Построить маршрут
             </v-btn>
         </v-container>
@@ -120,22 +149,27 @@
             </v-btn>
         </v-row>
     </v-container>
+
+
 </template>
 
 <script>
-import axios from 'axios'
-
 
 export default{
-
     data: () => ({
         stage: 0,
 
         iceclass: "",
-        start_longitude: "",
-        start_latitude: "",
-        end_longitude: "",
-        end_latitude: "",
+        start_longitude: -168.39220116469363,
+        start_latitude: 70.63562822509428,
+        end_longitude: 60.76615063298328,
+        end_latitude: 71.34638528176734,
+
+        start_coords: [],
+        end_coords: [],
+
+        ship_name: "",
+        points: "start",
 
         iceclasses: [
             ['Ice1', 'ЛУ1', 'Самостоятельное эпизодическое плавание в мелкобитом разреженном льду неарктических морей и в сплошном льду в канале за ледоколом при толщине льда до 0,4 м'],
@@ -149,6 +183,7 @@ export default{
             ['Arc9', 'ЛУ9', 'Самостоятельное плавание в сплоченных многолетних арктических льдах толщиной до 3,5 м в зимне-весеннюю навигацию и до 4,0 м в летне-осеннюю навигацию. Преодоление ледовых перемычек с помощью работы набегами. Эпизодическое преодоление участков однолетних и двухлетних сплошных льдов с помощью работы набегами']
         ]
     }),
+
     methods: {
         next(){
             this.stage++
@@ -157,27 +192,32 @@ export default{
         back(){
             this.stage--
         },
-        getIceClass(iceclass){
-            alert(iceclass)
-        },
-        send_data(){
-            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/generate_route", 
-            {
-                iceclass: this.iceclass,
-                start_longitude: this.start_longitude,
-                start_latitude: this.start_latitude,
-                end_longitude: this.end_longitude,
-                end_latitude: this.end_latitude
+        onClick(e) {
+
+            if (this.points === 'start'){
+                this.start_coords = e.get('coords');
+                this.start_latitude = this.start_coords[0]
+                this.start_longitude = this.start_coords[1]
             }
-            )
-        }
-    }
+            else if (this.points === 'end'){
+                this.end_coords = e.get('coords');
+                this.end_latitude = this.end_coords[0]
+                this.end_longitude = this.end_coords[1]
+            }
+
+        },
+    },
+
+    mounted(){
+        this.start_coords = [this.start_latitude, this.start_longitude]
+        this.end_coords = [this.end_latitude, this.end_longitude]
+    }   
 }
 </script>
 
 <style scoped>
 .ymap-container {
-    width: 1770px;
+    width: 1400px;
     height: 700px;
 }
 
