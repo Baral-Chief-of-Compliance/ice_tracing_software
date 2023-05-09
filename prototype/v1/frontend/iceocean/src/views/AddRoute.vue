@@ -10,7 +10,7 @@
                     cols="12"
                     md="4"
                 >
-                    <v-text-field label="Название судна" color="purple-darken-4" v-model="ship_name">
+                    <v-text-field label="Название судна" color="purple-darken-4" v-model="ship_name" variant="underlined">
 
                     </v-text-field>
                 </v-col>
@@ -70,7 +70,7 @@
             <div class="d-flex ml-10">
                 <div class="map">
                     <yandex-map
-                        :coords="[68.970360, 33.074172]"
+                        :coords="[71.10679806433585, 126.47064037736162]"
                         :zoom="3"
                         @click="onClick"
                     >
@@ -78,13 +78,11 @@
                     <ymap-marker 
                         :coords="start_coords" 
                         marker-id="1" 
-                        hint-content="some hint" 
                     />
 
                     <ymap-marker 
                         :coords="end_coords" 
                         marker-id="2" 
-                        hint-content="some hint" 
                         :icon="{ color: 'red' }"
                     />
 
@@ -99,18 +97,18 @@
                     </div>
                     
 
-                    <v-text-field v-model="start_longitude" color="blue" label="Долгота"></v-text-field>
+                    <v-text-field v-model="start_longitude" color="blue" label="Долгота" variant="underlined"></v-text-field>
 
-                    <v-text-field v-model="start_latitude" color="blue" label="Широта"></v-text-field>
+                    <v-text-field v-model="start_latitude" color="blue" label="Широта" variant="underlined"></v-text-field>
 
                     <div class="d-flex justify-center pt-7">
                         <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
                         <span class="text-h6">Пункт назначения:</span>
                     </div>
 
-                    <v-text-field v-model="end_longitude" color="red" label="Долгота"></v-text-field>
+                    <v-text-field v-model="end_longitude" color="red" label="Долгота" variant="underlined"></v-text-field>
          
-                    <v-text-field v-model="end_latitude" color="red" label="Широта"></v-text-field>
+                    <v-text-field v-model="end_latitude" color="red" label="Широта" variant="underlined"></v-text-field>
 
                     <div class="d-flex justify-center pt-7">
                         <span class="text-h6">Отметить на карте:</span>
@@ -134,33 +132,243 @@
                 </v-form>
             </div>
 
-            <v-btn block class="mx-8 pa-5 mt-8 text-h6" color="purple-darken-4" @click="send_data">
-                Построить маршрут
-            </v-btn>
+        </v-container>
+
+        <v-container v-if="stage === 2">
+            <div class="text-h5 mx-10 mb-5">3 ШАГ: Настройки для построения маршрута</div>
+            
+            <div class="d-flex ml-10">
+                <div class="map">
+                    <yandex-map
+                        :coords="start_coords"
+                        :zoom="4"
+                    >
+
+                        <!-- <ymap-marker 
+                            :coords="start_coords" 
+                            marker-id="2" 
+                            marker-type="Circle"
+                            :circle-radius="radius"
+
+                        /> -->
+
+                        <ymap-marker 
+                            :coords="start_coords" 
+                            marker-id="1" 
+                        />
+
+                        <ymap-marker 
+                            :coords="[this.polygon]" 
+                            marker-id="2"
+                            marker-type="Polygon" 
+                        />
+
+            
+                    </yandex-map>
+                </div>
+
+                <v-form class="ml-10">
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Радиус зоны для построения маршрута:</span>
+                    </div>
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Левая сторона квадрата:</span>
+                    </div>
+
+                    <v-slider
+                        v-model="lenght_left_side"
+                        class="align-center"
+                        :max="max"
+                        :min="min"
+                        hide-details
+                        color="purple-darken-4"
+                    >
+                        <template v-slot:prepend>
+                        <v-btn
+                            size="small"
+                            variant="text"
+                            icon="mdi-minus"
+                            color="purple-darken-4"
+                            @click="decrement_left_side"
+                        ></v-btn>
+                        </template>
+                        <template v-slot:append>
+                            <v-btn
+                                size="small"
+                                variant="text"
+                                icon="mdi-plus"
+                                color="purple-darken-4"
+                                @click="increment_left_side"
+                            ></v-btn>
+                        </template>
+                    </v-slider>
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Правая сторона квадрата:</span>
+                    </div>
+
+                    <v-slider
+                        v-model="lenght_right_side"
+                        class="align-center"
+                        :max="max"
+                        :min="min"
+                        hide-details
+                        color="purple-darken-4"
+                    >
+                        <template v-slot:prepend>
+                        <v-btn
+                            size="small"
+                            variant="text"
+                            icon="mdi-minus"
+                            color="purple-darken-4"
+                            @click="decrement_right_side"
+                        ></v-btn>
+                        </template>
+                        <template v-slot:append>
+                            <v-btn
+                                size="small"
+                                variant="text"
+                                icon="mdi-plus"
+                                color="purple-darken-4"
+                                @click="increment_right_side"
+                            ></v-btn>
+                        </template>
+                    </v-slider>
+
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Верхняя сторона квадрата:</span>
+                    </div>
+
+                    <v-slider
+                        v-model="width_top_side"
+                        class="align-center"
+                        :max="max"
+                        :min="min"
+                        hide-details
+                        color="purple-darken-4"
+                    >
+                        <template v-slot:prepend>
+                        <v-btn
+                            size="small"
+                            variant="text"
+                            icon="mdi-minus"
+                            color="purple-darken-4"
+                            @click="decrement_width_top_side"
+                        ></v-btn>
+                        </template>
+                        <template v-slot:append>
+                            <v-btn
+                                size="small"
+                                variant="text"
+                                icon="mdi-plus"
+                                color="purple-darken-4"
+                                @click="increment_width_top_side"
+                            ></v-btn>
+                        </template>
+                    </v-slider>
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Нижняя сторона квадрата:</span>
+                    </div>
+
+                    <v-slider
+                        v-model="width_bottom_side"
+                        class="align-center"
+                        :max="max"
+                        :min="min"
+                        hide-details
+                        color="purple-darken-4"
+                    >
+                        <template v-slot:prepend>
+                        <v-btn
+                            size="small"
+                            variant="text"
+                            icon="mdi-minus"
+                            color="purple-darken-4"
+                            @click="decrement_width_bottom_side"
+                        ></v-btn>
+                        </template>
+                        <template v-slot:append>
+                            <v-btn
+                                size="small"
+                                variant="text"
+                                icon="mdi-plus"
+                                color="purple-darken-4"
+                                @click="increment_width_bottom_side"
+                            ></v-btn>
+                        </template>
+                    </v-slider>
+
+
+                    <div class="d-flex justify-center pt-7">
+                        <span class="text-h6">Дата отправления:</span>
+                    </div>
+
+                    <v-text-field type="date" color="purple-darken-4"></v-text-field>
+                    
+
+                </v-form>
+            </div>
+            <v-dialog
+                v-model="dialog"
+                width="auto"
+            >
+                <template v-slot:activator="{ props }">
+                    <v-btn block class="mx-8 pa-5 mt-8 text-h6" 
+                        color="purple-darken-4" 
+                        v-bind="props">
+                        Построить маршрут
+                    </v-btn>
+                </template>
+
+                <v-card width="500">
+                    <v-card-title>
+                        Добавить маршрут
+                    </v-card-title>
+                    <v-card-text>
+                        <v-text-field label="Название маршрута" color="purple-darken-4" variant="underlined">
+
+                        </v-text-field>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="red" @click="dialog = false">Закрыть</v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green" @click="dialog = false">Добавить</v-btn>
+                    </v-card-actions>
+                </v-card>
+
+            </v-dialog>
+
         </v-container>
 
         <v-row class="ma-10">
             <v-btn  @click="back" color="gray" v-if="stage != 0">
                 Предыдущий шаг
             </v-btn>
+            <v-spacer></v-spacer>
 
-            <v-btn @click="next" color="purple-darken-4"  v-if="stage != 1">
+            <v-btn @click="next" color="purple-darken-4"  v-if="stage != 2">
                 Следующий шаг
             </v-btn>
         </v-row>
+
     </v-container>
 
 
 </template>
 
 <script>
+import axios from 'axios';
+
 
 export default{
     data: () => ({
         stage: 0,
 
         iceclass: "",
-        start_longitude: -168.39220116469363,
+        start_longitude: 170.39220116469363,
         start_latitude: 70.63562822509428,
         end_longitude: 60.76615063298328,
         end_latitude: 71.34638528176734,
@@ -170,6 +378,23 @@ export default{
 
         ship_name: "",
         points: "start",
+
+        min: 0,
+        max: 20,
+        lenght_left_side: 10,
+        lenght_right_side: 10,
+        width_top_side: 10,
+        width_bottom_side: 10,
+
+        polygon: [                [
+                    [55.75, 37.80],
+                    [55.80, 37.90],
+                    [55.75, 38.00],
+                    [55.70, 38.00],
+                    [55.70, 37.80]
+                ]],
+
+        dialog: false,
 
         iceclasses: [
             ['Ice1', 'ЛУ1', 'Самостоятельное эпизодическое плавание в мелкобитом разреженном льду неарктических морей и в сплошном льду в канале за ледоколом при толщине льда до 0,4 м'],
@@ -187,6 +412,15 @@ export default{
     methods: {
         next(){
             this.stage++
+
+            if(this.stage === 2){
+                axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/generate_area", 
+                {
+                    start_longitude: this.start_longitude,
+                    start_latitude: this.start_latitude
+                }
+                ).then(response => this.polygon = response.data.polygon)
+            }
         },
 
         back(){
@@ -206,6 +440,131 @@ export default{
             }
 
         },
+        increment_left_side(){
+            this.lenght_left_side++
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                [right_top_area[0], right_top_area[1] - 1], left_top_area, left_bottom_area, [right_bottom_area[0], right_bottom_area[1] - 1], [right_top_area[0], right_top_area[1] - 1]
+            ]        
+        },
+        decrement_left_side(){
+            this.lenght_left_side--
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                [right_top_area[0], right_top_area[1] + 1], 
+                left_top_area, 
+                left_bottom_area, 
+                [right_bottom_area[0], right_bottom_area[1] + 1], 
+                [right_top_area[0], right_top_area[1] + 1]
+            ]   
+        },
+
+        increment_right_side(){
+            this.lenght_right_side++
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                right_top_area, 
+                [left_top_area[0], left_top_area[1] + 1], 
+                [left_bottom_area[0], left_bottom_area[1] + 1], 
+                right_bottom_area, 
+                right_top_area
+            ]        
+        },
+
+        decrement_right_side(){
+            this.lenght_right_side--
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                right_top_area, 
+                [left_top_area[0], left_top_area[1] - 1], 
+                [left_bottom_area[0], left_bottom_area[1] - 1], 
+                right_bottom_area, 
+                right_top_area
+            ]        
+        },
+
+        decrement_width_top_side(){
+            this.width_top_side--
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                [right_top_area[0] - 1,  right_top_area[1]], 
+                [left_top_area[0] - 1, left_top_area[1]], 
+                left_bottom_area, 
+                right_bottom_area, 
+                [right_top_area[0] - 1,  right_top_area[1]]
+            ]   
+        },
+
+        increment_width_top_side(){
+            this.width_top_side++
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                [right_top_area[0] + 1,  right_top_area[1]], 
+                [left_top_area[0] + 1, left_top_area[1]], 
+                left_bottom_area, 
+                right_bottom_area, 
+                [right_top_area[0] + 1,  right_top_area[1]]
+            ]   
+        },
+
+
+        decrement_width_bottom_side(){
+            this.width_bottom_side--
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                right_top_area, 
+                left_top_area, 
+                [left_bottom_area[0] + 1, left_bottom_area[1]],
+                [right_bottom_area[0] + 1, right_bottom_area[1]], 
+                right_top_area
+            ]   
+        },
+
+        increment_width_bottom_side(){
+            this.width_bottom_side++
+            let right_top_area = this.polygon[0]
+            let left_top_area = this.polygon[1]
+            let left_bottom_area = this.polygon[2]
+            let right_bottom_area = this.polygon[3]
+
+            this.polygon = [
+                right_top_area, 
+                left_top_area, 
+                [left_bottom_area[0] - 1, left_bottom_area[1]],
+                [right_bottom_area[0] - 1, right_bottom_area[1]], 
+                right_top_area
+            ]  
+        }
+
+
     },
 
     mounted(){

@@ -1,1 +1,0 @@
-{'longitude': 180, 'latitude': 0.0009000000000014552, 'start': False, 'end': False, 'type_of_ice': ''}
