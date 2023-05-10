@@ -5,12 +5,11 @@ from ports.ports import ports
 
 
 url = '/iceocean/api/v1.0/'
+
+
 @app.route('/')
 def index():
     return "hello world"
-
-
-
 
 
 app.register_blueprint(generate_route, url_prefix=url)

@@ -158,6 +158,12 @@
                         />
 
                         <ymap-marker 
+                            :coords="end_coords" 
+                            marker-id="3" 
+                            :icon="{ color: 'red' }"
+                        />
+
+                        <ymap-marker 
                             :coords="[this.polygon]" 
                             marker-id="2"
                             marker-type="Polygon" 
@@ -306,7 +312,7 @@
                         <span class="text-h6">Дата отправления:</span>
                     </div>
 
-                    <v-text-field type="date" color="purple-darken-4"></v-text-field>
+                    <v-text-field type="date" color="purple-darken-4" v-model="date_start"></v-text-field>
                     
 
                 </v-form>
@@ -328,14 +334,14 @@
                         Добавить маршрут
                     </v-card-title>
                     <v-card-text>
-                        <v-text-field label="Название маршрута" color="purple-darken-4" variant="underlined">
+                        <v-text-field v-model="route_name" label="Название маршрута" color="purple-darken-4" variant="underlined">
 
                         </v-text-field>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn color="red" @click="dialog = false">Закрыть</v-btn>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" @click="dialog = false">Добавить</v-btn>
+                        <v-btn color="green" @click="add_route()">Добавить</v-btn>
                     </v-card-actions>
                 </v-card>
 
@@ -353,7 +359,7 @@
                 Следующий шаг
             </v-btn>
         </v-row>
-
+        {{ this.polygon }}
     </v-container>
 
 
@@ -393,6 +399,9 @@ export default{
                     [55.70, 38.00],
                     [55.70, 37.80]
                 ]],
+
+        date_start: "",
+        route_name: "",
 
         dialog: false,
 
@@ -562,6 +571,29 @@ export default{
                 [right_bottom_area[0] - 1, right_bottom_area[1]], 
                 right_top_area
             ]  
+        },
+
+        add_route(){
+            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/add_route", 
+                {
+                    ship_name: this.ship_name,
+                    iceclass: this.iceclass,
+
+                    start_longitude: this.start_longitude,
+                    start_latitude: this.start_latitude,
+
+                    end_longitude: this.end_longitude,
+                    end_latitude: this.end_latitude,
+
+                    area_building_route: this.polygon,
+
+                    date_start: this.date_start,
+
+                    route_name: this.route_name
+                }
+            )
+
+            this.$router.push({ path: 'Routes'})
         }
 
 

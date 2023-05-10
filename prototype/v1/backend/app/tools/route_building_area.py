@@ -174,3 +174,39 @@ def build_2(map_, width, length, start_longitude, start_latitude, end_longitude,
                     area[y - y_vertex_top][x - x_vertex_left] = map_[y][x]
 
     return area
+
+
+def build_interval_route(map_, area_building_route):
+
+    width = len(map_)
+    length = len(map_[0])
+
+    y_1, x_1 = nearest(map_, width, length, area_building_route[0][1], area_building_route[0][0])
+    y_2, x_2 = nearest(map_, width, length, area_building_route[1][1], area_building_route[1][0])
+    y_3, x_3 = nearest(map_, width, length, area_building_route[2][1], area_building_route[2][0])
+    y_4, x_4 = nearest(map_, width, length, area_building_route[3][1], area_building_route[3][0])
+
+    print(f"y_1:{y_1}, x_1:{x_1}")
+    print(f"y_2:{y_2}, x_2:{x_2}")
+    print(f"y_3:{y_3}, x_3:{x_3}")
+    print(f"y_4:{y_4}, x_4:{x_4}")
+
+
+    area_width = y_4 - y_1 + 1
+    area_length = x_2 - x_1 + 1
+    print(area_width)
+    print(area_length)
+
+    area = [['.' for x in range(area_length)] for y in range(area_width)]
+
+    for y in range(width):
+        for x in range(length):
+            if y_1 <= y <= y_4:
+                if x_1 <= x <= x_2:
+                    area[y - y_1][x - x_1] = map_[y][x]
+
+    print(len(area))
+    print(len(area[0]))
+    print(area)
+    print("\n\n")
+    return area

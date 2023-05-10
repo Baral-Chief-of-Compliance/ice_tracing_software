@@ -1,4 +1,4 @@
-from weight import get_weight
+from app.tools.weight import get_weight
 
 
 def create(area, iceclass):
