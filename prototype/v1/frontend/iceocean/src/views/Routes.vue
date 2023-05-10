@@ -8,6 +8,7 @@
                         <v-card  class="pa-5 d-flex flex-row"
                             v-bind="props"
                             :color="isHovering ? 'purple-darken-4': undefined"
+                            :to = "{name: 'RouteInfo', params: {id_rt: route.id_rt}}"
                         >
                             <b class="pr-2">Название маршрута:</b>  {{ route.name }} 
                             <v-spacer></v-spacer> 

@@ -39,6 +39,11 @@ const routes = [
         path: 'add-route',
         name: 'AddRoute',
         component: () => import('@/views/AddRoute.vue')
+      },
+      {
+        path:'routes/:id_rt',
+        name: 'RouteInfo',
+        component: () => import('@/views/RouteInfo.vue')
       }
     ]
   }
