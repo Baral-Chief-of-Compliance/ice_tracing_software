@@ -191,7 +191,6 @@ def build_interval_route(map_, area_building_route):
     print(f"y_3:{y_3}, x_3:{x_3}")
     print(f"y_4:{y_4}, x_4:{x_4}")
 
-
     area_width = y_4 - y_1 + 1
     area_length = x_2 - x_1 + 1
     print(area_width)
@@ -205,8 +204,4 @@ def build_interval_route(map_, area_building_route):
                 if x_1 <= x <= x_2:
                     area[y - y_1][x - x_1] = map_[y][x]
 
-    print(len(area))
-    print(len(area[0]))
-    print(area)
-    print("\n\n")
     return area

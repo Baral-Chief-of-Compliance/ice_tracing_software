@@ -14,13 +14,15 @@ geo_json = {
   ]
 }
 
+polyline_for_ymap = []
+
 
 def enter_path(path):
     for el in path:
         new_list = el.split("|")
         longitude = float(new_list[0])
         latitude = float(new_list[1])
-        geo_json["features"][0]["geometry"]["coordinates"].append([longitude, latitude])
+        polyline_for_ymap.append([latitude, longitude])
 
     with open("data/pathArc7.json", "w") as file:
-        json.dump(geo_json, file)
+        json.dump(polyline_for_ymap, file)

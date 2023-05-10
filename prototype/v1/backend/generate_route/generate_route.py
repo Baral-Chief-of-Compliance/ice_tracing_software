@@ -3,6 +3,7 @@ from app.tools import route_building_area
 from app.tools import create_graph
 from app.tools import create_src_dest
 from app.tools import dijkstra
+from app.use_db import generate_route_db
 
 
 generate_route = Blueprint('generate_route', __name__)
@@ -90,6 +91,21 @@ def add_route():
 
         route_name = request.json["route_name"]
 
+        generate_route_db.add_ship(ship_name, iceclass)
+        id_sh = generate_route_db.find_ship(ship_name)
+
+        generate_route_db.create_route(route_name, 1, id_sh[0])
+        id_rt = generate_route_db.find_route(route_name)
+
+        generate_route_db.create_start_end_point(
+            id_rt[0],
+            start_longitude,
+            start_latitude,
+            end_longitude,
+            end_latitude,
+            date_start
+        )
+
         print(f"Корабль: {ship_name}")
         print(f"ледовый класс: {iceclass}")
         print(f"Начало: long {start_longitude}, lat {start_latitude}")
@@ -120,7 +136,7 @@ def add_route():
             end_latitude
         )
 
-        area_y_start_point, area_x_star_point = route_building_area.nearest(
+        area_y_start_point, area_x_start_point = route_building_area.nearest(
             area,
             area_width,
             area_length,
@@ -128,16 +144,26 @@ def add_route():
             start_latitude
         )
 
-        area[area_y_start_point][area_x_star_point]["start"] = True
+        area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
 
+        generate_route_db.add_intermediate(
+            id_rt,
+            area[area_y_next_point][area_x_next_point]["longitude"],
+            area[area_y_next_point][area_x_next_point]["latitude"]
+        )
+
         print(area_y_next_point, area_x_next_point)
-        print(area_y_start_point, area_x_star_point)
+        print(area_y_start_point, area_x_start_point)
 
         graph = create_graph.create(area, iceclass)
         src, dest = create_src_dest.create_src_dest(area)
         dijkstra.dijkstra(graph, src, dest)
 
+        with open("data/pathArc7.json", "r") as file:
+            polyline_for_ymap = json.load(file)
+
+        generate_route_db.add_route(id_rt, polyline_for_ymap)
         return "hello"
 
 

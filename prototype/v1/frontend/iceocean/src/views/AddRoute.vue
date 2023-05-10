@@ -359,7 +359,6 @@
                 Следующий шаг
             </v-btn>
         </v-row>
-        {{ this.polygon }}
     </v-container>
 
 
