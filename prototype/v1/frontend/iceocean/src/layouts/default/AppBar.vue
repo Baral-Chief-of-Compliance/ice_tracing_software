@@ -9,7 +9,7 @@
     contain
     ></v-img>
     <v-app-bar-title>
-      <div class="text-h4" >ICEocean</div>
+      <div class="text-h4">ICEocean</div>
       <!-- <v-icon icon="mdi-circle-slice-4" /> -->
     </v-app-bar-title>
     <div class="mr-15">

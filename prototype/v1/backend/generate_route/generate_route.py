@@ -163,7 +163,9 @@ def add_route():
         with open("data/pathArc7.json", "r") as file:
             polyline_for_ymap = json.load(file)
 
-        generate_route_db.add_route(id_rt, polyline_for_ymap)
+        json_way = json.dumps(polyline_for_ymap)
+
+        generate_route_db.add_route(id_rt, json_way)
         return "hello"
 
 

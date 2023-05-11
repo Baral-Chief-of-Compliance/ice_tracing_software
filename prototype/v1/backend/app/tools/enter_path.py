@@ -23,6 +23,10 @@ def enter_path(path):
         longitude = float(new_list[0])
         latitude = float(new_list[1])
         polyline_for_ymap.append([latitude, longitude])
+        geo_json["features"][0]["geometry"]["coordinates"].append([longitude, latitude])
 
     with open("data/pathArc7.json", "w") as file:
         json.dump(polyline_for_ymap, file)
+
+    with open("data/pathArc7_map_box.json", "w") as file:
+        json.dump(geo_json, file)

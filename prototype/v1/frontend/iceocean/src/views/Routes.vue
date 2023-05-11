@@ -20,6 +20,12 @@
                             <v-spacer></v-spacer>
                             <b class="pr-2">Дата окончания:</b>  --
                         </v-card>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn @click="delete_route(route.id_rt)" color="red">
+                                Удалить
+                            </v-btn>
+                        </v-card-actions>
                     </v-hover>
                 </v-col>
             </v-container>
@@ -44,10 +50,21 @@ export default{
         this.get_routes()
     },
 
+    updated(){
+        this.get_routes()
+    },
+
     methods: {
         get_routes(){
             axios.get("http://127.0.0.1:5000/iceocean/api/v1.0/route_inf")
             .then(response => this.rotes = response.data.routes)
+        },
+
+        delete_route(id_rt){
+            axios.delete(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${id_rt}`)
+            .then (
+                rotes => this.get_routes()
+            )
         }
     }
 }

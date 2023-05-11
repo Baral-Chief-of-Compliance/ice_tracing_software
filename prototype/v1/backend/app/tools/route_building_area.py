@@ -1,4 +1,5 @@
 from app.tools.find_index import find_index
+from global_land_mask import globe
 
 
 def find_min_elem(map_, width, length, longitude, latitude):
@@ -47,30 +48,35 @@ def nearest(map_, width, length, longitude, latitude):
         for y in range(width):
             for x in range(length):
 
-                if map_[y][x]["longitude"] >= 0 and map_[y][x]["latitude"] >= 0:
-                    if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
-                        min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
+                if map_[y][x]["weight"] != 9999:
+
+                    if map_[y][x]["longitude"] >= 0 and map_[y][x]["latitude"] >= 0:
+                        if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
+                            min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
 
     elif longitude < 0 and latitude < 0:
         for y in range(width):
             for x in range(length):
-                if map_[y][x]["longitude"] < 0 and map_[y][x]["latitude"] < 0:
-                    if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
-                        min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
+                if map_[y][x]["weight"] != 9999:
+                    if map_[y][x]["longitude"] < 0 and map_[y][x]["latitude"] < 0:
+                        if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
+                            min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
 
     elif longitude >= 0 > latitude:
         for y in range(width):
             for x in range(length):
-                if map_[y][x]["longitude"] >= 0 > map_[y][x]["latitude"]:
-                    if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
-                        min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
+                if map_[y][x]["weight"] != 9999:
+                    if map_[y][x]["longitude"] >= 0 > map_[y][x]["latitude"]:
+                        if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
+                            min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
 
     elif longitude < 0 <= latitude:
         for y in range(width):
             for x in range(length):
-                if map_[y][x]["longitude"] < 0 <= map_[y][x]["latitude"]:
-                    if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
-                        min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
+                if map_[y][x]["weight"] != 9999:
+                    if map_[y][x]["longitude"] < 0 <= map_[y][x]["latitude"]:
+                        if check_diff(map_[y][x], longitude, latitude, difference_long, difference_lat):
+                            min_elem, difference_long, difference_lat = define_diff(map_[y][x], longitude, latitude)
 
     y, x = find_index(map_, width, length, min_elem)
 
@@ -203,5 +209,11 @@ def build_interval_route(map_, area_building_route):
             if y_1 <= y <= y_4:
                 if x_1 <= x <= x_2:
                     area[y - y_1][x - x_1] = map_[y][x]
+
+
+    for y in range(len(area)):
+        for x in range(len(area[0])):
+            if globe.is_land(area[y][x]["latitude"], area[y][x]["longitude"]):
+                area[y][x]["weight"] = 9999
 
     return area

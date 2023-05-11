@@ -592,7 +592,7 @@ export default{
                 }
             )
 
-            this.$router.push({ path: 'Routes'})
+            this.$router.push({ name: 'Routes'})
         }
 
 
