@@ -301,6 +301,8 @@ export default{
         date_enter: "",
         stage: 0,
 
+        commit: "",
+
         min: 0,
         max: 20,
         lenght_left_side: 10,
