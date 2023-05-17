@@ -19,6 +19,10 @@
         
         </div> 
 
+        <v-btn  variant="outlined" class="mx-10" :to="{name: 'Home'}">
+            <v-icon icon="mdi-arrow-collapse-left" color="purple-darken-4" class="mr-2"></v-icon>назад
+        </v-btn>
+
         <div class="text-h4 py-6 mx-10 mb-5 text-left">Ледовая обстановка на сегодня</div>
 
         <div class="map">
@@ -27,50 +31,56 @@
                 :zoom="3"
                 :cluster-options="clusterOptions"
             >
-                <ymap-marker v-if="!show_fast_ice" v-for="(polygon, index) in fast_ice" :key="index"
+                <ymap-marker v-if="!show_fast_ice" v-for="(polygon, index) in fast_ice" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#fffafa'}"
+                    :markerFill="{color: '#fffafa', opacity: 0.5}"
+                    :marker-stroke="{color: '#fffafa', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index"
+                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#b9b1b1'}"
+                    :markerFill="{color: '#b9b1b1', opacity: 0.5}"
+                    :marker-stroke="{color: '#b9b1b1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index"
+                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#0968f5'}"
+                    :markerFill="{color: '#0968f5', opacity: 0.5}"
+                    :marker-stroke="{color: '#0968f5', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index"
+                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#f708f9'}"
+                    :markerFill="{color: '#f708f9', opacity: 0.5}"
+                    :marker-stroke="{color: '#f708f9', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index"
+                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#00c8a1'}"
+                    :markerFill="{color: '#00c8a1', opacity: 0.7}"
+                    :marker-stroke="{color: '#00c8a1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index"
+                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index+1000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
-                    :markerFill="{color: '#900001'}"
+                    :markerFill="{color: '#900001', opacity: 0.7}"
+                    :marker-stroke="{color: '#900001', opacity: 1}"
                     suppressMapOpenBlock: true
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_ports" v-for="(port, index) in ports" :key="index"
+                <ymap-marker v-if="!show_ports" v-for="(port, index) in ports" :key="index+10000"
                     :marker-id="show_ports"
                     :balloon="{header: port.name }"
                     cluster-name="1"

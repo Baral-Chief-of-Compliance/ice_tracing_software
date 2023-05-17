@@ -66,6 +66,7 @@
                         :marker-id="index"
                         marker-type="Polyline"
                         :coords="route.polyline"
+                        :marker-stroke="{ color: '#000000', width: 2, opacity: 1, style: 'shortdash'}"
                         />
 
                     </yandex-map>
@@ -84,7 +85,7 @@
             <div class="d-flex ml-10">
                 <div class="map">
                     <yandex-map
-                        :coords="[start_latitude, start_longitude]"
+                        :coords="[final_point_latitude, final_point_longitude]"
                         :zoom="4"
                     >
 
@@ -115,13 +116,18 @@
                             :marker-id="index"
                             marker-type="Polyline"
                             :coords="route.polyline"
+                            :marker-stroke="{ color: '#000000', width: 2, opacity: 1, style: 'shortdash'}"
                         />
 
                         <ymap-marker 
                             :coords="[this.polygon]" 
                             marker-id="500"
                             marker-type="Polygon" 
+                            :markerFill="{color: '#4A148C', opacity: 0.7}"
+                            :marker-stroke="{color: '#4A148C', opacity: 1}"
                         />
+
+
 
             
                     </yandex-map>
@@ -301,8 +307,6 @@ export default{
         date_enter: "",
         stage: 0,
 
-        commit: "",
-
         min: 0,
         max: 20,
         lenght_left_side: 10,
@@ -314,10 +318,6 @@ export default{
     }),
 
     mounted(){
-        this.get_inf()
-    },
-
-    updated(){
         this.get_inf()
     },
 

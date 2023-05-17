@@ -87,20 +87,21 @@ def get_int_route(id_rt):
         return "date on point is update"
 
     elif request.method == 'POST':
+        print("\n\nжукич лох\n\n")
 
         final_point_longitude = request.json["final_point_longitude"]
         final_point_latitude = request.json["final_point_latitude"]
+        print(f"final_long_start: {final_point_longitude}" )
+        print(f"final_lat_start: {final_point_latitude}")
 
         print(final_point_longitude)
         print(final_point_latitude)
-        print("\n\n")
+
 
         end_longitude = request.json["end_longitude"]
         end_latitude = request.json["end_latitude"]
-
-        print(end_longitude)
-        print(end_latitude)
-        print("\n\n")
+        print(f"\n\nlong_end: {end_longitude}" )
+        print(f"lat_end: {end_latitude}")
 
         iceclass = request.json["iceclass"]
 
@@ -109,7 +110,13 @@ def get_int_route(id_rt):
         with open("data/map.json", "r") as file:
             map_ = json.load(file)
 
+        print("\n\n")
+        print(area_building_route)
+        print("\n\n")
         area = route_building_area.build_interval_route(map_, area_building_route)
+
+        # with open("data/area_check.json", "w") as file:
+        #     json.dump(area, file)
 
         area_width = len(area)
         area_length = len(area[0])
@@ -123,6 +130,9 @@ def get_int_route(id_rt):
             end_latitude
         )
 
+        print(f"\n\nLong_next_point: {area[area_y_next_point][area_x_next_point]['longitude']}")
+        print(f"Lat_next_point: {area[area_y_next_point][area_x_next_point]['latitude']}")
+
         area_y_start_point, area_x_start_point = route_building_area.nearest(
             area,
             area_width,
@@ -130,6 +140,9 @@ def get_int_route(id_rt):
             final_point_longitude,
             final_point_latitude
         )
+
+        print(f"\n\nLong_start_point: {area[area_y_start_point][area_x_start_point]['longitude']}")
+        print(f"Lat_start_point: {area[area_y_start_point][area_x_start_point]['latitude']}")
 
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
@@ -145,16 +158,18 @@ def get_int_route(id_rt):
 
         graph = create_graph.create(area, iceclass)
         src, dest = create_src_dest.create_src_dest(area)
+        print(f"src: {src}")
+        print(f"dest: {dest}")
         dijkstra.dijkstra(graph, src, dest)
 
         with open("data/pathArc7.json", "r") as file:
             polyline_for_ymap = json.load(file)
 
-        with open("data/pathArc7.json", "w") as file:
-            json.dump("", file)
-
-        with open("data/pathArc7_map_box.json", "w") as file:
-            json.dump("", file)
+        # with open("data/pathArc7.json", "w") as file:
+        #     json.dump("", file)
+        #
+        # with open("data/pathArc7_map_box.json", "w") as file:
+        #     json.dump("", file)
 
         json_way = json.dumps(polyline_for_ymap)
 

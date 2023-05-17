@@ -81,9 +81,13 @@ def add_route():
 
         start_longitude = request.json["start_longitude"]
         start_latitude = request.json["start_latitude"]
+        print(f"long_start: {start_longitude}" )
+        print(f"lat_start: {start_latitude}")
 
         end_longitude = request.json["end_longitude"]
         end_latitude = request.json["end_latitude"]
+        print(f"\n\nlong_end: {end_longitude}" )
+        print(f"lat_end: {end_latitude}")
 
         area_building_route = request.json["area_building_route"]
 
@@ -136,6 +140,11 @@ def add_route():
             end_latitude
         )
 
+        print(f"\n\nLong_next_point: {area[area_y_next_point][area_x_next_point]['longitude']}")
+        print(f"Lat_next_point: {area[area_y_next_point][area_x_next_point]['latitude']}")
+
+
+
         area_y_start_point, area_x_start_point = route_building_area.nearest(
             area,
             area_width,
@@ -143,6 +152,9 @@ def add_route():
             start_longitude,
             start_latitude
         )
+
+        print(f"\n\nLong_start_point: {area[area_y_start_point][area_x_start_point]['longitude']}")
+        print(f"Lat_start_point: {area[area_y_start_point][area_x_start_point]['latitude']}")
 
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
@@ -158,6 +170,8 @@ def add_route():
 
         graph = create_graph.create(area, iceclass)
         src, dest = create_src_dest.create_src_dest(area)
+        print(f"src: {src}")
+        print(f"dest: {dest}")
         dijkstra.dijkstra(graph, src, dest)
 
         with open("data/pathArc7.json", "r") as file:

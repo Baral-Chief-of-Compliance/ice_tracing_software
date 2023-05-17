@@ -1,6 +1,9 @@
 <template>
     <v-container>
         <div class="text-h3 py-6 mx-10 text-left">Добавить маршрут</div>
+        <v-btn  variant="outlined" class="mx-10" :to="{name: 'Routes'}">
+            <v-icon icon="mdi-arrow-collapse-left" color="purple-darken-4" class="mr-2"></v-icon>назад
+        </v-btn>
 
         <v-container v-if="stage === 0">
             <div class="text-h5 mx-10">1.1 ШАГ: Введите имя судна</div>
