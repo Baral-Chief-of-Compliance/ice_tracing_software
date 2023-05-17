@@ -12,7 +12,7 @@ def create(area, iceclass):
             if y == 0 and x == 0:
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 1.41
+                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y][x + 1]['longitude']}|{area[y][x + 1]['latitude']}": area[y][x + 1]['weight'],
@@ -25,7 +25,7 @@ def create(area, iceclass):
             elif y == 0 and x == length - 1:
                 area[y][x - 1]['weight'] = get_weight(area[y][x], area[y][x - 1],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 1.41
+                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y][x - 1]['longitude']}|{area[y][x - 1]['latitude']}":  area[y][x - 1]['weight'],
@@ -38,7 +38,7 @@ def create(area, iceclass):
             elif y == width - 1 and x == 0:
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
-                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 1.41
+                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
@@ -51,7 +51,7 @@ def create(area, iceclass):
             elif y == width - 1 and x == length - 1:
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
                 area[y][x - 1]['weight'] = get_weight(area[y][x], area[y][x - 1],  iceclass) + 1
-                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 1.41
+                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
@@ -65,8 +65,8 @@ def create(area, iceclass):
                 area[y][x - 1]['weight'] = get_weight(area[y][x], area[y][x - 1],  iceclass) + 1
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 1.41
-                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 1.41
+                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 3
+                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y][x - 1]['longitude']}|{area[y][x - 1]['latitude']}": area[y][x - 1]['weight'],
@@ -82,8 +82,8 @@ def create(area, iceclass):
                 area[y][x - 1]['weight'] = get_weight(area[y][x], area[y][x - 1],  iceclass) + 1
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
-                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 1.41
-                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 1.41
+                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 3
+                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y][x - 1]['longitude']}|{area[y][x - 1]['latitude']}": area[y][x - 1]['weight'],
@@ -99,8 +99,8 @@ def create(area, iceclass):
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 1.41
-                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 1.41
+                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 3
+                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
@@ -116,8 +116,8 @@ def create(area, iceclass):
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
                 area[y][x - 1]['weight'] = get_weight(area[y][x], area[y][x - 1],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 1.41
-                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 1.41
+                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 3
+                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y - 1][x]['longitude']}|{area[y - 1][x]['latitude']}": area[y - 1][x]['weight'],
@@ -134,10 +134,10 @@ def create(area, iceclass):
                 area[y][x + 1]['weight'] = get_weight(area[y][x], area[y][x + 1],  iceclass) + 1
                 area[y - 1][x]['weight'] = get_weight(area[y][x], area[y - 1][x],  iceclass) + 1
                 area[y + 1][x]['weight'] = get_weight(area[y][x], area[y + 1][x],  iceclass) + 1
-                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 1.41
-                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 1.41
-                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 1.41
-                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 1.41
+                area[y - 1][x - 1]['weight'] = get_weight(area[y][x], area[y - 1][x - 1],  iceclass) + 3
+                area[y - 1][x + 1]['weight'] = get_weight(area[y][x], area[y - 1][x + 1],  iceclass) + 3
+                area[y + 1][x + 1]['weight'] = get_weight(area[y][x], area[y + 1][x + 1],  iceclass) + 3
+                area[y + 1][x - 1]['weight'] = get_weight(area[y][x], area[y + 1][x - 1],  iceclass) + 3
 
                 nodes = {
                     f"{area[y][x - 1]['longitude']}|{area[y][x - 1]['latitude']}": area[y][x - 1]['weight'],

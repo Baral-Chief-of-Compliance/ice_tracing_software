@@ -107,7 +107,8 @@ def get_int_route(id_rt):
 
         area_building_route = request.json["area_building_route"]
 
-        with open("data/map.json", "r") as file:
+        # проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
+        with open("data/map_test.json", "r") as file:
             map_ = json.load(file)
 
         print("\n\n")

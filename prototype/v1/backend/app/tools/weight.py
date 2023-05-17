@@ -37,11 +37,11 @@ def get_weight_based_ice_class(elem, iceclass):
 
     elif iceclass == "Arc7":
         if elem["type_of_ice"] == "old_ice":
-            return 30
+            return 5
         elif elem["type_of_ice"] == "first_year_ice":
-            return 20
+            return 6
         elif elem["type_of_ice"] == "young_ice":
-            return 10
+            return 6
         elif elem["type_of_ice"] == "nilas_ice":
             return 5
         elif elem["type_of_ice"] == "fast_ice":
@@ -49,7 +49,7 @@ def get_weight_based_ice_class(elem, iceclass):
         elif elem["type_of_ice"] == "ice_field":
             return 8
         else:
-            return 2
+            return 4
 
     elif iceclass == "Arc6":
         if elem["type_of_ice"] == "old_ice":
@@ -81,7 +81,7 @@ def get_weight_based_ice_class(elem, iceclass):
         elif elem["type_of_ice"] == "ice_field":
             return 10
         else:
-            return 1
+            return 4
 
     elif iceclass == "Arc4":
         if elem["type_of_ice"] == "old_ice":

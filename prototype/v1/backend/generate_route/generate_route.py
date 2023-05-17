@@ -43,7 +43,8 @@ def define_square_area():
         print(start_longitude)
         print(start_latitude)
 
-        with open("data/map.json", "r") as file:
+        #проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
+        with open("data/map_test.json", "r") as file:
             map_ = json.load(file)
 
         width = len(map_)
@@ -123,7 +124,8 @@ def add_route():
         print(f"Дата отправки: {date_start}")
         print(f"Название маршрута: {route_name}")
 
-        with open("data/map.json", "r") as file:
+        # проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
+        with open("data/map_test.json", "r") as file:
             map_ = json.load(file)
 
         area = route_building_area.build_interval_route(map_, area_building_route)

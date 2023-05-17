@@ -39,7 +39,7 @@
                     :marker-stroke="{color: '#fffafa', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index+1000"
+                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index+2000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
@@ -47,7 +47,7 @@
                     :marker-stroke="{color: '#b9b1b1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index+1000"
+                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index+3000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
@@ -55,7 +55,7 @@
                     :marker-stroke="{color: '#0968f5', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index+1000"
+                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index+4000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
@@ -63,7 +63,7 @@
                     :marker-stroke="{color: '#f708f9', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index+1000"
+                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index+5000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"
@@ -71,7 +71,7 @@
                     :marker-stroke="{color: '#00c8a1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index+1000"
+                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index+6000"
                     :marker-id="index"
                     marker-type="Polygon"
                     :coords="[polygon]"

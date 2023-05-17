@@ -78,16 +78,65 @@
                         @click="onClick"
                     >
 
-                    <ymap-marker 
-                        :coords="start_coords" 
-                        marker-id="1" 
-                    />
+                        <ymap-marker 
+                            :coords="start_coords" 
+                            marker-id="1" 
+                        />
 
-                    <ymap-marker 
-                        :coords="end_coords" 
-                        marker-id="2" 
-                        :icon="{ color: 'red' }"
-                    />
+                        <ymap-marker 
+                            :coords="end_coords" 
+                            marker-id="2" 
+                            :icon="{ color: 'red' }"
+                        />
+
+                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+1000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#fffafa', opacity: 0.5}"
+                            :marker-stroke="{color: '#fffafa', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index+2000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#b9b1b1', opacity: 0.5}"
+                            :marker-stroke="{color: '#b9b1b1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index+3000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#0968f5', opacity: 0.5}"
+                            :marker-stroke="{color: '#0968f5', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index+4000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#f708f9', opacity: 0.5}"
+                            :marker-stroke="{color: '#f708f9', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index+5000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#00c8a1', opacity: 0.7}"
+                            :marker-stroke="{color: '#00c8a1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index+6000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#900001', opacity: 0.7}"
+                            :marker-stroke="{color: '#900001', opacity: 1}"
+                            suppressMapOpenBlock: true
+                        ></ymap-marker>
 
                     </yandex-map>
                 </div>
@@ -104,6 +153,8 @@
 
                     <v-text-field v-model="start_latitude" color="blue" label="Широта" variant="underlined"></v-text-field>
 
+                    <!-- <v-btn @click="get_coords_form_input()" color="blue" class="mt-2">Применить координаты</v-btn> -->
+
                     <div class="d-flex justify-center pt-7">
                         <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
                         <span class="text-h6">Пункт назначения:</span>
@@ -112,6 +163,10 @@
                     <v-text-field v-model="end_longitude" color="red" label="Долгота" variant="underlined"></v-text-field>
          
                     <v-text-field v-model="end_latitude" color="red" label="Широта" variant="underlined"></v-text-field>
+
+                    <!-- <v-btn color="red" class="mt-2">Применить координаты</v-btn> -->
+
+                    
 
                     <div class="d-flex justify-center pt-7">
                         <span class="text-h6">Отметить на карте:</span>
@@ -169,8 +224,59 @@
                         <ymap-marker 
                             :coords="[this.polygon]" 
                             marker-id="2"
-                            marker-type="Polygon" 
+                            marker-type="Polygon"
+                            :markerFill="{color: '#4A148C', opacity: 0.7}"
+                            :marker-stroke="{color: '#4A148C', opacity: 1}"
                         />
+
+                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+1000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#fffafa', opacity: 0.5}"
+                            :marker-stroke="{color: '#fffafa', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index+2000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#b9b1b1', opacity: 0.5}"
+                            :marker-stroke="{color: '#b9b1b1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index+3000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#0968f5', opacity: 0.5}"
+                            :marker-stroke="{color: '#0968f5', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index+4000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#f708f9', opacity: 0.5}"
+                            :marker-stroke="{color: '#f708f9', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index+5000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#00c8a1', opacity: 0.7}"
+                            :marker-stroke="{color: '#00c8a1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index+6000"
+                            :marker-id="index"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#900001', opacity: 0.7}"
+                            :marker-stroke="{color: '#900001', opacity: 1}"
+                            suppressMapOpenBlock: true
+                        ></ymap-marker>
 
             
                     </yandex-map>
@@ -376,10 +482,10 @@ export default{
         stage: 0,
 
         iceclass: "",
-        start_longitude: 170.39220116469363,
-        start_latitude: 70.63562822509428,
-        end_longitude: 60.76615063298328,
-        end_latitude: 71.34638528176734,
+        start_longitude: 178.29070665057407,
+        start_latitude: 74.31000052240081,
+        end_longitude: 136.63055040057407,
+        end_latitude: 76.72340514385297,
 
         start_coords: [],
         end_coords: [],
@@ -417,10 +523,50 @@ export default{
             ['Arc7', 'ЛУ7', 'Самостоятельное плавание в сплоченных однолетних арктических льдах толщиной до 1,4 м в зимне-весеннюю навигацию и до 1,7 м в летне-осеннюю навигацию при эпизодическом преодолении ледовых перемычек с помощью работы набегами. Плавание в канале за ледоколом в однолетних арктических льдах толщиной до 2,0 м в зимне-весеннюю навигацию и в двухлетних арктических льдах толщиной до 3,2 м в летне-осеннюю навигацию'],
             ['Arc8', 'ЛУ8', 'Самостоятельное плавание в сплоченных однолетних и двухлетних арктических льдах толщиной до 2,1 м в зимне-весеннюю навигацию и до 3,1 м в летне-осеннюю навигацию. Преодоление ледовых перемычек с помощью работы набегами. Плавание в канале за ледоколом в двухлетних арктических льдах толщиной до 3,4 м в зимне-весеннюю навигацию и в многолетних льдах в летне-осеннюю навигацию без ограничений'],
             ['Arc9', 'ЛУ9', 'Самостоятельное плавание в сплоченных многолетних арктических льдах толщиной до 3,5 м в зимне-весеннюю навигацию и до 4,0 м в летне-осеннюю навигацию. Преодоление ледовых перемычек с помощью работы набегами. Эпизодическое преодоление участков однолетних и двухлетних сплошных льдов с помощью работы набегами']
-        ]
+        ],
+
+        fast_ice: [],
+        ice_field: [],
+        nilas_ice: [],
+        young_ice: [],
+        first_year_ice: [],
+        old_ice: []
     }),
 
     methods: {
+        get_coords_form_input(){
+            this.start_latitude = this.start_latitude
+            this.start_longitude = this.start_longitude
+        },
+
+        get_fast_ice(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/fast_ice')
+            .then(response => this.fast_ice = response.data.polygons)
+        },
+
+        get_ice_field(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/ice_field')
+            .then(response => this.ice_field = response.data.polygons) 
+        },
+
+        get_nilas_ice(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/nilas_ice')
+            .then(response => this.nilas_ice = response.data.polygons) 
+        },
+        get_young_ice(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/young_ice')
+            .then(response => this.young_ice = response.data.polygons)
+        },
+
+        get_first_year_ice(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/first_year_ice')
+            .then(response => this.first_year_ice = response.data.polygons)
+        },
+
+        get_old_ice(){
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice')
+            .then(response => this.old_ice = response.data.polygons)
+        },
         next(){
             this.stage++
 
@@ -604,6 +750,12 @@ export default{
     mounted(){
         this.start_coords = [this.start_latitude, this.start_longitude]
         this.end_coords = [this.end_latitude, this.end_longitude]
+        this.get_fast_ice()
+        this.get_ice_field()
+        this.get_nilas_ice()
+        this.get_young_ice()
+        this.get_first_year_ice()
+        this.get_old_ice()
     }   
 }
 </script>
