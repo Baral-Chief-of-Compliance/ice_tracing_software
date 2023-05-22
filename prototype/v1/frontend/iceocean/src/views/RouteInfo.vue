@@ -650,13 +650,14 @@ export default{
         },
 
         update_route(){
-            axios.post(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`,
+            axios.post(`http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route`,
             {
-                final_point_longitude: this.final_point_longitude,
-                final_point_latitude: this.final_point_latitude,
+                id_rt: this.$route.params.id_rt,
+                start_point_longitude: this.final_point_longitude,
+                start_point_latitude: this.final_point_latitude,
 
-                end_longitude: this.end_longitude,
-                end_latitude: this.end_latitude,
+                end_point_longitude: this.end_longitude,
+                end_point_latitude: this.end_latitude,
 
                 iceclass: this.ice_class,
                 area_building_route: this.polygon
