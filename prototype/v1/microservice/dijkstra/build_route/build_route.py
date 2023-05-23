@@ -61,14 +61,27 @@ def build_route_inf():
         )
 
         graph = create_graph.create(area, iceclass)
-        src, dest = create_src_dest.create_src_dest(area)
-        dijkstra.dijkstra(graph, src, dest, distances={}, predecessors={})
+        with open("graph_test.json", "w") as file:
+            json.dump(graph, file)
+        start, goal = create_src_dest.create_src_dest(area)
 
-        with open("data/pathArc7.json", "r") as file:
-            polyline_for_ymap = json.load(file)
+        dijkstra.dijkstra(graph, start, goal)
 
-        json_way = json.dumps(polyline_for_ymap)
+        # cur_node = goal
+        #
+        # print(f'\npath from {goal} to {start}: \n {goal} ', end="")
+        # print("start: ", start)
+        # print("goal: ", goal)
+        # print(visited)
+        # while cur_node != start:
+        #     cur_node = visited[cur_node]
+        #     print(f'---> {cur_node} ', end='')
 
-        generate_route_db.add_route(id_rt, json_way)
-
+        # with open("data/pathArc7.json", "r") as file:
+        #     polyline_for_ymap = json.load(file)
+        #
+        # json_way = json.dumps(polyline_for_ymap)
+        #
+        # generate_route_db.add_route(id_rt, json_way)
+        print("over")
         return "hello"

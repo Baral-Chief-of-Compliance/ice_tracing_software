@@ -1,46 +1,52 @@
 from build_route.enter_path import enter_path
 import sys
+from heapq import *
 
 
-def dijkstra(graph, src, dest, visited=[], distances={}, predecessors={}):
-    print(f"пункт назначение (dest): {dest}")
-    print(f"источник (src): {src}")
-    print(predecessors)
-    sys.setrecursionlimit(10000)
-    if src not in graph:
-        raise TypeError("The root of the shortest path tree cannot be found")
-    if dest not in graph:
-        raise TypeError("The root of the shortest path tree cannot be found")
-    if src == dest:
-        path = []
-        pred = dest
-        while pred != None:
-            path.append(pred)
-            pred = predecessors.get(pred, None)
-            readable = path[0]
+def dijkstra(graph, start, goal):
+    shortest_distance = {} #records the cost to reach to that node. Going to be updated as we mode long the graph
+    track_predecessor = {} #Keep check of the path that has led us to this node
+    unseenNodes = graph #to iterate through the entire graph
+    infinity = float('inf') #infinity can basicaly be considered a very large number
+    track_path = [] #going to trace our journey back to the source node optimal route
 
-        for index in range(1, len(path)): readable = path[index]+'--->'+readable
-        print('shortest path - array: '+str(path))
-        print("path: "+readable+", cost="+str(distances[dest]))
-        enter_path(path)
+    for node in unseenNodes:
+        shortest_distance[node] = infinity
+    shortest_distance[start] = 0
 
-    else:
-        if not visited:
-            distances[src] = 0
+    while unseenNodes:
 
-        for neighbor in graph[src]:
-            if neighbor not in visited:
-                new_distance = distances[src] + graph[src][neighbor]
-                if new_distance < distances.get(neighbor, float('inf')):
-                    distances[neighbor] = new_distance
-                    predecessors[neighbor] = src
+        min_distance_node = None
 
-        visited.append(src)
-        unvisited = {}
+        for node in unseenNodes:
+            if min_distance_node is None:
+                min_distance_node = node
 
-        for k in graph:
-            if k not in visited:
-                unvisited[k] = distances.get(k, float('inf'))
+            elif shortest_distance[node] < shortest_distance[min_distance_node]:
+                min_distance_node = node
 
-        x = min(unvisited, key=unvisited.get)
-        dijkstra(graph, x, dest, visited, distances, predecessors)
+        path_options = graph[min_distance_node].items()
+
+        for child_node, weight in path_options:
+            if weight + shortest_distance[min_distance_node] < shortest_distance[child_node]:
+                shortest_distance[child_node] = weight + shortest_distance[min_distance_node]
+                track_predecessor[child_node] = min_distance_node
+
+        unseenNodes.pop(min_distance_node)
+
+    currentNode = goal
+
+    while currentNode != start:
+        try:
+            track_path.insert(0, currentNode)
+            currentNode = track_predecessor[currentNode]
+        except KeyError:
+            print("Path is not reachable")
+            break
+
+    track_path.insert(0, start)
+
+    if shortest_distance[goal] != infinity:
+        print("Shortest distance is "+str(shortest_distance))
+        print("\n\n")
+        print("Oprimal path is"+str(track_path))

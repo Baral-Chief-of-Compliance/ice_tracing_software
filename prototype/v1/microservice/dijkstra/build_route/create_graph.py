@@ -17,7 +17,7 @@ def create(area, iceclass):
                 nodes = {
                     f"{area[y][x + 1]['longitude']}|{area[y][x + 1]['latitude']}": area[y][x + 1]['weight'],
                     f"{area[y + 1][x]['longitude']}|{area[y + 1][x]['latitude']}": area[y + 1][x]['weight'],
-                    f"{area[y + 1][x + 1]['longitude']}|{area[y + 1][x + 1]['latitude']}": area[y + 1][x + 1]
+                    f"{area[y + 1][x + 1]['longitude']}|{area[y + 1][x + 1]['latitude']}": area[y + 1][x + 1]['weight']
                 }
 
                 graph[f"{area[y][x]['longitude']}|{area[y][x]['latitude']}"] = nodes
