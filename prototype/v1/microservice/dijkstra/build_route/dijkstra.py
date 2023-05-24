@@ -1,8 +1,3 @@
-from build_route.enter_path import enter_path
-import sys
-from heapq import *
-
-
 def dijkstra(graph, start, goal):
     shortest_distance = {} #records the cost to reach to that node. Going to be updated as we mode long the graph
     track_predecessor = {} #Keep check of the path that has led us to this node
@@ -47,6 +42,4 @@ def dijkstra(graph, start, goal):
     track_path.insert(0, start)
 
     if shortest_distance[goal] != infinity:
-        print("Shortest distance is "+str(shortest_distance))
-        print("\n\n")
-        print("Oprimal path is"+str(track_path))
+        return track_path

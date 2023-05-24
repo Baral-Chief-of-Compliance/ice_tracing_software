@@ -6,6 +6,7 @@ import build_route.route_building_area as route_building_area
 import build_route.create_graph as create_graph
 import build_route.create_src_dest as create_src_dest
 import build_route.dijkstra as dijkstra
+from build_route.convert_path_to_geojson import convert
 
 
 build_route = Blueprint('build_route', __name__)
@@ -61,27 +62,15 @@ def build_route_inf():
         )
 
         graph = create_graph.create(area, iceclass)
-        with open("graph_test.json", "w") as file:
-            json.dump(graph, file)
+
         start, goal = create_src_dest.create_src_dest(area)
 
-        dijkstra.dijkstra(graph, start, goal)
+        path = dijkstra.dijkstra(graph, start, goal)
 
-        # cur_node = goal
-        #
-        # print(f'\npath from {goal} to {start}: \n {goal} ', end="")
-        # print("start: ", start)
-        # print("goal: ", goal)
-        # print(visited)
-        # while cur_node != start:
-        #     cur_node = visited[cur_node]
-        #     print(f'---> {cur_node} ', end='')
+        polyline_for_ymap = convert(path)
 
-        # with open("data/pathArc7.json", "r") as file:
-        #     polyline_for_ymap = json.load(file)
-        #
-        # json_way = json.dumps(polyline_for_ymap)
-        #
-        # generate_route_db.add_route(id_rt, json_way)
-        print("over")
-        return "hello"
+        json_path = json.dumps(polyline_for_ymap)
+
+        generate_route_db.add_route(id_rt, json_path)
+
+        return jsonify("path is build")
