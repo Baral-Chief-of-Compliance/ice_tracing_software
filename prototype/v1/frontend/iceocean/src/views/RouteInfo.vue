@@ -387,8 +387,33 @@
             <v-btn block class="mx-8 pa-5 mt-8 text-h6" color="purple-darken-4" @click="update_route()">
                 Построить маршрут
             </v-btn>
+
         </v-container>
+
+
+
+
     </v-container>
+
+
+    <v-dialog
+        v-model="dialog_loading"
+        width="auto"
+        persistent
+      >
+        <v-card
+            color="purple-darken-4"
+        >
+            <v-card-text>
+            Пожалуйста, подождите
+            <v-progress-linear
+                indeterminate
+                color="white"
+                class="mb-0"
+            ></v-progress-linear>
+            </v-card-text>
+        </v-card>
+      </v-dialog>
 
 </template>
 
@@ -419,6 +444,7 @@ export default{
         dialog_yes: false,
         date_enter: "",
         stage: 0,
+        dialog_loading: false,
 
         min: 0,
         max: 20,
@@ -436,6 +462,21 @@ export default{
         first_year_ice: [],
         old_ice: []
     }),
+
+    created(){
+        axios.interceptors.request.use( (config)=>{
+            this.dialog_loading = true
+            return config
+        }),
+
+        axios.interceptors.response.use((response) =>{
+            this.dialog_loading = false
+            if (response.config.method == 'post' && response.config.url == 'http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route'){
+                this.$router.go(0)
+            }
+            return response
+        })
+    },
 
     mounted(){
         this.get_inf()
@@ -664,7 +705,6 @@ export default{
             }
             )
 
-            this.$router.push({ name: 'Routes'})
         }
     }
 }

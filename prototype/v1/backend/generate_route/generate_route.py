@@ -4,6 +4,7 @@ from app.tools import create_graph
 from app.tools import create_src_dest
 from app.tools import dijkstra
 from app.use_db import generate_route_db
+from app.tools.convert_path_to_geojson import convert
 
 
 generate_route = Blueprint('generate_route', __name__)
@@ -82,13 +83,11 @@ def add_route():
 
         start_longitude = request.json["start_longitude"]
         start_latitude = request.json["start_latitude"]
-        print(f"long_start: {start_longitude}" )
-        print(f"lat_start: {start_latitude}")
+
 
         end_longitude = request.json["end_longitude"]
         end_latitude = request.json["end_latitude"]
-        print(f"\n\nlong_end: {end_longitude}" )
-        print(f"lat_end: {end_latitude}")
+
 
         area_building_route = request.json["area_building_route"]
 
@@ -111,19 +110,6 @@ def add_route():
             date_start
         )
 
-        print(f"Корабль: {ship_name}")
-        print(f"ледовый класс: {iceclass}")
-        print(f"Начало: long {start_longitude}, lat {start_latitude}")
-        print(f"Конец: long {end_longitude}, lat {end_latitude}")
-        print(f"Область постройки маршрута: \n"
-              f"левая вершина: long: {area_building_route[0][1]}, lat: {area_building_route[0][0]} \n"
-              f"правая вершина: long: {area_building_route[1][1]}, lat: {area_building_route[1][0]} \n"
-              f"правый низ: long: {area_building_route[2][1]}, lat: {area_building_route[2][0]} \n"
-              f"левый низ: long: {area_building_route[3][1]}, lat: {area_building_route[3][0]} \n")
-
-        print(f"Дата отправки: {date_start}")
-        print(f"Название маршрута: {route_name}")
-
         # проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
         with open("data/map_test.json", "r") as file:
             map_ = json.load(file)
@@ -132,8 +118,7 @@ def add_route():
 
         area_width = len(area)
         area_length = len(area[0])
-        print(area_width)
-        print(area_length)
+
         area_y_next_point, area_x_next_point = route_building_area.nearest(
             area,
             area_width,
@@ -142,11 +127,6 @@ def add_route():
             end_latitude
         )
 
-        print(f"\n\nLong_next_point: {area[area_y_next_point][area_x_next_point]['longitude']}")
-        print(f"Lat_next_point: {area[area_y_next_point][area_x_next_point]['latitude']}")
-
-
-
         area_y_start_point, area_x_start_point = route_building_area.nearest(
             area,
             area_width,
@@ -154,9 +134,6 @@ def add_route():
             start_longitude,
             start_latitude
         )
-
-        print(f"\n\nLong_start_point: {area[area_y_start_point][area_x_start_point]['longitude']}")
-        print(f"Lat_start_point: {area[area_y_start_point][area_x_start_point]['latitude']}")
 
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
@@ -167,22 +144,19 @@ def add_route():
             area[area_y_next_point][area_x_next_point]["latitude"]
         )
 
-        print(area_y_next_point, area_x_next_point)
-        print(area_y_start_point, area_x_start_point)
-
         graph = create_graph.create(area, iceclass)
-        src, dest = create_src_dest.create_src_dest(area)
-        print(f"src: {src}")
-        print(f"dest: {dest}")
-        dijkstra.dijkstra(graph, src, dest)
+        start, goal = create_src_dest.create_src_dest(area)
 
-        with open("data/pathArc7.json", "r") as file:
-            polyline_for_ymap = json.load(file)
+        path = dijkstra.dijkstra(graph, start, goal)
 
-        json_way = json.dumps(polyline_for_ymap)
 
-        generate_route_db.add_route(id_rt, json_way)
-        return "hello"
+        polyline_for_ymap = convert(path)
+
+        json_path = json.dumps(polyline_for_ymap)
+
+        generate_route_db.add_route(id_rt, json_path)
+
+        return jsonify("path is generate")
 
 
 

@@ -470,6 +470,24 @@
         </v-row>
     </v-container>
 
+    <v-dialog
+        v-model="dialog_loading"
+        width="auto"
+        persistent
+      >
+        <v-card
+            color="purple-darken-4"
+        >
+            <v-card-text>
+            Пожалуйста, подождите
+            <v-progress-linear
+                indeterminate
+                color="white"
+                class="mb-0"
+            ></v-progress-linear>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 
 </template>
 
@@ -499,6 +517,7 @@ export default{
         lenght_right_side: 10,
         width_top_side: 10,
         width_bottom_side: 10,
+        dialog_loading: false,
 
         polygon: [                [
                     [55.75, 37.80],
@@ -532,6 +551,22 @@ export default{
         first_year_ice: [],
         old_ice: []
     }),
+
+    created(){
+        axios.interceptors.request.use( (config)=>{
+            this.dialog_loading = true
+            return config
+        }),
+
+        axios.interceptors.response.use((response) =>{
+            this.dialog_loading = false
+            if (response.config.method == 'post' && response.config.url == 'http://127.0.0.1:5000/iceocean/api/v1.0/add_route'){
+                this.$router.push({name: 'Routes'})
+            }
+            return response
+        })
+    },
+
 
     methods: {
         get_coords_form_input(){
@@ -740,8 +775,6 @@ export default{
                     route_name: this.route_name
                 }
             )
-
-            this.$router.push({ name: 'Routes'})
         }
 
 

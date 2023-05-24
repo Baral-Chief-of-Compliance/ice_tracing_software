@@ -1,5 +1,10 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import RouteInfo from '@/views/RouteInfo.vue'
+import Routes from '@/views/Routes.vue'
+import Home from '@/views/Home.vue'
+import AddRoute from '@/views/AddRoute.vue'
+
 
 const routes = [
   {
@@ -12,7 +17,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        component: Home
       },
     ],
   },
@@ -33,17 +38,17 @@ const routes = [
       {
         path: 'routes',
         name: 'Routes',
-        component: () => import('@/views/Routes.vue')
+        component: Routes
       },
       {
         path: 'add-route',
         name: 'AddRoute',
-        component: () => import('@/views/AddRoute.vue')
+        component: AddRoute
       },
       {
         path:'routes/:id_rt',
         name: 'RouteInfo',
-        component: () => import('@/views/RouteInfo.vue')
+        component: RouteInfo
       }
     ]
   }

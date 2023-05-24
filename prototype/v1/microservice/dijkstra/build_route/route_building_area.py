@@ -102,15 +102,8 @@ def build_interval_route(map_, area_building_route):
     y_3, x_3 = nearest(map_, width, length, area_building_route[2][1], area_building_route[2][0])
     y_4, x_4 = nearest(map_, width, length, area_building_route[3][1], area_building_route[3][0])
 
-    print(f"y_1:{y_1}, x_1:{x_1}")
-    print(f"y_2:{y_2}, x_2:{x_2}")
-    print(f"y_3:{y_3}, x_3:{x_3}")
-    print(f"y_4:{y_4}, x_4:{x_4}")
-
     area_width = y_4 - y_1 + 1
     area_length = x_2 - x_1 + 1
-    print(area_width)
-    print(area_length)
 
     area = [['.' for x in range(area_length)] for y in range(area_width)]
 

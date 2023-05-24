@@ -11,7 +11,7 @@
                         <v-card  class="pa-5 d-flex flex-row"
                             v-bind="props"
                             :color="isHovering ? 'purple-darken-4': undefined"
-                            :to = "{name: 'RouteInfo', params: {id_rt: route.id_rt}}"
+                            @click="enter_route(route.id_rt)"
                         >
                             <b class="pr-2">Название маршрута:</b>  {{ route.name }} 
                             <v-spacer></v-spacer> 
@@ -51,6 +51,9 @@ export default{
 
     mounted(){
         this.get_routes()
+        // setInterval(() => {
+        //             location.reload();
+        //         }, 10000);
     },
 
     updated(){
@@ -68,7 +71,12 @@ export default{
             .then (
                 rotes => this.get_routes()
             )
+        },
+
+        async enter_route(id_route){
+            await this.$router.push({name: 'RouteInfo', params: {id_rt: id_route}}) 
         }
+        
     }
 }
 </script>

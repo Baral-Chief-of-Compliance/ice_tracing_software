@@ -5,6 +5,7 @@ from app.tools import create_graph
 from app.tools import create_src_dest
 from app.tools import dijkstra
 from app.use_db import generate_route_db
+from app.tools.convert_path_to_geojson import convert
 
 
 route_inf = Blueprint('route_inf', __name__)
@@ -131,8 +132,6 @@ def get_int_route(id_rt):
             end_latitude
         )
 
-        print(f"\n\nLong_next_point: {area[area_y_next_point][area_x_next_point]['longitude']}")
-        print(f"Lat_next_point: {area[area_y_next_point][area_x_next_point]['latitude']}")
 
         area_y_start_point, area_x_start_point = route_building_area.nearest(
             area,
@@ -142,8 +141,6 @@ def get_int_route(id_rt):
             final_point_latitude
         )
 
-        print(f"\n\nLong_start_point: {area[area_y_start_point][area_x_start_point]['longitude']}")
-        print(f"Lat_start_point: {area[area_y_start_point][area_x_start_point]['latitude']}")
 
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
@@ -154,14 +151,10 @@ def get_int_route(id_rt):
             area[area_y_next_point][area_x_next_point]["latitude"]
         )
 
-        print(area_y_next_point, area_x_next_point)
-        print(area_y_start_point, area_x_start_point)
-
         graph = create_graph.create(area, iceclass)
-        src, dest = create_src_dest.create_src_dest(area)
-        print(f"src: {src}")
-        print(f"dest: {dest}")
-        dijkstra.dijkstra(graph, src, dest)
+        start, goal = create_src_dest.create_src_dest(area)
+
+        path = dijkstra.dijkstra(graph, start, goal)
 
         with open("data/pathArc7.json", "r") as file:
             polyline_for_ymap = json.load(file)
