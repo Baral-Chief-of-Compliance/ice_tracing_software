@@ -4,9 +4,15 @@ import RouteInfo from '@/views/RouteInfo.vue'
 import Routes from '@/views/Routes.vue'
 import Home from '@/views/Home.vue'
 import AddRoute from '@/views/AddRoute.vue'
+import Login from '@/views/Login.vue'
 
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
   {
     path: '/',
     component: () => import('@/layouts/default/DefaultEnter.vue'),
@@ -18,7 +24,7 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: Home
-      },
+      }
     ],
   },
   {
