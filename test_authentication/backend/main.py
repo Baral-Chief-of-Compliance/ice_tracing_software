@@ -3,8 +3,11 @@ from flask_cors import CORS
 from config import Config
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
-from hash import check_password
+from hash import check_password, hash_password
 import bcrypt
+import jwt
+import datetime
+from functools import wraps
 
 
 app = Flask(__name__)
@@ -43,6 +46,79 @@ def index():
     return "hello world"
 
 
+def token_required(f):
+    @wraps(f)
+    def _verify(*args, **kwargs):
+        auth_headers = request.headers.get('Authorization', '').split()
+
+        invalid_msg = {
+            'message': 'Invalid token. Registeration and / or authentication required',
+            'authenticated': False
+        }
+
+        expired_msg = {
+            'message': 'Expired token. Reauthentication required.',
+            'authenticated': False
+        }
+
+        if len(auth_headers) != 2:
+            return jsonify(invalid_msg), 401
+
+        try:
+            token = auth_headers[1]
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            email = data['sub']
+
+            email_exist = call('select exists '
+                               '(select * from person where email_per = %s)', [email], commit=False, fetchall=False)
+
+            if email_exist[0] == 0:
+                    raise RuntimeError('User not found')
+
+            login = call('select login from person where email_per = %s', [email], commit=False, fetchall=False)
+            return f(login[0], *args, **kwargs)
+        except jwt.ExpiredSignatureError:
+            return jsonify(expired_msg), 401  # 401 is Unauthorized HTTP status code
+        except (jwt.InvalidTokenError, Exception) as e:
+            print(e)
+            return jsonify(invalid_msg), 401
+
+    return _verify
+
+
+@app.route('/registration', methods=['POST'])
+def registration():
+    if request.method == 'POST':
+        email = request.json['email']
+        login = request.json['login']
+        password = request.json['password']
+
+        email_exist = call('select exists '
+                     '(select * from person where email_per = %s)', [email], commit=False, fetchall=False)
+
+        if email_exist[0] == 1:
+            print("это почта уже есть в базе")
+            return ""
+
+        elif email_exist[0] == 0:
+
+            login_exist = call('select exists '
+                     '(select * from person where login_per = %s)', [login], commit=False, fetchall=False)
+
+            if login_exist[0] == 1:
+                print("этот логин уже существует")
+                return "this login is exists"
+
+            elif login_exist[0] == 0:
+                print("этого логина нету, как и почты")
+
+                hash_pass = hash_password(password)
+
+                call("insert into person (login_per, email_per, password_hash) "
+                     "values (%s, %s, %s)", [login, email, hash_pass], commit=True, fetchall=False)
+                return "account is create"
+
+
 @app.route('/enter', methods=['POST'])
 def enter():
     if request.method == 'POST':
@@ -52,14 +128,26 @@ def enter():
         exist = call('select exists '
                      '(select * from person where login_per = %s)', [login], commit=False, fetchall=False)
 
-
         if exist[0] == 1:
             password_hash_form_bd = call('select password_hash from person '
                                          'where login_per = %s', [login], commit=False, fetchall=False)
 
             if check_password(password, password_hash_form_bd[0]):
                 print("пользователь вошел")
-                return "user is enter"
+
+                email = call("select email_per from person "
+                             "where login_per = %s", [login], commit=False, fetchall=False)
+
+                print(email[0])
+                print(app.config['SECRET_KEY'])
+
+                token = jwt.encode({
+                    'sub': email[0],
+                    'iat': datetime.datetime.utcnow(),
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                }, app.config['SECRET_KEY'], algorithm="HS256")
+
+                return jsonify({'token': token.decode('UTF-8')})
 
             else:
                 print("неправильный пароль")
@@ -68,8 +156,6 @@ def enter():
         else:
             print("такого логина нет")
             return "wrong login"
-
-
 
 
 if __name__ == '__main__':

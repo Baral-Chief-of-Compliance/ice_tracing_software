@@ -5,6 +5,7 @@
       <v-text-field label="Пароль" v-model="pass"/>
       <v-btn type="submit" block class="mt-2" @click="send_login_pass">Войти</v-btn>
     </v-form>
+    <v-btn block class="mt-10" :to="{name: 'Registration'}">Хотите зарегистрироваться</v-btn>
     {{ this.login }}
     {{ this.password }}
   </v-container>
