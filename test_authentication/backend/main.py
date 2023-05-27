@@ -86,6 +86,31 @@ def token_required(f):
     return _verify
 
 
+@app.route('/records', methods=['GET'])
+@token_required
+def show_records(login):
+    print(login)
+
+    id_per = call('select id_per from person where login_per = %s', [login], commit=False, fetchall=False)
+    records = call('select * from records where id_per = %s', [id_per[0]], commit=False, fetchall=True)
+
+    return jsonify({
+        "records": records
+    })
+
+
+@app.route('/add_record', methods=['POST'])
+@token_required
+def add_record(login):
+    if request.method == "POST":
+        record = request.json['record']
+        id_per = call('select id_per from person where login_per = %s', [login], commit=False, fetchall=False)
+
+        call('insert into records(id_per, record) values (%s, %s)', [id_per[0], record], commit=True, fetchall=False)
+
+        return "record is add"
+
+
 @app.route('/registration', methods=['POST'])
 def registration():
     if request.method == 'POST':

@@ -6,6 +6,7 @@
 
 // Components
 import App from './App.vue'
+import { createStore } from 'vuex'
 
 // Composables
 import { createApp } from 'vue'

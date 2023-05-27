@@ -1,5 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
+
 
 const routes = [
   {
@@ -18,6 +20,23 @@ const routes = [
         path: '/registration',
         name: 'Registration',
         component: () => import('@/views/Registration.vue'),
+      },
+      {
+        path: '/records',
+        name: 'Records',
+        component: () => import('@/views/Records.vue'),
+        beforeEnter (to, from, next) {
+          if (!store.getters.isAuthenticated) {
+            next('/login')
+          } else {
+            next()
+          }
+        }
+      },
+      {
+        path: '/add_records',
+        name: 'AddRecords',
+
       }
     ],
   },

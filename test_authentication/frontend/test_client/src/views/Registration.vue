@@ -4,8 +4,9 @@
             <v-text-field label="Почта" v-model="email"></v-text-field>
             <v-text-field label="Логин" v-model="login"></v-text-field>
             <v-text-field label="Пароль" v-model="password"></v-text-field>
-            <v-btn type="submit" block class="mt-2" @click="send_data_for_registration">Зарегестрироваться</v-btn>
+            <v-btn type="submit" block class="mt-2" @click="register">Зарегестрироваться</v-btn>
         </v-form>
+        <div color="red">{{  this.errorMsg }}</div>
     </v-container>
 </template>
 
@@ -16,17 +17,25 @@ import axios from "axios"
         data: () => ({
             email: "",
             login: "",
-            password: ""
+            password: "",
+            errorMsg: ""
         }),
 
         methods: {
-            send_data_for_registration(){
-                axios.post("http://127.0.0.1:5000/registration", {
-                    email: this.email,
-                    login: this.login,
-                    password: this.password
-                })
+            register () {
+                this.$store.dispatch('register', this.email, this.login, thes.password)
+                    .then(() => this.$router.push('/'))
             }
+        },
+
+        mounted() {
+            EventBus.$on('failedRegistering', (msg) => {
+                this.errorMsg = msg
+            })
+        },
+
+        beforeDestroy () {
+            EventBus.$off('failedRegistering')
         }
     }
 </script>
