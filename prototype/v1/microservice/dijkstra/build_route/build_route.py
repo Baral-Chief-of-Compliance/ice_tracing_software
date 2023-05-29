@@ -27,9 +27,13 @@ def build_route_inf():
 
         area_building_route = request.json["area_building_route"]
 
-        map_form_bd = map.get_map()
+        #использоваться будет это, но пока из файла
+        # map_form_bd = map.get_map()
+        #
+        # json_map = json.loads(map_form_bd[0])
 
-        json_map = json.loads(map_form_bd[0])
+        with open("data/map_test.json") as file:
+            json_map = json.load(file)
 
         area = route_building_area.build_interval_route(json_map, area_building_route)
 

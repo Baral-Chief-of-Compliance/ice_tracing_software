@@ -169,10 +169,12 @@ def enter():
                 token = jwt.encode({
                     'sub': email[0],
                     'iat': datetime.datetime.utcnow(),
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=5)
                 }, app.config['SECRET_KEY'], algorithm="HS256")
 
-                return jsonify({'token': token.decode('UTF-8')})
+                print(token)
+
+                return jsonify({'token': token})
 
             else:
                 print("неправильный пароль")
