@@ -174,7 +174,13 @@ def enter():
 
                 print(token)
 
-                return jsonify({'token': token})
+                return jsonify(
+                    {
+                        'token': token,
+                        'login': login,
+                        'email': email
+                    }
+                )
 
             else:
                 print("неправильный пароль")

@@ -7,26 +7,27 @@
     {{ this.login }}
     {{ this.password }}
     {{ this.jwt }}
+
+    <v-btn block class="mt-10" @click="check_authorized">Проверка авторизации</v-btn>
+
   </v-container>
 
 </template>
 
 <script>
 import axios from "axios"
-import { useAppStore } from '@/store/app'
-import { mapActions } from 'pinia'
+import { setJWT, isAuthorized, exitFromApp } from "@/store/TokenStore.js"
 
 
 export default {
   data:() => ({
     login: "",
     pass: "",
-    jwt: ""
+    jwt: "",
+    statusAuthorized: false
   }),
 
   methods: {
-
-    ...mapActions(useAppStore, ['addJWT']),
 
     authenticate(){
       axios.post("http://127.0.0.1:5000/enter", {
@@ -34,8 +35,17 @@ export default {
         password: this.pass
       }).then ((response) => {
         this.jwt = response.data.token
-        this.addJWT(response.data.token)
+        setJWT(this.jwt, response.data.login, response.data.email)
+        this.statusAuthorized = true
       })
+    },
+
+    check_authorized(){
+      if (isAuthorized()){
+        console.log("пользователь авторизован")
+      } else{
+        console.log("пользователь не авторизован")
+      }
     }
   }
 }
