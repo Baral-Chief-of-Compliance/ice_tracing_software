@@ -1,7 +1,14 @@
 <template>
   <v-container>
+      <div class="text-red">{{ this.errorTextMsg }}</div>
       <v-text-field label="Логин" v-model="login"/>
-      <v-text-field label="Пароль" v-model="pass"/>
+      <v-text-field
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :type="visible ? 'text' : 'password'"
+        label="Пароль" 
+        v-model="pass"
+        @click:append-inner="visible = !visible"
+      />
       <v-btn type="submit" block class="mt-2" @click="authenticate">Войти</v-btn>
     <v-btn block class="mt-10" :to="{name: 'Registration'}">Хотите зарегистрироваться</v-btn>
     {{ this.login }}
@@ -24,6 +31,8 @@ export default {
     login: "",
     pass: "",
     jwt: "",
+    errorTextMsg: "",
+    visible: false,
   }),
 
   methods: {
@@ -36,6 +45,11 @@ export default {
         this.jwt = response.data.token
         setJWT(this.jwt, response.data.login, response.data.email)
         this.$router.push("/records")
+      }).catch(err => {
+        console.log(err.response.data.error)
+        this.password = ""
+        this.errorTextMsg = err.response.data.error
+
       })
     },
 

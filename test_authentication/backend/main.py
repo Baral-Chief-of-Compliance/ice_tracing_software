@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from config import Config
 from flask_mysqldb import MySQL
@@ -66,7 +66,6 @@ def token_required(f):
 
         try:
             token = auth_headers[1]
-            print(token)
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             email = data['sub']
 
@@ -90,7 +89,6 @@ def token_required(f):
 @app.route('/records', methods=['GET'])
 @token_required
 def show_records(login):
-    print(login)
 
     id_per = call('select id_per from person where login_per = %s', [login], commit=False, fetchall=False)
     records = call('select * from records where id_per = %s', [id_per[0]], commit=False, fetchall=True)
@@ -131,8 +129,8 @@ def registration():
                      '(select * from person where email_per = %s)', [email], commit=False, fetchall=False)
 
         if email_exist[0] == 1:
-            print("это почта уже есть в базе")
-            return ""
+            return jsonify({"error": "это почта уже существует"}), 403
+
 
         elif email_exist[0] == 0:
 
@@ -140,17 +138,28 @@ def registration():
                      '(select * from person where login_per = %s)', [login], commit=False, fetchall=False)
 
             if login_exist[0] == 1:
-                print("этот логин уже существует")
-                return "this login is exists"
+                return jsonify({"error": "этот логин уже существует"}), 403
 
             elif login_exist[0] == 0:
-                print("этого логина нету, как и почты")
 
                 hash_pass = hash_password(password)
 
                 call("insert into person (login_per, email_per, password_hash) "
                      "values (%s, %s, %s)", [login, email, hash_pass], commit=True, fetchall=False)
-                return "account is create"
+
+                token = jwt.encode({
+                    'sub': email,
+                    'iat': datetime.datetime.utcnow(),
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=5)
+                }, app.config['SECRET_KEY'], algorithm="HS256")
+
+                return jsonify(
+                    {
+                        'token': token,
+                        'login': login,
+                        'email': email
+                    }
+                )
 
 
 @app.route('/enter', methods=['POST'])
@@ -167,21 +176,15 @@ def enter():
                                          'where login_per = %s', [login], commit=False, fetchall=False)
 
             if check_password(password, password_hash_form_bd[0]):
-                print("пользователь вошел")
 
                 email = call("select email_per from person "
                              "where login_per = %s", [login], commit=False, fetchall=False)
-
-                print(email[0])
-                print(app.config['SECRET_KEY'])
 
                 token = jwt.encode({
                     'sub': email[0],
                     'iat': datetime.datetime.utcnow(),
                     'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=5)
                 }, app.config['SECRET_KEY'], algorithm="HS256")
-
-                print(token)
 
                 return jsonify(
                     {
@@ -192,12 +195,10 @@ def enter():
                 )
 
             else:
-                print("неправильный пароль")
-                return "wrong password"
+                return jsonify({"error": "неправильный пароль"}), 403
 
         else:
-            print("такого логина нет")
-            return "wrong login"
+            return jsonify({"error": "неправильный логин"}), 403
 
 
 if __name__ == '__main__':
