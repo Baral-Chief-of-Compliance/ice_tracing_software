@@ -32,7 +32,8 @@ import { exitFromApp } from "@/store/TokenStore.js"
     methods: {
       exitFromAcc(){
         exitFromApp();
-        this.login = ""
+        this.login = "";
+        this.$router.push("/login")
       }
     }
 }

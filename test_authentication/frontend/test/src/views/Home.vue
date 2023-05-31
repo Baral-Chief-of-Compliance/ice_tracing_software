@@ -24,7 +24,6 @@ export default {
     login: "",
     pass: "",
     jwt: "",
-    statusAuthorized: false
   }),
 
   methods: {
@@ -36,7 +35,7 @@ export default {
       }).then ((response) => {
         this.jwt = response.data.token
         setJWT(this.jwt, response.data.login, response.data.email)
-        this.statusAuthorized = true
+        this.$router.push("/records")
       })
     },
 

@@ -6,7 +6,7 @@
             <v-text-field label="Пароль" v-model="password"></v-text-field>
             <v-btn type="submit" block class="mt-2" @click="register">Зарегестрироваться</v-btn>
         </v-form>
-        <v-btn block class="mt-10" :to="{name: 'Home'}">У меня уже есть учетная запись</v-btn>
+        <v-btn block class="mt-10" :to="{name: 'Login'}">У меня уже есть учетная запись</v-btn>
     </v-container>
 </template>
 

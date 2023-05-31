@@ -1,31 +1,31 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthorized } from '@/store/TokenStore'
+import { isAuthorizedRouter } from '@/store/TokenStore'
+import Home from '@/views/Home.vue'
+import Registration from '@/views/Registration.vue'
+
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: Home
+  },
+  {
+    path: '/registration',
+    name: 'Registration',
+    component: Registration
+  },
   {
     path: '/',
     component: () => import('@/layouts/default/Default.vue'),
     beforeEnter(to) {
       // redirect back home
-      if (isAuthorized) {
-        return '/'
+      if (isAuthorizedRouter()) {
+        return '/login'
       }
     },
     children: [
-      {
-        path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
-      },
-      {
-        path: '/registration',
-        name: 'Registration',
-        component: () => import('@/views/Registration.vue'),
-      },
       {
         path: '/records',
         name: 'Records',

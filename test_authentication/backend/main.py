@@ -66,7 +66,8 @@ def token_required(f):
 
         try:
             token = auth_headers[1]
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            print(token)
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             email = data['sub']
 
             email_exist = call('select exists '
@@ -75,7 +76,7 @@ def token_required(f):
             if email_exist[0] == 0:
                     raise RuntimeError('User not found')
 
-            login = call('select login from person where email_per = %s', [email], commit=False, fetchall=False)
+            login = call('select login_per from person where email_per = %s', [email], commit=False, fetchall=False)
             return f(login[0], *args, **kwargs)
         except jwt.ExpiredSignatureError:
             return jsonify(expired_msg), 401  # 401 is Unauthorized HTTP status code
@@ -94,8 +95,16 @@ def show_records(login):
     id_per = call('select id_per from person where login_per = %s', [login], commit=False, fetchall=False)
     records = call('select * from records where id_per = %s', [id_per[0]], commit=False, fetchall=True)
 
+    json_records = []
+    for record in records:
+        json_records.append({
+            "id": record[0],
+            "id_per": record[1],
+            "record": record[2]
+        })
+
     return jsonify({
-        "records": records
+        "records": json_records
     })
 
 
