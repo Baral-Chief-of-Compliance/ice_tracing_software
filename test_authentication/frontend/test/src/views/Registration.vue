@@ -30,7 +30,24 @@
         <v-btn block class="mt-10" :to="{name: 'Login'}">У меня уже есть учетная запись</v-btn>
     </v-container>
 
-    {{ login.value.value }}
+    <v-dialog
+        v-model="dialog_loading"
+        width="auto"
+        persistent
+    >
+        <v-card
+        color="purple-darken-4"
+        >
+            <v-card-text>
+                Просиходит регистрация, подождите
+                <v-progress-linear
+                    indeterminate
+                    color="white"
+                    class="mb-0"
+                ></v-progress-linear>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -101,6 +118,7 @@ export default{
     data: () => ({
         visible: false,
         visible_check: false,
+        dialog_loading: false
     }),
 
     methods: {
@@ -114,6 +132,21 @@ export default{
                 this.$router.push("/records")
             })
         }  
+    },
+
+    created(){
+        axios.interceptors.request.use( (config)=>{
+            this.dialog_loading = true
+            return config
+        }),
+
+        axios.interceptors.response.use((response) =>{
+            this.dialog_loading = false
+            // if (response.config.method == 'post' && response.config.url == 'http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route'){
+            //     this.$router.go(0)
+            // }
+            return response
+        })
     }
 }
 </script>

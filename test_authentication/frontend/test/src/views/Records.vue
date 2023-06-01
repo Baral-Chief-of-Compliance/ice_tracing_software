@@ -33,7 +33,9 @@ import axios from 'axios';
             .then(response => (
                 console.log(response),
                 this.records = response.data
-            ))
+            )).catch(err => {
+                this.$router.push("/mistake") 
+            })
         },
 
         add_record(){
@@ -43,6 +45,8 @@ import axios from 'axios';
                 headers: {
                     Authorization: `Bearer: ${localStorage.jwt}`  
                 }
+            }).catch(err => {
+                this.$router.push("/mistake")
             })
         }
     },
@@ -50,6 +54,6 @@ import axios from 'axios';
     mounted(){
         this.get_records()
     }
-
+    
   }
 </script>

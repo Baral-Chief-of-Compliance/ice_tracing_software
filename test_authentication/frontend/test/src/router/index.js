@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { isAuthorizedRouter } from '@/store/TokenStore'
 import Home from '@/views/Home.vue'
 import Registration from '@/views/Registration.vue'
+import Mistake from '@/views/Mistake.vue'
 
 
 const routes = [
@@ -15,6 +16,11 @@ const routes = [
     path: '/registration',
     name: 'Registration',
     component: Registration
+  },
+  {
+    path: '/mistake',
+    name: 'Mistake',
+    component: Mistake
   },
   {
     path: '/',
