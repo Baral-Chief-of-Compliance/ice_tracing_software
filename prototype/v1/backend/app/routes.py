@@ -3,6 +3,7 @@ from generate_route.generate_route import generate_route
 from generate_ice_conditions.generate_ice_conditions import generate_ice_conditions
 from ports.ports import ports
 from route_inf.route_inf import route_inf
+from authorization.authorization import authorization_blueprint
 from app.use_db.enter_map_in_bd import add_map_to_bd
 
 
@@ -24,3 +25,4 @@ app.register_blueprint(generate_route, url_prefix=url)
 app.register_blueprint(generate_ice_conditions, url_prefix=url)
 app.register_blueprint(ports, url_prefix=url)
 app.register_blueprint(route_inf, url_prefix=url)
+app.register_blueprint(authorization_blueprint, url_prefix=url)

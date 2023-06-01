@@ -5,6 +5,8 @@ import Routes from '@/views/Routes.vue'
 import Home from '@/views/Home.vue'
 import AddRoute from '@/views/AddRoute.vue'
 import Login from '@/views/Login.vue'
+import Registration from '@/views/Registration.vue'
+import { isAuthorizedRouter } from '@/store/TokenStore'
 
 
 const routes = [
@@ -14,8 +16,19 @@ const routes = [
     component: Login
   },
   {
+    path: '/registration',
+    name: 'Registration',
+    component: Registration
+  },
+  {
     path: '/',
     component: () => import('@/layouts/default/DefaultEnter.vue'),
+    beforeEnter(to) {
+      // redirect back home
+      if (isAuthorizedRouter()) {
+        return '/login'
+      }
+    },
     children: [
       {
         path: '',

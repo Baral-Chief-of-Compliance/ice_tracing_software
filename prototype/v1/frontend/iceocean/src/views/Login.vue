@@ -25,6 +25,7 @@
                 prepend-inner-icon="mdi-account"
                 variant="outlined"
                 color="purple-darken-4"
+                v-model="login"
             ></v-text-field>
 
             <v-text-field
@@ -36,7 +37,11 @@
                 variant="outlined"
                 color="purple-darken-4"
                 @click:append-inner="visible = !visible"
+                class="mb-5"
+                v-model="pass"
             ></v-text-field>
+
+            <div class="text-red">{{ this.errorTextMsg }}</div>
 
 
             <v-btn
@@ -44,33 +49,100 @@
                 class="mb-8 mt-5"
                 color="purple-darken-4"
                 size="large"
+                @click="authenticate"
             >
                 Войти
             </v-btn>
 
             <v-card-text class="text-center">
-                <a
+                <router-link
                 class="text-purple-darken-4 text-decoration-none"
-                href="#"
                 rel="noopener noreferrer"
-                target="_blank"
+                :to="{ name: 'Registration'}"
                 >
                 Зарегистрироваться <v-icon icon="mdi-chevron-right" class="pt-2"></v-icon>
-                </a>
+                </router-link>
             </v-card-text>
             </v-card>
         </div>
         </v-container>
+
+        <v-dialog
+            v-model="dialog_loading"
+            width="auto"
+            persistent
+        >
+            <v-card
+                color="purple-darken-4"
+            >
+                <v-card-text>
+                    Просиходит вход, подождите
+                    <v-progress-linear
+                        indeterminate
+                        color="white"
+                        class="mb-0"
+                    ></v-progress-linear>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
   
 <script>
+import axios from "axios"
+import { setJWT } from "@/store/TokenStore.js"
+
   export default {
     data: () => ({
       visible: false,
+      login: "",
+      pass: "",
+      jwt: "",
+      errorTextMsg: "",
+      dialog_loading: false
     }),
+
+    methods: {
+        authenticate(){
+            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/enter", {
+                login: this.login,
+                password: this.pass
+            }).then ((response) => {
+                this.jwt = response.data.token
+                setJWT(this.jwt, response.data.login, response.data.email)
+                this.$router.push("/")
+            }).catch(err => {
+                console.log(err.response.data.error)
+                this.password = ""
+                this.errorTextMsg = err.response.data.error
+
+            })
+        }
+    },
+
+    created(){
+        axios.interceptors.request.use( (config)=>{
+            this.dialog_loading = true
+            return config
+        }),
+
+        axios.interceptors.response.use((response) =>{
+            this.dialog_loading = false
+            // if (response.config.method == 'post' && response.config.url == 'http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route'){
+            //     this.$router.go(0)
+            // }
+            return response
+        },
+        error => {
+            this.dialog_loading = false
+            this.errorTextMsg = error.response.data.error
+            return error
+        }
+        )
+    }
   }
 </script>
+
 
 <style scoped>
 .main{
