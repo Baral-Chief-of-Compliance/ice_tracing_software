@@ -112,9 +112,7 @@ import { setJWT } from "@/store/TokenStore.js"
                 setJWT(this.jwt, response.data.login, response.data.email)
                 this.$router.push("/")
             }).catch(err => {
-                console.log(err.response.data.error)
                 this.password = ""
-                this.errorTextMsg = err.response.data.error
 
             })
         }

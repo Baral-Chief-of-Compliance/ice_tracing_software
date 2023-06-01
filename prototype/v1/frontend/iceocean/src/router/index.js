@@ -7,6 +7,7 @@ import AddRoute from '@/views/AddRoute.vue'
 import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import { isAuthorizedRouter } from '@/store/TokenStore'
+import Mistake from '@/views/Mistake.vue'
 
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
     path: '/registration',
     name: 'Registration',
     component: Registration
+  },
+  {
+    path: '/mistake',
+    name: 'Mistake',
+    component: Mistake
   },
   {
     path: '/',
