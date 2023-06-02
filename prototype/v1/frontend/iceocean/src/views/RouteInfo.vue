@@ -130,6 +130,7 @@
                 <div class="ml-5">
                     <v-card class="text-h6 px-5 py-2 d-flex"><v-icon class="mt-1" color="blue" icon="mdi-map-marker"/><b class="mr-1">Начало пути:</b>{{ this.date_start }}</v-card>
                     <v-card v-for="(point, index) in points" :key="index" class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="black" icon="mdi-map-marker"/><b class="mr-1">Промежуток:</b>{{ this.format_date(point.date) }}</v-card>
+                    <v-card class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="red" icon="mdi-map-marker"/><b class="mr-1">Конец пути:</b>{{ this.date_start }}</v-card>
                 </div>
             </div>
         </v-container>
@@ -728,6 +729,9 @@ export default{
 
                 end_point_longitude: this.end_longitude,
                 end_point_latitude: this.end_latitude,
+
+                final_point_longitude: this.final_point_longitude,
+                final_point_latitude: this.final_point_latitude,
 
                 iceclass: this.ice_class,
                 area_building_route: this.polygon

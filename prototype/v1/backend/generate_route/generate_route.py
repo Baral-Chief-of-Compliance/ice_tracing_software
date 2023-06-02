@@ -73,10 +73,33 @@ def add_route(id_per):
         start_longitude = request.json["start_longitude"]
         start_latitude = request.json["start_latitude"]
 
-
         end_longitude = request.json["end_longitude"]
         end_latitude = request.json["end_latitude"]
 
+        with open("data/map_test.json", "r") as file:
+            map_ = json.load(file)
+
+        nearest_start_y, nearest_start_x = route_building_area.nearest(
+            map_,
+            len(map_),
+            len(map_[0]),
+            start_longitude,
+            start_latitude
+        )
+
+        nearest_end_y, nearest_end_x = route_building_area.nearest(
+            map_,
+            len(map_),
+            len(map_[0]),
+            end_longitude,
+            end_latitude
+        )
+
+        start_longitude = map_[nearest_start_y][nearest_start_x]["longitude"]
+        start_latitude = map_[nearest_start_y][nearest_start_x]["latitude"]
+
+        end_longitude = map_[nearest_end_y][nearest_end_x]["longitude"]
+        end_latitude = map_[nearest_end_y][nearest_end_x]["latitude"]
 
         area_building_route = request.json["area_building_route"]
 

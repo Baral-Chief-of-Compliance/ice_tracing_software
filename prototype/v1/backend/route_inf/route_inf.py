@@ -81,6 +81,9 @@ def get_int_route(id_per, id_rt):
         end_point_longitude = request.json["end_point_longitude"]
         end_point_latitude = request.json["end_point_latitude"]
 
+        final_point_longitude = request.json["final_point_longitude"]
+        final_point_latitude = request.json["final_point_latitude"]
+
         iceclass = request.json["iceclass"]
 
         area_building_route = request.json["area_building_route"]
@@ -116,12 +119,17 @@ def get_int_route(id_per, id_rt):
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
 
-        generate_route_db.add_intermediate(
-            id_rt,
-            area[area_y_next_point][area_x_next_point]["longitude"],
-            area[area_y_next_point][area_x_next_point]["latitude"]
-        )
+        if final_point_latitude == end_point_latitude and final_point_longitude == end_point_longitude:
+            pass
 
+        else:
+
+            generate_route_db.add_intermediate(
+                id_rt,
+                area[area_y_next_point][area_x_next_point]["longitude"],
+                area[area_y_next_point][area_x_next_point]["latitude"]
+            )
+    
         graph = create_graph.create(area, iceclass)
 
         start, goal = create_src_dest.create_src_dest(area)
