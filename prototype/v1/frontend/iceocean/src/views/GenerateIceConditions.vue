@@ -470,36 +470,64 @@ export default{
     },
     methods: {
         get_fast_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/fast_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/fast_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.fast_ice = response.data.polygons)
         },
 
         get_ice_field(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/ice_field')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/ice_field', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.ice_field = response.data.polygons) 
         },
 
         get_nilas_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/nilas_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/nilas_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.nilas_ice = response.data.polygons) 
         },
         get_young_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/young_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/young_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.young_ice = response.data.polygons)
         },
 
         get_first_year_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/first_year_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/first_year_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.first_year_ice = response.data.polygons)
         },
 
         get_old_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.old_ice = response.data.polygons)
         },
 
         get_all_ports(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/ports')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/ports', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.ports = response.data.ports)
         }
     },

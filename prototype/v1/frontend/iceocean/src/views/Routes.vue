@@ -62,12 +62,20 @@ export default{
 
     methods: {
         get_routes(){
-            axios.get("http://127.0.0.1:5000/iceocean/api/v1.0/route_inf")
+            axios.get("http://127.0.0.1:5000/iceocean/api/v1.0/route_inf", {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.rotes = response.data.routes)
         },
 
         delete_route(id_rt){
-            axios.delete(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${id_rt}`)
+            axios.delete(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then (
                 rotes => this.get_routes()
             )

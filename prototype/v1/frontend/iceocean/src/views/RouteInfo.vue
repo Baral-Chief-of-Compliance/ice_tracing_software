@@ -471,7 +471,7 @@ export default{
 
         axios.interceptors.response.use((response) =>{
             this.dialog_loading = false
-            if (response.config.method == 'post' && response.config.url == 'http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route'){
+            if (response.config.method == 'post' && response.config.url == `http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`){
                 this.$router.go(0)
             }
             return response
@@ -490,36 +490,64 @@ export default{
 
     methods: {
         get_fast_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/fast_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/fast_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.fast_ice = response.data.polygons)
         },
 
         get_ice_field(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/ice_field')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/ice_field', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.ice_field = response.data.polygons) 
         },
 
         get_nilas_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/nilas_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/nilas_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.nilas_ice = response.data.polygons) 
         },
         get_young_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/young_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/young_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.young_ice = response.data.polygons)
         },
 
         get_first_year_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/first_year_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/first_year_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.first_year_ice = response.data.polygons)
         },
 
         get_old_ice(){
-            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice')
+            axios.get('http://127.0.0.1:5000/iceocean/api/v1.0/today/old_ice', {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => this.old_ice = response.data.polygons)
         },
 
         get_inf(){
-            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`)
+            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
             .then(response => (
                 this.name = response.data.name,
                 this.ship_name = response.data.ship_name,
@@ -554,14 +582,14 @@ export default{
         },
 
         update_point(){
-            axios.put(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, 
-            {
-                date_enter: this.date_enter  
-            })
 
             axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/generate_area", {
                 start_longitude: this.final_point_longitude,
                 start_latitude: this.final_point_latitude
+            }, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
             }).then(response => this.polygon = response.data.polygon)
 
             this.stage++
@@ -691,8 +719,9 @@ export default{
         },
 
         update_route(){
-            axios.post(`http://127.0.0.1:4000/iceocean/api/v1.0/microservice/build_route`,
-            {
+            axios.post(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`,
+            {   
+                date_enter: this.date_enter,
                 id_rt: this.$route.params.id_rt,
                 start_point_longitude: this.final_point_longitude,
                 start_point_latitude: this.final_point_latitude,
@@ -702,6 +731,10 @@ export default{
 
                 iceclass: this.ice_class,
                 area_building_route: this.polygon
+            }, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
             }
             )
 

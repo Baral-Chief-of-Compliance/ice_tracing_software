@@ -33,8 +33,8 @@ def token_required(f):
             if email_exist[0] == 0:
                 raise RuntimeError('User not found')
 
-            login = quarry.call('select login_per from person where email_per = %s', [email], commit=False, fetchall=False)
-            return f(login[0], *args, **kwargs)
+            id_per = quarry.call('select id_per from person where email_per = %s', [email], commit=False, fetchall=False)
+            return f(id_per[0], *args, **kwargs)
         except jwt.ExpiredSignatureError:
             return jsonify(expired_msg), 401  # 401 is Unauthorized HTTP status code
         except (jwt.InvalidTokenError, Exception) as e:

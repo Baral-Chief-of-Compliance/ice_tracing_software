@@ -1,12 +1,14 @@
 from app import Blueprint, jsonify, request, json
 from generate_ice_conditions.format_polygons import format_polygons
+from authorization.decorator_for_authorization import token_required
 
 
 generate_ice_conditions = Blueprint('generate_ice_conditions', __name__)
 
 
 @generate_ice_conditions.route('/today/young_ice', methods=['GET'])
-def today_young_ice():
+@token_required
+def today_young_ice(id_per):
     if request.method == "GET":
         with open("ice/json/young_ice.json") as file:
             young_ice = json.load(file)
@@ -17,7 +19,8 @@ def today_young_ice():
 
 
 @generate_ice_conditions.route('/today/first_year_ice', methods=['GET'])
-def today_first_year_ice():
+@token_required
+def today_first_year_ice(id_per):
     if request.method == "GET":
         with open("ice/json/first_year_ice.json") as file:
             first_year_ice = json.load(file)
@@ -28,7 +31,8 @@ def today_first_year_ice():
 
 
 @generate_ice_conditions.route('/today/old_ice', methods=['GET'])
-def today_old_ice():
+@token_required
+def today_old_ice(id_per):
     if request.method == 'GET':
         with open("ice/json/old_ice.json") as file:
             old_ice = json.load(file)
@@ -39,7 +43,8 @@ def today_old_ice():
 
 
 @generate_ice_conditions.route('/today/fast_ice', methods=['GET'])
-def today_fast_ice():
+@token_required
+def today_fast_ice(id_per):
     if request.method == 'GET':
         with open("ice/json/fast_ice.json") as file:
             fast_ice = json.load(file)
@@ -50,7 +55,8 @@ def today_fast_ice():
 
 
 @generate_ice_conditions.route('/today/ice_field', methods=['GET'])
-def today_ice_field():
+@token_required
+def today_ice_field(id_per):
     if request.method == 'GET':
         with open("ice/json/ice_field.json") as file:
             ice_field = json.load(file)
@@ -61,7 +67,8 @@ def today_ice_field():
 
 
 @generate_ice_conditions.route('/today/nilas_ice', methods=['GET'])
-def today_nilas_ice():
+@token_required
+def today_nilas_ice(id_per):
     if request.method == 'GET':
         with open("ice/json/nilas_ice.json") as file:
             nilas_ice = json.load(file)

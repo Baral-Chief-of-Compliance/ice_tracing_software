@@ -5,13 +5,15 @@ from app.tools import create_src_dest
 from app.tools import dijkstra
 from app.use_db import generate_route_db
 from app.tools.convert_path_to_geojson import convert
+from authorization.decorator_for_authorization import token_required
 
 
 generate_route = Blueprint('generate_route', __name__)
 
 
 @generate_route.route('/generate_route', methods=['POST'])
-def generate():
+@token_required
+def generate(id_per):
     if request.method == 'POST':
         iceclass = request.json['iceclass']
 
@@ -20,12 +22,6 @@ def generate():
 
         end_longitude = request.json['end_longitude']
         end_latitude = request.json['end_latitude']
-
-        print(f"Ледовый класс: {iceclass} \n\n"
-              f"Долгота исходного пункта: {start_longitude} \n"
-              f"Широта исходного пункта: {start_latitude} \n\n"
-              f"Долгота пункта назначения: {end_longitude}\n"
-              f"Широта пункта назначения: {end_latitude}")
 
         return jsonify({
             "iceclass": iceclass,
@@ -37,12 +33,11 @@ def generate():
 
 
 @generate_route.route('/generate_area', methods=['POST'])
-def define_square_area():
+@token_required
+def define_square_area(id_per):
     if request.method == "POST":
         start_longitude = request.json["start_longitude"]
         start_latitude = request.json["start_latitude"]
-        print(start_longitude)
-        print(start_latitude)
 
         #проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
         with open("data/map_test.json", "r") as file:
@@ -53,17 +48,10 @@ def define_square_area():
 
         y, x = route_building_area.nearest(map_, width, length, start_longitude, start_latitude)
 
-        print(y, x)
-
         right_top_area = map_[y - 2][x - 5]
         left_top_area = map_[y - 2][x + 5]
         left_bottom_area = map_[y + 2][x + 5]
         right_bottom_area = map_[y + 2][x - 5]
-
-        print(right_top_area["longitude"], right_top_area["latitude"])
-        print(left_top_area["longitude"], left_top_area["latitude"])
-        print(left_bottom_area["longitude"], left_bottom_area["latitude"])
-        print(right_bottom_area["longitude"], right_bottom_area["latitude"])
 
         polygon = []
         polygon.append([right_top_area["latitude"], right_top_area["longitude"]])
@@ -76,7 +64,8 @@ def define_square_area():
 
 
 @generate_route.route('/add_route', methods=['POST'])
-def add_route():
+@token_required
+def add_route(id_per):
     if request.method == "POST":
         ship_name = request.json["ship_name"]
         iceclass = request.json["iceclass"]
@@ -95,14 +84,12 @@ def add_route():
 
         route_name = request.json["route_name"]
 
-        generate_route_db.add_ship(ship_name, iceclass)
-        id_sh = generate_route_db.find_ship(ship_name)
+        id_sh = generate_route_db.add_ship(ship_name, iceclass)
 
-        generate_route_db.create_route(route_name, 1, id_sh[0])
-        id_rt = generate_route_db.find_route(route_name)
+        id_rt = generate_route_db.create_route(route_name, id_per, id_sh)
 
         generate_route_db.create_start_end_point(
-            id_rt[0],
+            id_rt,
             start_longitude,
             start_latitude,
             end_longitude,

@@ -2,29 +2,32 @@ from app.use_db.tools import quarry
 
 
 def add_ship(name_sh, ice_class):
-    quarry.call("insert into ship(name_sh, ice_class) values "
-                "(%s, %s)", [name_sh, ice_class],
+    id_sh_from_db = quarry.call('select max(id_sh) from ship', commit=False, fetchall=False)
+
+    if id_sh_from_db[0] == None:
+        id_sh = 1
+    else:
+        id_sh = int(id_sh_from_db[0]) + 1
+
+    quarry.call("insert into ship(id_sh, name_sh, ice_class) values "
+                "(%s, %s, %s)", [id_sh, name_sh, ice_class],
                 commit=True, fetchall=False)
-
-
-def find_ship(name_sh):
-    id_sh = quarry.call("select id_sh from ship where "
-                        "name_sh = %s", [name_sh], commit=False,
-                        fetchall=False)
 
     return id_sh
 
 
 def create_route(name, id_per, id_sh):
-    quarry.call("insert into route(name, id_per, id_sh) values "
-                "(%s, %s, %s)", [name, id_per, id_sh],
+
+    id_rt_from_db = quarry.call('select max(id_rt) from route', commit=False, fetchall=False)
+
+    if id_rt_from_db[0] == None:
+        id_rt = 1
+    else:
+        id_rt = int(id_rt_from_db[0]) + 1
+
+    quarry.call("insert into route(id_rt, name, id_per, id_sh) values "
+                "(%s, %s, %s, %s)", [id_rt, name, id_per, id_sh],
                 commit=True, fetchall=False)
-
-
-def find_route(name_route):
-    id_rt = quarry.call("select id_rt from route where "
-                        "name = %s", [name_route], commit=False,
-                        fetchall=False)
 
     return id_rt
 
