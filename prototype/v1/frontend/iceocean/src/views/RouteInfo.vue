@@ -8,9 +8,10 @@
         <div class="text-h5 mx-10 mb-3"><b>Название судна: </b>{{ this.ship_name }}</div>
         <div class="text-h5 mx-10 mb-3"><b>Ледовый класс судна: </b>{{ this.ice_class }}</div>
         <v-container v-if="stage === 0">
-            <div class="text-h5 mx-10 mb-5">1 ШАГ: Вы достигли следущего пункта маршрута?(<v-icon class="mt-1" color="green" icon="mdi-map-marker"></v-icon>)
+            <div v-if="this.status === 'в процессе' ? true:false" class="text-h5 mx-10 mb-5">1 ШАГ: Вы достигли следущего пункта маршрута?(<v-icon class="mt-1" color="green" icon="mdi-map-marker"></v-icon>)
+                
                 <v-dialog
-                    v-model="dialog_yes"
+                    v-model="dialog_in_progress"
                     width="auto"
                 >  
                     <template v-slot:activator="{ props }">
@@ -27,9 +28,37 @@
                             </v-text-field>
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn color="red" @click="dialog_yes = false">Закрыть</v-btn>
+                            <v-btn color="red" @click="dialog_in_progress = false">Закрыть</v-btn>
                             <v-spacer></v-spacer>
-                            <v-btn color="green" @click="dialog_yes = update_point()">Достигнут</v-btn>
+                            <v-btn color="green" @click="dialog_in_progress = update_point()">Достигнут</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
+
+            <div v-if="this.status === 'завершение' ? true:false" class="text-h5 mx-10 mb-5">1 ШАГ: Вы достигли конечного пункта маршрута?(<v-icon class="mt-1" color="red" icon="mdi-map-marker"></v-icon>)
+                
+                <v-dialog
+                    v-model="dialog_completion"
+                    width="auto"
+                >  
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" color="purple-darken-4" class="px-10">да</v-btn>
+                    </template>
+
+                    <v-card>
+                        <v-card-title>
+                            Выберите дату достижения маршрута
+                        </v-card-title>
+                        <v-card-text>
+                            <v-text-field type="date" v-model="date_enter">
+
+                            </v-text-field>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="red" @click="dialog_completion = false">Закрыть</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green" @click="update_status">Достигнут</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -53,7 +82,7 @@
                         :icon="{ color: 'red' }"
                     />
 
-                    <ymap-marker
+                    <ymap-marker v-if="this.status === 'в процессе' ? true:false "
                         :coords="[final_point_latitude, final_point_longitude]"
                         marker-id="3"
                         :icon="{ color: 'green' }"
@@ -427,6 +456,7 @@ export default{
         name: "",
         ship_name: "",
         ice_class: "",
+        status: "",
 
         start_longitude: "",
         start_latitude: "",
@@ -442,7 +472,8 @@ export default{
         final_point_longitude: "",
         final_point_latitude: "",
 
-        dialog_yes: false,
+        dialog_in_progress: false,
+        dialog_completion: false,
         date_enter: "",
         stage: 0,
         dialog_loading: false,
@@ -564,8 +595,11 @@ export default{
                 this.points = response.data.points,
                 this.routes = response.data.routes,
 
+                this.status = response.data.status,
+
                 this.final_point_longitude = response.data.final_point_longitude,
                 this.final_point_latitude = response.data.final_point_latitude
+
             ))
         },
         format_date(date){
@@ -741,6 +775,19 @@ export default{
                 } 
             }
             )
+
+        },
+
+        update_status(){
+            axios.put(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                date_enter: this.date_enter
+            }, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            
+            this.$router.go(0)
 
         }
     }

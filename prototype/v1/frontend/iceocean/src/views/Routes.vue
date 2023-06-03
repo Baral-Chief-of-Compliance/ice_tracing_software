@@ -19,9 +19,11 @@
                             <v-spacer></v-spacer> 
                             <b class="pr-2">Ледовый класс судна:</b>  {{ route.ice_class }}
                             <v-spacer></v-spacer>
-                            <b class="pr-2">Дата начала:</b>  --
+                            <b class="pr-2">Дата начала:</b>  {{ this.format_date_v(route.date_enter) }}
                             <v-spacer></v-spacer>
-                            <b class="pr-2">Дата окончания:</b>  --
+                            <v-card :color=" route.status === 'в процессе' ? 'teal-accent-4' : 'orange-accent-4' " class="px-10 py-1">
+                                {{ route.status }}
+                            </v-card>
                         </v-card>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -42,6 +44,7 @@
 
 <script>
 import axios from 'axios';
+import { format_date } from '@/tools/views'
 
 
 export default{
@@ -83,6 +86,11 @@ export default{
 
         async enter_route(id_route){
             await this.$router.push({name: 'RouteInfo', params: {id_rt: id_route}}) 
+        },
+
+        format_date_v(date){
+           date = format_date(date)
+           return date
         }
         
     }

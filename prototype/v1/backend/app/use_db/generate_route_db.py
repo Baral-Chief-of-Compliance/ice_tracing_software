@@ -16,7 +16,7 @@ def add_ship(name_sh, ice_class):
     return id_sh
 
 
-def create_route(name, id_per, id_sh):
+def create_route(name, id_per, id_sh, status):
 
     id_rt_from_db = quarry.call('select max(id_rt) from route', commit=False, fetchall=False)
 
@@ -25,8 +25,8 @@ def create_route(name, id_per, id_sh):
     else:
         id_rt = int(id_rt_from_db[0]) + 1
 
-    quarry.call("insert into route(id_rt, name, id_per, id_sh) values "
-                "(%s, %s, %s, %s)", [id_rt, name, id_per, id_sh],
+    quarry.call("insert into route(id_rt, name, id_per, id_sh, status_rt) values "
+                "(%s, %s, %s, %s, %s)", [id_rt, name, id_per, id_sh, status],
                 commit=True, fetchall=False)
 
     return id_rt

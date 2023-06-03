@@ -24,7 +24,9 @@ def show_routes(id_per):
                 'id_rt': route[0],
                 'name': route[1],
                 'name_sh': route[2],
-                'ice_class': route[3]
+                'ice_class': route[3],
+                'status': route[4],
+                'date_enter': route[5]
             })
 
         return jsonify({
@@ -42,6 +44,8 @@ def get_int_route(id_per, id_rt):
         route_inf, inf_about_start, inf_about_end, intermediates, itirerarys, final_point \
             = route_inf_db.show_inf_about_route(id_per, id_rt)
 
+        status = route_inf_db.get_status(id_rt)
+
         for point in intermediates:
             json_points.append({
                 "point_longitude": point[0],
@@ -54,20 +58,39 @@ def get_int_route(id_per, id_rt):
                 "polyline": json.loads(route[0])
             })
 
-        return jsonify({
-            "name": route_inf[1],
-            "ship_name": route_inf[2],
-            "ice_class": route_inf[3],
-            "date_start": inf_about_start[2],
-            "start_longitude": float(inf_about_start[0]),
-            "start_latitude": float(inf_about_start[1]),
-            "end_longitude": float(inf_about_end[0]),
-            "end_latitude": float(inf_about_end[1]),
-            "points": json_points,
-            "routes": json_routes,
-            "final_point_longitude": float(final_point[0]),
-            "final_point_latitude": float(final_point[1])
-        })
+        if status == 'в процессе':
+
+            return jsonify({
+                "name": route_inf[1],
+                "ship_name": route_inf[2],
+                "ice_class": route_inf[3],
+                "date_start": inf_about_start[2],
+                "start_longitude": float(inf_about_start[0]),
+                "start_latitude": float(inf_about_start[1]),
+                "end_longitude": float(inf_about_end[0]),
+                "end_latitude": float(inf_about_end[1]),
+                "points": json_points,
+                "routes": json_routes,
+                "status": status,
+                "final_point_longitude": float(final_point[0]),
+                "final_point_latitude": float(final_point[1])
+            })
+
+        else:
+
+            return jsonify({
+                "name": route_inf[1],
+                "ship_name": route_inf[2],
+                "ice_class": route_inf[3],
+                "date_start": inf_about_start[2],
+                "start_longitude": float(inf_about_start[0]),
+                "start_latitude": float(inf_about_start[1]),
+                "end_longitude": float(inf_about_end[0]),
+                "end_latitude": float(inf_about_end[1]),
+                "points": json_points,
+                "routes": json_routes,
+                "status": status
+            })
 
     elif request.method == 'POST':
 
@@ -149,4 +172,12 @@ def get_int_route(id_per, id_rt):
         route_inf_db.delete_route(id_rt)
 
         return jsonify(f"route {id_rt} is delete")
+
+    elif request.method == 'PUT':
+        date_enter = request.json["date_enter"]
+
+        route_inf_db.update_status(id_rt, date_enter)
+
+        return jsonify(f"status route is update")
+
 

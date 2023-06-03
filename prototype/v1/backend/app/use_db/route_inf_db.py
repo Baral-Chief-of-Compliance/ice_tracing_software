@@ -2,9 +2,11 @@ from app.use_db.tools import quarry
 
 
 def show_routes(id_per):
-    routes = quarry.call("select route.id_rt, route.name, ship.name_sh, ship.ice_class "
+    routes = quarry.call("select route.id_rt, route.name, ship.name_sh, ship.ice_class, status_rt, intermediate.date_enter "
                          "from route inner join ship "
                          "on route.id_sh = ship.id_sh "
+                         "inner join intermediate "
+                         "on route.id_rt = intermediate.id_rt and intermediate.start_point = 'да'"
                          "where route.id_per = %s", [id_per], commit=False, fetchall=True)
 
     return routes
@@ -76,6 +78,19 @@ def delete_route(id_rt):
                 commit=True, fetchall=False)
 
 
+def get_status(id_rt):
+    status = quarry.call("select status_rt from route "
+                         "where route.id_rt = %s", [id_rt],
+                         commit=False, fetchall=False)
+
+    status = status[0]
+
+    return status
 
 
+def update_status(id_rt, date):
+    quarry.call("update intermediate set date_enter = %s where finish_point = 'да' and id_rt = %s",
+                [date, id_rt], commit=True, fetchall=False)
 
+    quarry.call("update route set status_rt = 'завершён' where id_rt = %s", [id_rt], commit=True, fetchall=False)
+    

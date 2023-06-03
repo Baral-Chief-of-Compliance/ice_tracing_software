@@ -6,6 +6,7 @@ from app.tools import dijkstra
 from app.use_db import generate_route_db
 from app.tools.convert_path_to_geojson import convert
 from authorization.decorator_for_authorization import token_required
+from generate_route.define_status import check
 
 
 generate_route = Blueprint('generate_route', __name__)
@@ -107,25 +108,12 @@ def add_route(id_per):
 
         route_name = request.json["route_name"]
 
-        id_sh = generate_route_db.add_ship(ship_name, iceclass)
-
-        id_rt = generate_route_db.create_route(route_name, id_per, id_sh)
-
-        generate_route_db.create_start_end_point(
-            id_rt,
-            start_longitude,
-            start_latitude,
-            end_longitude,
-            end_latitude,
-            date_start
-        )
-
         # проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
         with open("data/map_test.json", "r") as file:
             map_ = json.load(file)
 
         area = route_building_area.build_interval_route(map_, area_building_route)
-
+        # print(area)
         area_width = len(area)
         area_length = len(area[0])
 
@@ -148,17 +136,32 @@ def add_route(id_per):
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
 
-        generate_route_db.add_intermediate(
+        id_sh = generate_route_db.add_ship(ship_name, iceclass)
+
+        status_rt = check(area, end_longitude, end_latitude)
+
+        id_rt = generate_route_db.create_route(route_name, id_per, id_sh, status_rt)
+
+        generate_route_db.create_start_end_point(
             id_rt,
-            area[area_y_next_point][area_x_next_point]["longitude"],
-            area[area_y_next_point][area_x_next_point]["latitude"]
+            start_longitude,
+            start_latitude,
+            end_longitude,
+            end_latitude,
+            date_start
         )
+
+        if status_rt == 'в процессе':
+            generate_route_db.add_intermediate(
+                id_rt,
+                area[area_y_next_point][area_x_next_point]["longitude"],
+                area[area_y_next_point][area_x_next_point]["latitude"]
+            )
 
         graph = create_graph.create(area, iceclass)
         start, goal = create_src_dest.create_src_dest(area)
 
         path = dijkstra.dijkstra(graph, start, goal)
-
 
         polyline_for_ymap = convert(path)
 
