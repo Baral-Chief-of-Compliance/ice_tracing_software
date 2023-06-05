@@ -1,11 +1,11 @@
 <template>
 
     <v-container>
-        <div class="text-h3 py-6 mx-10 text-left">Информация о маршруте "{{ this.name }}"</div>
+        <div class="text-h3 py-6 mx-10 text-left d-flex">Информация о маршруте "{{ this.name }}" <v-card :color=" this.status === 'в процессе' ? 'teal-accent-4' : (this.status === 'завершён' ? 'blue-grey':'orange-accent-4') " class="text-h4 ml-5 px-10 py-1">{{ this.status }}</v-card></div>
         <v-btn  variant="outlined" class="mx-10" :to="{name: 'Routes'}">
             <v-icon icon="mdi-arrow-collapse-left" color="purple-darken-4" class="mr-2"></v-icon>назад
         </v-btn>
-        <div class="text-h5 mx-10 mb-3"><b>Название судна: </b>{{ this.ship_name }}</div>
+        <div class="text-h5 mx-10 mb-3 mt-3"><b>Название судна: </b>{{ this.ship_name }}</div>
         <div class="text-h5 mx-10 mb-3"><b>Ледовый класс судна: </b>{{ this.ice_class }}</div>
         <v-container v-if="stage === 0">
             <div v-if="this.status === 'в процессе' ? true:false" class="text-h5 mx-10 mb-5">1 ШАГ: Вы достигли следущего пункта маршрута?(<v-icon class="mt-1" color="green" icon="mdi-map-marker"></v-icon>)
@@ -159,7 +159,7 @@
                 <div class="ml-5">
                     <v-card class="text-h6 px-5 py-2 d-flex"><v-icon class="mt-1" color="blue" icon="mdi-map-marker"/><b class="mr-1">Начало пути:</b>{{ this.date_start }}</v-card>
                     <v-card v-for="(point, index) in points" :key="index" class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="black" icon="mdi-map-marker"/><b class="mr-1">Промежуток:</b>{{ this.format_date(point.date) }}</v-card>
-                    <v-card class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="red" icon="mdi-map-marker"/><b class="mr-1">Конец пути:</b>{{ this.date_start }}</v-card>
+                    <v-card class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="red" icon="mdi-map-marker"/><b class="mr-1">Конец пути:</b>{{ this.date_end }}</v-card>
                 </div>
             </div>
         </v-container>
@@ -492,7 +492,8 @@ export default{
         nilas_ice: [],
         young_ice: [],
         first_year_ice: [],
-        old_ice: []
+        old_ice: [],
+        date_end: ""
     }),
 
     created(){
@@ -598,11 +599,17 @@ export default{
                 this.status = response.data.status,
 
                 this.final_point_longitude = response.data.final_point_longitude,
-                this.final_point_latitude = response.data.final_point_latitude
+                this.final_point_latitude = response.data.final_point_latitude,
+
+                this.date_end = this.format_date(response.data.date_end)
 
             ))
         },
         format_date(date){
+
+            if (date === '--'){
+                return '--'
+            }else{
                 var d = new Date(date)
 
                 var dd = d.getDate()
@@ -614,6 +621,7 @@ export default{
                 var yy = d.getFullYear()
 
                 return dd + '.' + mm + '.' + yy
+            }
         },
 
         update_point(){

@@ -73,10 +73,11 @@ def get_int_route(id_per, id_rt):
                 "routes": json_routes,
                 "status": status,
                 "final_point_longitude": float(final_point[0]),
-                "final_point_latitude": float(final_point[1])
+                "final_point_latitude": float(final_point[1]),
+                "date_end": "--"
             })
 
-        else:
+        elif status == 'завершение':
 
             return jsonify({
                 "name": route_inf[1],
@@ -89,7 +90,25 @@ def get_int_route(id_per, id_rt):
                 "end_latitude": float(inf_about_end[1]),
                 "points": json_points,
                 "routes": json_routes,
-                "status": status
+                "status": status,
+                "date_end": "--"
+            })
+
+        else:
+            date_end = route_inf_db.get_date_end(id_rt)
+            return jsonify({
+                "name": route_inf[1],
+                "ship_name": route_inf[2],
+                "ice_class": route_inf[3],
+                "date_start": inf_about_start[2],
+                "start_longitude": float(inf_about_start[0]),
+                "start_latitude": float(inf_about_start[1]),
+                "end_longitude": float(inf_about_end[0]),
+                "end_latitude": float(inf_about_end[1]),
+                "points": json_points,
+                "routes": json_routes,
+                "status": status,
+                "date_end": date_end
             })
 
     elif request.method == 'POST':
@@ -142,8 +161,11 @@ def get_int_route(id_per, id_rt):
         area[area_y_start_point][area_x_start_point]["start"] = True
         area[area_y_next_point][area_x_next_point]["end"] = True
 
+        final_point_longitude = area[area_y_next_point][area_x_next_point]["longitude"]
+        final_point_latitude = area[area_y_next_point][area_x_next_point]["latitude"]
+
         if final_point_latitude == end_point_latitude and final_point_longitude == end_point_longitude:
-            pass
+            route_inf_db.update_status_completion(id_rt)
 
         else:
 

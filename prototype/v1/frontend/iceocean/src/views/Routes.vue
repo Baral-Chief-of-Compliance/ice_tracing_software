@@ -21,7 +21,7 @@
                             <v-spacer></v-spacer>
                             <b class="pr-2">Дата начала:</b>  {{ this.format_date_v(route.date_enter) }}
                             <v-spacer></v-spacer>
-                            <v-card :color=" route.status === 'в процессе' ? 'teal-accent-4' : 'orange-accent-4' " class="px-10 py-1">
+                            <v-card :color=" route.status === 'в процессе' ? 'teal-accent-4' : (route.status === 'завершён' ? 'blue-grey':'orange-accent-4') " class="px-10 py-1">
                                 {{ route.status }}
                             </v-card>
                         </v-card>

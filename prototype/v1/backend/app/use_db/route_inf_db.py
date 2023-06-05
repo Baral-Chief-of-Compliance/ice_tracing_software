@@ -93,4 +93,14 @@ def update_status(id_rt, date):
                 [date, id_rt], commit=True, fetchall=False)
 
     quarry.call("update route set status_rt = 'завершён' where id_rt = %s", [id_rt], commit=True, fetchall=False)
-    
+
+
+def get_date_end(id_rt):
+    date_end = quarry.call("select date_enter from intermediate where finish_point = 'да' and id_rt = %s",
+                           [id_rt], commit=False, fetchall=True)
+
+    return date_end[0]
+
+
+def update_status_completion(id_rt):
+    quarry.call("update route set status_rt = 'завершение' where id_rt = %s", [id_rt], commit=True, fetchall=False)
