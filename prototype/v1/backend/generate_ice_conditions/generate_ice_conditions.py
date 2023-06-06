@@ -1,6 +1,13 @@
 from app import Blueprint, jsonify, request, json
 from generate_ice_conditions.format_polygons import format_polygons
 from authorization.decorator_for_authorization import token_required
+from ice import test_form_jupyter
+from app.use_db import generate_ice_conditions_db
+import sys
+from threading import Thread
+from ice.ice_object_border import clear
+from ice.create_polygon import clean_map
+from app import redis_data_base
 
 
 generate_ice_conditions = Blueprint('generate_ice_conditions', __name__)
@@ -76,3 +83,78 @@ def today_nilas_ice(id_per):
         nilas_ice_polygons = format_polygons(nilas_ice)
 
         return jsonify({"polygons": nilas_ice_polygons})
+
+
+class CustomThread(Thread):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target is not None:
+            self._return = self._target(*self._args, **self._kwargs)
+
+    def join(self):
+        Thread.join(self)
+        return self._return
+
+
+def create_geojson(map_, type_of_ice):
+    map_ = clear(map_, type_of_ice)
+    geojson = clean_map(map_, type_of_ice)
+
+    ice_field_geojson = format_polygons(geojson)
+    return ice_field_geojson
+
+
+def add_data_to_redis(map_, id_per):
+    json_map = json.dumps(map_)
+    redis_data_base.set(id_per, json_map)
+    print(f"map into redis for person {id_per}")
+
+@generate_ice_conditions.route('/random/ice_conditions', methods=['GET'])
+@token_required
+def random_ice_conditions(id_per):
+    if request.method == 'GET':
+        sys.setrecursionlimit(5000)
+
+        map_ = generate_ice_conditions_db.get_map()
+
+        map_ = test_form_jupyter.create_ice(map_)
+
+        redis_thread = Thread(target=add_data_to_redis, args=(map_, id_per))
+        t1 = CustomThread(target=create_geojson, args=(map_, "first_year_ice"))
+        t2 = CustomThread(target=create_geojson, args=(map_, "young_ice"))
+        t3 = CustomThread(target=create_geojson, args=(map_, "old_ice"))
+        t4 = CustomThread(target=create_geojson, args=(map_, "nilas_ice"))
+        t5 = CustomThread(target=create_geojson, args=(map_, "fast_ice"))
+        t6 = CustomThread(target=create_geojson, args=(map_, "ice_field"))
+
+        redis_thread.start()
+
+        t1.start()
+        t2.start()
+        t3.start()
+        t4.start()
+        t5.start()
+        t6.start()
+
+        redis_thread.join()
+
+        first_year_ice = t1.join()
+        young_ice = t2.join()
+        old_ice = t3.join()
+        nilas_ice = t4.join()
+        fast_ice = t5.join()
+        ice_field = t6.join()
+
+
+
+        return jsonify({
+            "first_year_ice": first_year_ice,
+            "young_ice": young_ice,
+            "old_ice": old_ice,
+            "nilas_ice": nilas_ice,
+            "fast_ice": fast_ice,
+            "ice_field": ice_field
+        })

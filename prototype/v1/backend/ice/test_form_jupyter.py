@@ -3,7 +3,7 @@ import noise
 import numpy as np
 from PIL import Image
 import math
-from test import Config
+from ice.test import Config
 import json
 
 
@@ -21,13 +21,13 @@ def prep_world(world):
 
 
 def create_ice(map_):
-    width = len(map_)
-    length = len(map_[0])
+    width = 38
+    length = 371
     shape = (width, length)
-    scale = 100
+    scale = 30
     octaves = 6
     persistence = 0.4
-    lacunarity = 2.0
+    lacunarity = 1.0
     seed = np.random.randint(0,100)
     # seed = 126
 
@@ -43,7 +43,7 @@ def create_ice(map_):
                                         repeaty=shape[0],
                                         base=seed)
 
-    center_x, center_y = shape[1] - 150, shape[0] // 100
+    center_x, center_y = shape[1] // 2, shape[0] // 2
     circle_grad = np.zeros_like(world)
 
     for y in range(world.shape[0]):
@@ -56,8 +56,8 @@ def create_ice(map_):
     # get it between -1 and 1
     max_grad = np.max(circle_grad)
     circle_grad = circle_grad / max_grad
-    circle_grad -= 0.5
-    circle_grad *= 2.0
+    circle_grad -= 1.5
+    circle_grad *= 1.0
     circle_grad = -circle_grad
 
     world_noise = np.zeros_like(world)
@@ -67,73 +67,91 @@ def create_ice(map_):
             if circle_grad[i][j]>0:
                 world_noise[i][j] = (world[i][j] * circle_grad[i][j])
 
-    threshold = 50
+    def add_color(world):
+        color_world = np.zeros(world.shape+(3,))
+        for i in range(shape[0]):
+            for j in range(shape[1]):
+                if world[i][j] < -0.20:
+                    color_world[i][j] = Config.blue
+                elif world[i][j] < -0.15:
+                    color_world[i][j] = Config.fast_ice
+                elif world[i][j] < -0.10:
+                    color_world[i][j] = Config.ice_field
+                elif world[i][j] < -0.05:
+                    color_world[i][j] = Config.nilas_ice
+                elif world[i][j] < 0.10:
+                    color_world[i][j] = Config.young_ice
+                elif world[i][j] < 0.30:
+                    color_world[i][j] = Config.first_year_ice
+                elif world[i][j] < 1.0:
+                    color_world[i][j] = Config.old_ice
+
+        return color_world
+
+    threshold = 20
 
     def add_color2(world):
         color_world = np.zeros(world.shape+(3,))
         for i in range(shape[0]):
             for j in range(shape[1]):
-                if world[i][j] < threshold + 100:
+                if world[i][j] < threshold + 70:
                     color_world[i][j] = Config.blue
-                elif world[i][j] < threshold + 105:
+                elif world[i][j] < threshold + 90:
                     color_world[i][j] = Config.fast_ice
                 elif world[i][j] < threshold + 110:
                     color_world[i][j] = Config.ice_field
                 elif world[i][j] < threshold + 120:
                     color_world[i][j] = Config.nilas_ice
-                elif world[i][j] < threshold + 130:
+                elif world[i][j] < threshold + 150:
                     color_world[i][j] = Config.young_ice
-                elif world[i][j] < threshold + 140:
+                elif world[i][j] < threshold + 170:
                     color_world[i][j] = Config.first_year_ice
-                # elif world[i][j] < threshold + 137:
-                #     color_world[i][j] = mountain
                 else:
                     color_world[i][j] = Config.old_ice
 
         return color_world
 
-    island_world_grad = add_color2(prep_world(world_noise)).astype(np.uint8)
+    island_world_grad = add_color2(prep_world(world)).astype(np.uint8)
 
     for y in range(width):
         for x in range(length):
             if island_world_grad[y, x][0] == Config.old_ice[0] \
                     and island_world_grad[y, x][1] == Config.old_ice[1] \
                     and island_world_grad[y, x][2] == Config.old_ice[2]:
-                map_[y][x]["type_of_ice"] = "old_ice"
+                map_[y + 15][x + 707]["type_of_ice"] = "old_ice"
 
             elif island_world_grad[y, x][0] == Config.young_ice[0] \
                     and island_world_grad[y, x][1] == Config.young_ice[1] \
                     and island_world_grad[y, x][2] == Config.young_ice[2]:
-                map_[y][x]["type_of_ice"] = "young_ice"
+                map_[y + 15][x + 707]["type_of_ice"] = "young_ice"
 
             elif island_world_grad[y, x][0] == Config.first_year_ice[0] \
                     and island_world_grad[y, x][1] == Config.first_year_ice[1] \
                     and island_world_grad[y, x][2] == Config.first_year_ice[2]:
-                map_[y][x]["type_of_ice"] = "first_year_ice"
+                map_[y + 15][x + 707]["type_of_ice"] = "first_year_ice"
 
             elif island_world_grad[y, x][0] == Config.nilas_ice[0] \
                     and island_world_grad[y, x][1] == Config.nilas_ice[1] \
                     and island_world_grad[y, x][2] == Config.nilas_ice[2]:
-                map_[y][x]["type_of_ice"] = "nilas_ice"
+                map_[y + 15][x + 707]["type_of_ice"] = "nilas_ice"
 
             elif island_world_grad[y, x][0] == Config.fast_ice[0] \
                     and island_world_grad[y, x][1] == Config.fast_ice[1] \
                     and island_world_grad[y, x][2] == Config.fast_ice[2]:
-                map_[y][x]["type_of_ice"] = "fast_ice"
+                map_[y + 15][x + 707]["type_of_ice"] = "fast_ice"
 
             elif island_world_grad[y, x][0] == Config.ice_field[0] \
                     and island_world_grad[y, x][1] == Config.ice_field[1] \
                     and island_world_grad[y, x][2] == Config.ice_field[2]:
-                map_[y][x]["type_of_ice"] = "ice_field"
+                map_[y + 15][x + 707]["type_of_ice"] = "ice_field"
 
-    # island_world_grad = add_color2(prep_world(world_noise)).astype(np.uint8)
+    island_world_grad = add_color2(prep_world(world)).astype(np.uint8)
     # Image.fromarray(island_world_grad,'RGB').show()
 
     return map_
 
-#
-# with open("../tools/map.json", "r") as file:
+
+# with open("../data/map.json", "r") as file:
 #     map_ = json.load(file)
-#
 #
 # map_ = create_ice(map_)

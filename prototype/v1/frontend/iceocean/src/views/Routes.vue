@@ -70,7 +70,9 @@ export default{
                     Authorization: `Bearer: ${localStorage.jwt}`  
                 } 
             })
-            .then(response => this.rotes = response.data.routes)
+            .then(response => this.rotes = response.data.routes).catch(err => {
+                this.$router.push("/mistake") 
+            })
         },
 
         delete_route(id_rt){

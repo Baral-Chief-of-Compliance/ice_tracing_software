@@ -603,7 +603,9 @@ export default{
 
                 this.date_end = this.format_date(response.data.date_end)
 
-            ))
+            )).catch(err => {
+                this.$router.push("/mistake") 
+            })
         },
         format_date(date){
 

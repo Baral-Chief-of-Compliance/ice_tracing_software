@@ -68,6 +68,17 @@ def add_route(id_rt, geojson):
                 "values (%s, %s)", [id_rt, geojson],
                 commit=True, fetchall=False)
 
+# def add_ice_condition(
+#         first_year_ice,
+#         young_ice,
+#         old_ice,
+#         nilas_ice,
+#         fast_ice,
+#         ice_field
+# ):
+
+
+
 
 def show_all_intermediate(id_rt):
     intermediates = quarry.call("select latitude, longitude "
