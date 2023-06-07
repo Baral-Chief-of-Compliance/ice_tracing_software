@@ -68,14 +68,16 @@ def add_route(id_rt, geojson):
                 "values (%s, %s)", [id_rt, geojson],
                 commit=True, fetchall=False)
 
-# def add_ice_condition(
-#         first_year_ice,
-#         young_ice,
-#         old_ice,
-#         nilas_ice,
-#         fast_ice,
-#         ice_field
-# ):
+    max_id_itirerary = quarry.call("select max(id_itir) from itirerary where id_rt = %s",
+                                   [id_rt], commit=False, fetchall=False)
+
+    return max_id_itirerary[0]
+
+
+def add_ice_condition(id_itir, ice_geojson, type_of_ice):
+    geojson = f"{ice_geojson}"
+    quarry.call("insert into ice(id_itir, type_of_ice, geojson) values (%s, %s, %s)",
+                [id_itir, type_of_ice, geojson], commit=True, fetchall=False)
 
 
 

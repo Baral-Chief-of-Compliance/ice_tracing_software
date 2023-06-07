@@ -23,6 +23,7 @@ def create_geojson(map_, type_of_ice):
 
     ice_field_geojson = format_polygons(geojson)
     ice_field_geojson_dumps = json.dumps(ice_field_geojson)
+
     return ice_field_geojson_dumps
 
 
@@ -105,34 +106,13 @@ def add_route(id_per):
         end_longitude = request.json["end_longitude"]
         end_latitude = request.json["end_latitude"]
 
-        # if redis_data_base.get(id_per):
-        #     map_ = json.loads(redis_data_base.get(id_per))
-        #
-        # else:
+        if redis_data_base.get(id_per):
+            map_ = json.loads(redis_data_base.get(id_per))
 
-        with open("data/map_test.json", "r") as file:
-            map_ = json.load(file)
+        else:
 
-        # t1 = CustomThread(target=create_geojson, args=(map_, "first_year_ice"))
-        # t2 = CustomThread(target=create_geojson, args=(map_, "young_ice"))
-        # t3 = CustomThread(target=create_geojson, args=(map_, "old_ice"))
-        # t4 = CustomThread(target=create_geojson, args=(map_, "nilas_ice"))
-        # t5 = CustomThread(target=create_geojson, args=(map_, "fast_ice"))
-        # t6 = CustomThread(target=create_geojson, args=(map_, "ice_field"))
-        #
-        # t1.start()
-        # t2.start()
-        # t3.start()
-        # t4.start()
-        # t5.start()
-        # t6.start()
-        #
-        # first_year_ice = t1.join()
-        # young_ice = t2.join()
-        # old_ice = t3.join()
-        # nilas_ice = t4.join()
-        # fast_ice = t5.join()
-        # ice_field = t6.join()
+            with open("data/map_test.json", "r") as file:
+                map_ = json.load(file)
 
         nearest_start_y, nearest_start_x = route_building_area.nearest(
             map_,
@@ -221,7 +201,38 @@ def add_route(id_per):
 
         json_path = json.dumps(polyline_for_ymap)
 
-        generate_route_db.add_route(id_rt, json_path)
+        max_id_itirerary = generate_route_db.add_route(id_rt, json_path)
+
+        t1 = CustomThread(target=create_geojson, args=(map_, "first_year_ice"))
+        t2 = CustomThread(target=create_geojson, args=(map_, "young_ice"))
+        t3 = CustomThread(target=create_geojson, args=(map_, "old_ice"))
+        t4 = CustomThread(target=create_geojson, args=(map_, "nilas_ice"))
+        t5 = CustomThread(target=create_geojson, args=(map_, "fast_ice"))
+        t6 = CustomThread(target=create_geojson, args=(map_, "ice_field"))
+
+        t1.start()
+        t2.start()
+        t3.start()
+        t4.start()
+        t5.start()
+        t6.start()
+
+        first_year_ice = t1.join()
+        young_ice = t2.join()
+        old_ice = t3.join()
+        nilas_ice = t4.join()
+        fast_ice = t5.join()
+        ice_field = t6.join()
+
+        generate_route_db.add_ice_condition(max_id_itirerary, first_year_ice, "first_year_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, young_ice, "young_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, old_ice, "old_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, nilas_ice, "nilas_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, fast_ice, "fast_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, ice_field, "ice_field")
+
+        if redis_data_base.get(id_per):
+            redis_data_base.delete(id_per)
 
         return jsonify("path is generate")
 

@@ -7,6 +7,11 @@ from app.tools import dijkstra
 from app.use_db import generate_route_db
 from app.tools.convert_path_to_geojson import convert
 from authorization.decorator_for_authorization import token_required
+from app import redis_data_base
+from ice.ice_object_border import clear
+from ice.create_polygon import clean_map
+from generate_ice_conditions.format_polygons import format_polygons
+from generate_route.generate_route import create_geojson, CustomThread
 
 
 route_inf = Blueprint('route_inf', __name__)
@@ -130,9 +135,12 @@ def get_int_route(id_per, id_rt):
 
         area_building_route = request.json["area_building_route"]
 
-        # проверяем вместо map.json map_test.json но в идеале заменить на подгрузку из бд
-        with open("data/map_test.json", "r") as file:
-            map_ = json.load(file)
+        if redis_data_base.get(id_per):
+            map_ = json.loads(redis_data_base.get(id_per))
+
+        else:
+            with open("data/map_test.json", "r") as file:
+                map_ = json.load(file)
 
         area = route_building_area.build_interval_route(map_, area_building_route)
 
@@ -185,7 +193,38 @@ def get_int_route(id_per, id_rt):
 
         json_way = json.dumps(polyline_for_ymap)
 
-        generate_route_db.add_route(id_rt, json_way)
+        max_id_itirerary = generate_route_db.add_route(id_rt, json_way)
+
+        t1 = CustomThread(target=create_geojson, args=(map_, "first_year_ice"))
+        t2 = CustomThread(target=create_geojson, args=(map_, "young_ice"))
+        t3 = CustomThread(target=create_geojson, args=(map_, "old_ice"))
+        t4 = CustomThread(target=create_geojson, args=(map_, "nilas_ice"))
+        t5 = CustomThread(target=create_geojson, args=(map_, "fast_ice"))
+        t6 = CustomThread(target=create_geojson, args=(map_, "ice_field"))
+
+        t1.start()
+        t2.start()
+        t3.start()
+        t4.start()
+        t5.start()
+        t6.start()
+
+        first_year_ice = t1.join()
+        young_ice = t2.join()
+        old_ice = t3.join()
+        nilas_ice = t4.join()
+        fast_ice = t5.join()
+        ice_field = t6.join()
+
+        generate_route_db.add_ice_condition(max_id_itirerary, first_year_ice, "first_year_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, young_ice, "young_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, old_ice, "old_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, nilas_ice, "nilas_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, fast_ice, "fast_ice")
+        generate_route_db.add_ice_condition(max_id_itirerary, ice_field, "ice_field")
+
+        if redis_data_base.get(id_per):
+            redis_data_base.delete(id_per)
 
         return jsonify("path is build")
 

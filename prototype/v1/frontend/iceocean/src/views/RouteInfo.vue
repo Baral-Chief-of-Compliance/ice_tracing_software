@@ -167,6 +167,8 @@
         <v-container v-if="stage === 1">
             <div class="text-h5 mx-10 mb-5">2 ШАГ: Настройки для построения маршрута</div>
 
+            <v-btn @click="update_ice_condition" class="mx-10 mb-5" color="purple-darken-4">Сгенирировать ледовую обстановку</v-btn>
+
             <div class="d-flex ml-10">
                 <div class="map">
                     <yandex-map
@@ -799,6 +801,22 @@ export default{
             
             this.$router.go(0)
 
+        },
+
+        update_ice_condition(){
+            axios.get("http://127.0.0.1:5000/iceocean/api/v1.0/random/ice_conditions", {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            .then(response => (
+                this.first_year_ice = response.data.first_year_ice,
+                this.young_ice = response.data.young_ice,
+                this.old_ice = response.data.old_ice,
+                this.nilas_ice = response.data.nilas_ice,
+                this.fast_ice = response.data.fast_ice,
+                this.ice_field = response.data.ice_field
+            ))
         }
     }
 }
