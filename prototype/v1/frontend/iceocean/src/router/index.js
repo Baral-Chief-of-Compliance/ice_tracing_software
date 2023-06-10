@@ -8,6 +8,7 @@ import Login from '@/views/Login.vue'
 import Registration from '@/views/Registration.vue'
 import { isAuthorizedRouter } from '@/store/TokenStore'
 import Mistake from '@/views/Mistake.vue'
+import HistoryOfRoute from '@/views/HistoryOfRoute.vue'
 
 
 const routes = [
@@ -74,6 +75,11 @@ const routes = [
         path:'routes/:id_rt',
         name: 'RouteInfo',
         component: RouteInfo
+      },
+      {
+        path: 'routes/:id_rt/history_of_route',
+        name: 'HistoryOfRoute',
+        component: HistoryOfRoute
       }
     ]
   }

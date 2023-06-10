@@ -157,7 +157,7 @@
                         </div>
 
 
-                        <div v-for="(route, index) in routes" :key="index">
+                        <!-- <div v-for="(route, index) in routes" :key="index">
                             <ymap-marker 
                             v-if="route.id_itir === this.select_route"
                             :marker-id="index + 2000000"
@@ -165,7 +165,7 @@
                             :coords="route.polyline"
                             :marker-stroke="{ color: '#FFFF00', width: 2, opacity: 1, style: 'shortdash'}"
                         />
-                        </div>
+                        </div> -->
 
 
 
@@ -183,7 +183,9 @@
             
 
             <div class="text-h5 mx-10 mt-5"><b>Отобразать ледовую обстановку, при которой был построен маршрут: </b> </div>
-            <v-row class="mt-3 mx-2" >
+
+            <v-btn class="mt-5" :to="{name: 'HistoryOfRoute', params: {id_rt: this.$route.params.id_rt }}" color="purple-darken-4" block>История маршрута</v-btn>
+            <!-- <v-row class="mt-3 mx-2" >
                 <v-col v-for="route in routes" cols="2">                
                     <v-card
                         color="purple-darken-4"
@@ -193,7 +195,7 @@
                     </v-card>
                 </v-col>
 
-            </v-row>
+            </v-row> -->
 
         </v-container>
 
@@ -203,7 +205,7 @@
             <v-btn @click="update_ice_condition" class="mx-10 mb-5" color="purple-darken-4">Сгенирировать ледовую обстановку</v-btn>
 
             <div class="d-flex ml-10">
-                <!-- <div class="map">
+                <div class="map">
                     <yandex-map
                         :coords="[final_point_latitude, final_point_longitude]"
                         :zoom="4"
@@ -309,7 +311,7 @@
 
             
                     </yandex-map>
-                </div> -->
+                </div>
 
                 <v-form class="ml-10">
                     <div class="d-flex justify-center pt-7">
@@ -493,8 +495,6 @@ export default{
         ice_class: "",
         status: "",
 
-        select_route: "",
-
         start_longitude: "",
         start_latitude: "",
 
@@ -577,10 +577,6 @@ export default{
     //     this.get_first_year_ice()
     //     this.get_old_ice()
     // },
-
-    beforeMount(){
-
-    },
 
     methods: {
         get_fast_ice(){
