@@ -44,7 +44,7 @@ def show_inf_about_route(id_per, id_rt):
                                 [id_rt],
                                 commit=False, fetchall=False)
 
-    itirerarys = quarry.call("select itirerary.geojson "
+    itirerarys = quarry.call("select itirerary.geojson, itirerary.id_itir "
                              "from itirerary "
                              "where itirerary.id_rt = %s group by itirerary.id_itir", [id_rt],
                              commit=False, fetchall=True)
@@ -104,3 +104,11 @@ def get_date_end(id_rt):
 
 def update_status_completion(id_rt):
     quarry.call("update route set status_rt = 'завершение' where id_rt = %s", [id_rt], commit=True, fetchall=False)
+
+
+def get_ice_condition(id_itir, type_of_ice):
+    geojson = quarry.call("select ice.geojson from ice "
+                          "where ice.id_itir = %s and ice.type_of_ice = %s",
+                          [id_itir, type_of_ice], commit=False, fetchall=False)
+
+    return geojson[0]

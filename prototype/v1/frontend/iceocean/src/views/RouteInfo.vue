@@ -7,6 +7,7 @@
         </v-btn>
         <div class="text-h5 mx-10 mb-3 mt-3"><b>Название судна: </b>{{ this.ship_name }}</div>
         <div class="text-h5 mx-10 mb-3"><b>Ледовый класс судна: </b>{{ this.ice_class }}</div>
+
         <v-container v-if="stage === 0">
             <div v-if="this.status === 'в процессе' ? true:false" class="text-h5 mx-10 mb-5">1 ШАГ: Вы достигли следущего пункта маршрута?(<v-icon class="mt-1" color="green" icon="mdi-map-marker"></v-icon>)
                 
@@ -73,71 +74,71 @@
 
                     <ymap-marker 
                         :coords="[start_latitude, start_longitude]" 
-                        marker-id="1"
+                        :marker-id="1"
                     />
 
                     <ymap-marker 
                         :coords="[end_latitude, end_longitude]" 
-                        marker-id="2" 
+                        :marker-id="2" 
                         :icon="{ color: 'red' }"
                     />
 
                     <ymap-marker v-if="this.status === 'в процессе' ? true:false "
                         :coords="[final_point_latitude, final_point_longitude]"
-                        marker-id="3"
+                        :marker-id="3"
                         :icon="{ color: 'green' }"
                     />
 
-                    <ymap-marker v-for="(point, index) in points" :key="index + 100"
-                        :marker-id="index"
+                    <ymap-marker v-for="(point, index) in points" :key="index"
+                        :marker-id="index + 100"
                         :icon="{ color: 'black' }"
                         :coords="[point.point_latitude, point.point_longitude]"
                     />
 
 
 
-                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+1000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
+                            :marker-id="index + 100000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#fffafa', opacity: 0.5}"
                             :marker-stroke="{color: '#fffafa', opacity: 1}"
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index+2000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index"
+                            :marker-id="index + 200000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#b9b1b1', opacity: 0.5}"
                             :marker-stroke="{color: '#b9b1b1', opacity: 1}"
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index+3000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index"
+                            :marker-id="index + 300000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#0968f5', opacity: 0.5}"
                             :marker-stroke="{color: '#0968f5', opacity: 1}"
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index+4000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index"
+                            :marker-id="index + 400000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#f708f9', opacity: 0.5}"
                             :marker-stroke="{color: '#f708f9', opacity: 1}"
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index+5000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index"
+                            :marker-id="index + 500000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#00c8a1', opacity: 0.7}"
                             :marker-stroke="{color: '#00c8a1', opacity: 1}"
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index+6000"
-                            :marker-id="index"
+                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index"
+                            :marker-id="index + 600000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#900001', opacity: 0.7}"
@@ -145,23 +146,55 @@
                             suppressMapOpenBlock: true
                         ></ymap-marker>
 
-                        <ymap-marker v-for="(route, index) in routes" :key="index + 200"
-                        :marker-id="index"
-                        marker-type="Polyline"
-                        :coords="route.polyline"
-                        :marker-stroke="{ color: '#000000', width: 2, opacity: 1, style: 'shortdash'}"
+                        <div v-for="(route, index) in routes" :key="index">
+                            <ymap-marker 
+                            v-if="route.id_itir != this.select_route"
+                            :marker-id="index + 1000000"
+                            marker-type="Polyline"
+                            :coords="route.polyline"
+                            :marker-stroke="{ color: '#000000', width: 2, opacity: 1, style: 'shortdash'}"
                         />
+                        </div>
+
+
+                        <div v-for="(route, index) in routes" :key="index">
+                            <ymap-marker 
+                            v-if="route.id_itir === this.select_route"
+                            :marker-id="index + 2000000"
+                            marker-type="Polyline"
+                            :coords="route.polyline"
+                            :marker-stroke="{ color: '#FFFF00', width: 2, opacity: 1, style: 'shortdash'}"
+                        />
+                        </div>
+
+
 
                     </yandex-map>
 
                 </div>
-                
+
                 <div class="ml-5">
+                    <div class="text-h5 mb-3 mt-3"><b>Контрольные точки: </b></div>
                     <v-card class="text-h6 px-5 py-2 d-flex"><v-icon class="mt-1" color="blue" icon="mdi-map-marker"/><b class="mr-1">Начало пути:</b>{{ this.date_start }}</v-card>
                     <v-card v-for="(point, index) in points" :key="index" class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="black" icon="mdi-map-marker"/><b class="mr-1">Промежуток:</b>{{ this.format_date(point.date) }}</v-card>
                     <v-card class="text-h6 px-5 py-2 my-2 d-flex"><v-icon class="mt-1" color="red" icon="mdi-map-marker"/><b class="mr-1">Конец пути:</b>{{ this.date_end }}</v-card>
                 </div>
             </div>
+            
+
+            <div class="text-h5 mx-10 mt-5"><b>Отобразать ледовую обстановку, при которой был построен маршрут: </b> </div>
+            <v-row class="mt-3 mx-2" >
+                <v-col v-for="route in routes" cols="2">                
+                    <v-card
+                        color="purple-darken-4"
+                        class="text-h6 px-5 py-2 mx-3"
+                        @click="func_select_route(route, this.routes)" >
+                        маршрут {{ route.id_itir }}
+                    </v-card>
+                </v-col>
+
+            </v-row>
+
         </v-container>
 
         <v-container v-if="stage === 1">
@@ -170,7 +203,7 @@
             <v-btn @click="update_ice_condition" class="mx-10 mb-5" color="purple-darken-4">Сгенирировать ледовую обстановку</v-btn>
 
             <div class="d-flex ml-10">
-                <div class="map">
+                <!-- <div class="map">
                     <yandex-map
                         :coords="[final_point_latitude, final_point_longitude]"
                         :zoom="4"
@@ -276,7 +309,7 @@
 
             
                     </yandex-map>
-                </div>
+                </div> -->
 
                 <v-form class="ml-10">
                     <div class="d-flex justify-center pt-7">
@@ -460,6 +493,8 @@ export default{
         ice_class: "",
         status: "",
 
+        select_route: "",
+
         start_longitude: "",
         start_latitude: "",
 
@@ -506,6 +541,16 @@ export default{
 
         axios.interceptors.response.use((response) =>{
             this.dialog_loading = false
+
+            // if (response.config.method == 'get'){
+            //     this.get_inf()
+            //     this.get_fast_ice()
+            //     this.get_ice_field()
+            //     this.get_nilas_ice()
+            //     this.get_young_ice()
+            //     this.get_first_year_ice()
+            //     this.get_old_ice()
+            // }
             if (response.config.method == 'post' && response.config.url == `http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`){
                 this.$router.go(0)
             }
@@ -521,6 +566,20 @@ export default{
         this.get_young_ice()
         this.get_first_year_ice()
         this.get_old_ice()
+    },
+
+    // updated(){
+    //     this.get_inf()
+    //     this.get_fast_ice()
+    //     this.get_ice_field()
+    //     this.get_nilas_ice()
+    //     this.get_young_ice()
+    //     this.get_first_year_ice()
+    //     this.get_old_ice()
+    // },
+
+    beforeMount(){
+
     },
 
     methods: {
@@ -817,6 +876,17 @@ export default{
                 this.fast_ice = response.data.fast_ice,
                 this.ice_field = response.data.ice_field
             ))
+        },
+
+        func_select_route(route, routes){
+            this.select_route = route.id_itir
+            this.first_year_ice = route.first_year_ice
+            this.young_ice = route.young_ice
+            this.old_ice = route.old_ice
+            this.nilas_ice = route.nilas_ice
+            this.fast_ice = route.fast_ice
+            this.ice_field = route.ice_field
+            this.get_inf()
         }
     }
 }

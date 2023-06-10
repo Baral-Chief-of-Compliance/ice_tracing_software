@@ -12,8 +12,10 @@
 
             <div class="text-h5 ma-15">Попробуйте обновить страницу позже</div>
 
+            <div class="text-h5 ma-15">Или попробуйте <v-btn :to="{ name: 'Login'}" color="purple-darken-4">перезайти</v-btn></div>
+
             <div class="text-h5 mx-15">Если ошибка повторяется - напишите нам об этом</div>
-            <div class="text-h5 mx-15">в поддержку</div>
+            <div class="text-h5 mx-15"><v-btn color="purple-darken-4">в поддержку</v-btn> </div>
         </v-container>
     </v-app>
 </template>

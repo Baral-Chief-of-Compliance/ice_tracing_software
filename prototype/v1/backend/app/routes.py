@@ -5,13 +5,15 @@ from ports.ports import ports
 from route_inf.route_inf import route_inf
 from authorization.authorization import authorization_blueprint
 from app.use_db.enter_map_in_bd import add_map_to_bd
+from authorization.decorator_for_authorization import token_required
 
 
 url = '/iceocean/api/v1.0/'
 
 
 @app.route('/')
-def index():
+@token_required
+def index(id_per):
     return "hello world"
 
 

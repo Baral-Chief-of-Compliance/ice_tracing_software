@@ -59,8 +59,23 @@ def get_int_route(id_per, id_rt):
             })
 
         for route in itirerarys:
+
+            first_year_ice = json.loads(route_inf_db.get_ice_condition(route[1], "first_year_ice"))
+            young_ice = json.loads(route_inf_db.get_ice_condition(route[1], "young_ice"))
+            old_ice = json.loads(route_inf_db.get_ice_condition(route[1], "old_ice"))
+            nilas_ice = json.loads(route_inf_db.get_ice_condition(route[1], "nilas_ice"))
+            fast_ice = json.loads(route_inf_db.get_ice_condition(route[1], "fast_ice"))
+            ice_field = json.loads(route_inf_db.get_ice_condition(route[1], "ice_field"))
+
             json_routes.append({
-                "polyline": json.loads(route[0])
+                "id_itir": route[1],
+                "polyline": json.loads(route[0]),
+                "first_year_ice": first_year_ice,
+                "young_ice": young_ice,
+                "old_ice": old_ice,
+                "nilas_ice": nilas_ice,
+                "fast_ice": fast_ice,
+                "ice_field": ice_field
             })
 
         if status == 'в процессе':

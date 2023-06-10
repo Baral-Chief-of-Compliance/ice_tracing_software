@@ -31,48 +31,48 @@
                 :zoom="3"
                 :cluster-options="clusterOptions"
             >
-                <ymap-marker v-if="!show_fast_ice" v-for="(polygon, index) in fast_ice" :key="index+1000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_fast_ice" v-for="(polygon, index) in fast_ice" :key="index"
+                    :marker-id="index + 100000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#fffafa', opacity: 0.5}"
                     :marker-stroke="{color: '#fffafa', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index+2000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_ice_field" v-for="(polygon, index) in ice_field" :key="index"
+                    :marker-id="index + 200000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#b9b1b1', opacity: 0.5}"
                     :marker-stroke="{color: '#b9b1b1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index+3000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_nilas_ice" v-for="(polygon, index) in nilas_ice" :key="index"
+                    :marker-id="index + 300000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#0968f5', opacity: 0.5}"
                     :marker-stroke="{color: '#0968f5', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index+4000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_young_ice" v-for="(polygon, index) in young_ice" :key="index"
+                    :marker-id="index + 400000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#f708f9', opacity: 0.5}"
                     :marker-stroke="{color: '#f708f9', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index+5000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_first_year_ice" v-for="(polygon, index) in first_year_ice" :key="index"
+                    :marker-id="index + 500000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#00c8a1', opacity: 0.7}"
                     :marker-stroke="{color: '#00c8a1', opacity: 1}"
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index+6000"
-                    :marker-id="index"
+                <ymap-marker v-if="!show_old_ice" v-for="(polygon, index) in old_ice" :key="index"
+                    :marker-id="index + 600000"
                     marker-type="Polygon"
                     :coords="[polygon]"
                     :markerFill="{color: '#900001', opacity: 0.7}"
@@ -80,8 +80,8 @@
                     suppressMapOpenBlock: true
                 ></ymap-marker>
 
-                <ymap-marker v-if="!show_ports" v-for="(port, index) in ports" :key="index+10000"
-                    :marker-id="show_ports"
+                <ymap-marker v-if="!show_ports" v-for="(port, index) in ports" :key="index"
+                    :marker-id="index + 700000"
                     :balloon="{header: port.name }"
                     cluster-name="1"
                     :coords="[port.latitude, port.longitude]"
