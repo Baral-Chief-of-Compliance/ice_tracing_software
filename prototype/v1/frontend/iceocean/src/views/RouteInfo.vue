@@ -72,48 +72,23 @@
                         :zoom="4"
                     >
 
-                    <ymap-marker 
-                        :coords="[start_latitude, start_longitude]" 
-                        :marker-id="1"
-                    />
-
-                    <ymap-marker 
-                        :coords="[end_latitude, end_longitude]" 
-                        :marker-id="2" 
-                        :icon="{ color: 'red' }"
-                    />
-
-                    <ymap-marker v-if="this.status === 'в процессе' ? true:false "
-                        :coords="[final_point_latitude, final_point_longitude]"
-                        :marker-id="3"
-                        :icon="{ color: 'green' }"
-                    />
-
-                    <ymap-marker v-for="(point, index) in points" :key="index"
-                        :marker-id="index + 100"
-                        :icon="{ color: 'black' }"
-                        :coords="[point.point_latitude, point.point_longitude]"
-                    />
-
-
-
-                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
-                            :marker-id="index + 100000"
+                        <!-- <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
+                            :marker-id="index"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#fffafa', opacity: 0.5}"
                             :marker-stroke="{color: '#fffafa', opacity: 1}"
-                        ></ymap-marker>
+                        ></ymap-marker> -->
 
-                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index"
-                            :marker-id="index + 200000"
+                        <!-- <ymap-marker v-for="(polygon, index) in ice_field" :key="index"
+                            :marker-id="index + 10000000000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#b9b1b1', opacity: 0.5}"
                             :marker-stroke="{color: '#b9b1b1', opacity: 1}"
-                        ></ymap-marker>
+                        ></ymap-marker> -->
 
-                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index"
+                        <!-- <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index"
                             :marker-id="index + 300000"
                             marker-type="Polygon"
                             :coords="[polygon]"
@@ -144,17 +119,38 @@
                             :markerFill="{color: '#900001', opacity: 0.7}"
                             :marker-stroke="{color: '#900001', opacity: 1}"
                             suppressMapOpenBlock: true
-                        ></ymap-marker>
+                        ></ymap-marker>  -->
 
-                        <div v-for="(route, index) in routes" :key="index">
-                            <ymap-marker 
-                            v-if="route.id_itir != this.select_route"
-                            :marker-id="index + 1000000"
+
+                        <ymap-marker v-for="route in routes" :key="route.id_itir"
+                            :marker-id="id_itir"
                             marker-type="Polyline"
                             :coords="route.polyline"
                             :marker-stroke="{ color: '#000000', width: 2, opacity: 1, style: 'shortdash'}"
                         />
-                        </div>
+
+                        <ymap-marker 
+                            :coords="[start_latitude, start_longitude]" 
+                            :marker-id="2000001"
+                        />
+
+                        <ymap-marker 
+                            :coords="[end_latitude, end_longitude]" 
+                            :marker-id="2000002" 
+                            :icon="{ color: 'red' }"
+                        />
+
+                        <ymap-marker v-if="this.status === 'в процессе' ? true:false "
+                            :coords="[final_point_latitude, final_point_longitude]"
+                            :marker-id="2000003"
+                            :icon="{ color: 'green' }"
+                        />
+
+                        <ymap-marker v-for="(point, index) in points" :key="index"
+                            :marker-id="index + 3000000"
+                            :icon="{ color: 'black' }"
+                            :coords="[point.point_latitude, point.point_longitude]"
+                        />
 
 
                         <!-- <div v-for="(route, index) in routes" :key="index">
@@ -495,8 +491,8 @@ export default{
         ice_class: "",
         status: "",
 
-        start_longitude: "",
-        start_latitude: "",
+        start_longitude: 33.09251,
+        start_latitude: 68.9791,
 
         end_longitude: "",
         end_latitude: "",
@@ -559,24 +555,18 @@ export default{
     },
 
     mounted(){
-        this.get_inf()
         this.get_fast_ice()
         this.get_ice_field()
         this.get_nilas_ice()
         this.get_young_ice()
         this.get_first_year_ice()
         this.get_old_ice()
+        this.get_inf()
+        this.get_routes()
+        this.get_end_and_start()
+        this.get_points()
+        this.get_final_point()
     },
-
-    // updated(){
-    //     this.get_inf()
-    //     this.get_fast_ice()
-    //     this.get_ice_field()
-    //     this.get_nilas_ice()
-    //     this.get_young_ice()
-    //     this.get_first_year_ice()
-    //     this.get_old_ice()
-    // },
 
     methods: {
         get_fast_ice(){
@@ -644,19 +634,7 @@ export default{
                 this.ice_class = response.data.ice_class,
                 this.date_start = this.format_date(response.data.date_start),
 
-                this.start_longitude = response.data.start_longitude,
-                this.start_latitude = response.data.start_latitude,
-
-                this.end_longitude = response.data.end_longitude,
-                this.end_latitude = response.data.end_latitude,
-
-                this.points = response.data.points,
-                this.routes = response.data.routes,
-
                 this.status = response.data.status,
-
-                this.final_point_longitude = response.data.final_point_longitude,
-                this.final_point_latitude = response.data.final_point_latitude,
 
                 this.date_end = this.format_date(response.data.date_end)
 
@@ -664,6 +642,59 @@ export default{
                 this.$router.push("/mistake") 
             })
         },
+
+        get_routes(){
+            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            .then(respnose => this.routes = respnose.data.routes)
+        },
+
+
+        get_end_and_start(){
+            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            .then(respnose => (
+                
+                this.start_latitude = respnose.data.start_latitude,
+                this.start_longitude = respnose.data.start_longitude,
+
+                this.end_latitude = respnose.data.end_latitude,
+                this.end_longitude = respnose.data.end_longitude
+            )) 
+        },
+
+        get_final_point(){
+            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            .then(respnose => (
+                this.status = respnose.data.status,
+                this.final_point_latitude = respnose.data.final_point_latitude,
+                this.final_point_longitude = respnose.data.final_point_longitude
+            ))
+
+        },
+
+        get_points(){
+            axios.get(`http://127.0.0.1:5000/iceocean/api/v1.0/route_inf/${this.$route.params.id_rt}`, {
+                headers: {
+                    Authorization: `Bearer: ${localStorage.jwt}`  
+                } 
+            })
+            .then(respnose => (
+                this.points = respnose.data.points
+
+            ))   
+        },
+
         format_date(date){
 
             if (date === '--'){
