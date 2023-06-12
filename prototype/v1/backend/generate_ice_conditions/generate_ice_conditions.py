@@ -8,6 +8,7 @@ from threading import Thread
 from ice.ice_object_border import clear
 from ice.create_polygon import clean_map
 from app import redis_data_base
+from PIL import Image
 
 
 generate_ice_conditions = Blueprint('generate_ice_conditions', __name__)
@@ -112,6 +113,7 @@ def add_data_to_redis(map_, id_per):
     redis_data_base.set(id_per, json_map)
     print(f"map into redis for person {id_per}")
 
+
 @generate_ice_conditions.route('/random/ice_conditions', methods=['GET'])
 @token_required
 def random_ice_conditions(id_per):
@@ -162,8 +164,12 @@ def random_ice_conditions(id_per):
 
 @generate_ice_conditions.route('/download_photo/ice_conditions', methods=['POST'])
 @token_required
-def random_ice_conditions(id_per):
+def ice_conditions_from_photo(id_per):
     if request.method == 'POST':
-        photo_ice_condition = request.form['image']
+        photo_ice_condition = request.files['image']
+
+        img = Image.open(photo_ice_condition)
+        img.show()
+        return "photo is add"
 
         
