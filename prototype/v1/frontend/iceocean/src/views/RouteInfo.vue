@@ -72,23 +72,23 @@
                         :zoom="4"
                     >
 
-                        <!-- <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
+                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
                             :marker-id="index"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#fffafa', opacity: 0.5}"
                             :marker-stroke="{color: '#fffafa', opacity: 1}"
-                        ></ymap-marker> -->
+                        ></ymap-marker>
 
-                        <!-- <ymap-marker v-for="(polygon, index) in ice_field" :key="index"
+                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index"
                             :marker-id="index + 10000000000"
                             marker-type="Polygon"
                             :coords="[polygon]"
                             :markerFill="{color: '#b9b1b1', opacity: 0.5}"
                             :marker-stroke="{color: '#b9b1b1', opacity: 1}"
-                        ></ymap-marker> -->
+                        ></ymap-marker>
 
-                        <!-- <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index"
+                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index"
                             :marker-id="index + 300000"
                             marker-type="Polygon"
                             :coords="[polygon]"
@@ -119,7 +119,7 @@
                             :markerFill="{color: '#900001', opacity: 0.7}"
                             :marker-stroke="{color: '#900001', opacity: 1}"
                             suppressMapOpenBlock: true
-                        ></ymap-marker>  -->
+                        ></ymap-marker> 
 
 
                         <ymap-marker v-for="route in routes" :key="route.id_itir"
@@ -153,7 +153,7 @@
                         />
 
 
-                        <!-- <div v-for="(route, index) in routes" :key="index">
+                        <div v-for="(route, index) in routes" :key="index">
                             <ymap-marker 
                             v-if="route.id_itir === this.select_route"
                             :marker-id="index + 2000000"
@@ -161,7 +161,7 @@
                             :coords="route.polyline"
                             :marker-stroke="{ color: '#FFFF00', width: 2, opacity: 1, style: 'shortdash'}"
                         />
-                        </div> -->
+                        </div>
 
 
 

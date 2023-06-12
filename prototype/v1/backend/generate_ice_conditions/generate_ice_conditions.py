@@ -158,3 +158,12 @@ def random_ice_conditions(id_per):
             "fast_ice": fast_ice,
             "ice_field": ice_field
         })
+
+
+@generate_ice_conditions.route('/download_photo/ice_conditions', methods=['POST'])
+@token_required
+def random_ice_conditions(id_per):
+    if request.method == 'POST':
+        photo_ice_condition = request.form['image']
+
+        

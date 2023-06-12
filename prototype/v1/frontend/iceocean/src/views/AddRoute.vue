@@ -69,7 +69,107 @@
 
         <v-container v-if="stage === 1">
             <div class="text-h5 mx-10 mb-5">2 ШАГ: Выбрать начало и конец маршрута</div>
-            <v-btn @click="update_ice_condition" class="mx-10 mb-5" color="purple-darken-4">Сгенирировать ледовую обстановку</v-btn>
+            <v-row class="mx-10 mb-5">
+                <v-btn @click="update_ice_condition" class="mr-5"  color="purple-darken-4"><v-icon class="mr-2" icon="mdi-creation"></v-icon>Сгенирировать ледовую обстановку</v-btn>
+
+                <v-dialog
+                    v-model="dialog_load_from_file_ice_condition"
+                    width="auto"
+                >
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" class="mx-5" color="purple-darken-4"><v-icon class="mr-2" icon="mdi-file-upload-outline"></v-icon> Загрузить ледовую обстановку</v-btn>
+                    </template>
+
+                    <v-card>
+                        <v-card-title>
+                            <v-icon class="mr-2" icon="mdi-file-upload-outline"></v-icon>Загрузить ледовую обстановку
+                        </v-card-title> 
+                        <v-card-subtitle>
+                            из файла расширения json
+                        </v-card-subtitle>
+
+                        <v-card-text>
+                            <v-file-input class="mb-2" label="Припай"></v-file-input>
+                            <v-file-input class="my-2" label="Отд. поле"></v-file-input>
+                            <v-file-input class="my-2" label="Нилас"></v-file-input>
+                            <v-file-input class="my-2" label="Молодой"></v-file-input>
+                            <v-file-input class="my-2" label="Однолетний"></v-file-input>
+                            <v-file-input class="mt-2" label="Старый"></v-file-input>
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-btn color="red" @click="dialog_load_from_file_ice_condition = false">Закрыть</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green" @click="dialog_load_from_file_ice_condition = false">Загрузить</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
+                <v-dialog
+                    v-model="dialog_load_from_photo_ice_condition"
+                    width="450"
+                >
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props" class="ml-5" color="purple-darken-4"><v-icon class="mr-2" icon="mdi-camera"></v-icon> Загрузить фото ледовой обстановки</v-btn>
+                    </template>
+
+                    <v-card>
+                        <v-card-title>
+                            <v-icon class="mr-2" icon="mdi-camera"></v-icon>Загрузить ледовую обстановку
+                        </v-card-title>
+                        <v-card-subtitle>
+                            из файла расширения jpg
+                        </v-card-subtitle>
+
+                        <v-card-text>
+                            <v-alert
+                                density="compact"
+                                type="warning"
+                                title="Педупреждение"
+                                text="Для корректной обработкки фотографии следуйте ниже перечисленным иснтрукциям"
+                                class="mb-2"
+                            >
+                            </v-alert>
+                            <span class="text-h6">Какого цвета должен быть лед на фотографии:</span>
+                            <v-col class="mt-2">
+                                <v-row>
+                                    <v-card width="60" height="40" color="#fffafa"></v-card><span class="mt-2 ml-2"><b>Припай</b> - #fffafa</span>
+                                </v-row>
+                                
+                                <v-row class="mt-5">
+                                    <v-card width="60" height="40" color="#b9b1b1"></v-card><span class="mt-2 ml-2"><b>Отд. поле</b> - #b9b1b1</span>
+                                </v-row>
+                                
+                                <v-row class="mt-5">
+                                    <v-card width="60" height="40" color="#0968f5"></v-card><span class="mt-2 ml-2"><b>Нилас</b> - #0968f5</span>
+                                </v-row>
+                                
+                                <v-row class="mt-5">
+                                    <v-card width="60" height="40" color="#f708f9"></v-card><span class="mt-2 ml-2"><b>Молодой лед</b> - #f708f9</span>
+                                </v-row>
+                                
+                                <v-row class="mt-5">
+                                    <v-card width="60" height="40" color="#00c8a1"></v-card><span class="mt-2 ml-2"><b>Однолетний лед</b> - #00c8a1</span>
+                                </v-row>
+                                
+                                <v-row class="mt-5">
+                                    <v-card width="60" height="40" color="#900001"></v-card><span class="mt-2 ml-2"><b>Старый лед</b> - #900001</span>
+                                </v-row>
+                                
+                            </v-col>
+
+                            <v-file-input class="mt-2" @change="onFileSelected" label="Карта мира со льдом"></v-file-input>
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-btn color="red" @click="dialog_load_from_photo_ice_condition = false">Закрыть</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green" @click="onUploadIceConditionFromPhoto">Загрузить</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+
            
             <div class="d-flex ml-10">
                 <div class="map">
@@ -520,6 +620,9 @@ export default{
         width_bottom_side: 10,
         dialog_loading: false,
 
+        dialog_load_from_file_ice_condition: false,
+        dialog_load_from_photo_ice_condition: false,
+
         polygon: [                [
                     [55.75, 37.80],
                     [55.80, 37.90],
@@ -550,7 +653,9 @@ export default{
         nilas_ice: [],
         young_ice: [],
         first_year_ice: [],
-        old_ice: []
+        old_ice: [],
+
+        selectedPhoto: null
     }),
 
     created(){
@@ -824,6 +929,25 @@ export default{
                 this.fast_ice = response.data.fast_ice,
                 this.ice_field = response.data.ice_field
             ))
+        },
+
+        onFileSelected(event){
+            this.selectedPhoto = event.target.files[0]
+        },
+
+        onUploadIceConditionFromPhoto(){
+            const fd = new FormData()
+            fd.append('image', this.selectedPhoto, this.selectedPhoto.name)
+            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/download_photo/ice_conditions", 
+            fd,  {
+                    headers: {
+                        Authorization: `Bearer: ${localStorage.jwt}`  
+                    } 
+            }).then(res => {
+                console.log(res)
+            })
+
+            this.dialog_load_from_photo_ice_condition = false
         }
 
 
