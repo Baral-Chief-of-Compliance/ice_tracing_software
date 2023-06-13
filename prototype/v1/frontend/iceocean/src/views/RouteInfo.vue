@@ -5,6 +5,17 @@
         <v-btn  variant="outlined" class="mx-10" :to="{name: 'Routes'}">
             <v-icon icon="mdi-arrow-collapse-left" color="purple-darken-4" class="mr-2"></v-icon>назад
         </v-btn>
+
+        <v-alert
+            density="compact"
+            type="warning"
+            title="Предупрждение"
+            class="mx-10 my-5"
+        >
+            Данное програмное средство находится на стадии разработки. Оно может измениться в будущем, а может остаться в текущем состоянии.<br>
+            Если возникли проблемы с отображением объектов на карте обновите страницу в браузере на кнопку <v-icon icon="mdi-reload"></v-icon> или используйте комбинацию клавиш  CTRL + R
+        </v-alert>
+
         <div class="text-h5 mx-10 mb-3 mt-3"><b>Название судна: </b>{{ this.ship_name }}</div>
         <div class="text-h5 mx-10 mb-3"><b>Ледовый класс судна: </b>{{ this.ice_class }}</div>
 
@@ -70,6 +81,7 @@
                     <yandex-map
                         :coords="[start_latitude, start_longitude]"
                         :zoom="4"
+                        :controls="['zoomControl', 'typeSelector']"
                     >
 
                         <ymap-marker v-for="(polygon, index) in fast_ice" :key="index"
@@ -178,7 +190,7 @@
             </div>
             
 
-            <div class="text-h5 mx-10 mt-5"><b>Отобразать ледовую обстановку, при которой был построен маршрут: </b> </div>
+            <div class="text-h5 mx-10 mt-5"><b>Отобразить ледовую обстановку, при которой был построен маршрут: </b> </div>
 
             <v-btn class="mt-5" :to="{name: 'HistoryOfRoute', params: {id_rt: this.$route.params.id_rt }}" color="purple-darken-4" block>История маршрута</v-btn>
             <!-- <v-row class="mt-3 mx-2" >

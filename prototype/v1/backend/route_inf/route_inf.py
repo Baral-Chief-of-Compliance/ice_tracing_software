@@ -257,3 +257,36 @@ def get_int_route(id_per, id_rt):
         return jsonify(f"status route is update")
 
 
+@route_inf.route('/route_inf/<int:id_rt>/ice_conditions/<int:id_itir>', methods=['GET'])
+@token_required
+def get_inf_about_ice_conditions_from_itir(id_per, id_itir, id_rt):
+    if request.method == 'GET':
+         first_year_ice = json.loads(route_inf_db.get_ice_condition(id_itir, "first_year_ice"))
+         young_ice = json.loads(route_inf_db.get_ice_condition(id_itir, "young_ice"))
+         old_ice = json.loads(route_inf_db.get_ice_condition(id_itir, "old_ice"))
+         nilas_ice = json.loads(route_inf_db.get_ice_condition(id_itir, "nilas_ice"))
+         fast_ice = json.loads(route_inf_db.get_ice_condition(id_itir, "fast_ice"))
+         ice_field = json.loads(route_inf_db.get_ice_condition(id_itir, "ice_field"))
+
+         json_routes = []
+
+         route_inf, inf_about_start, inf_about_end, intermediates, itirerarys, final_point \
+             = route_inf_db.show_inf_about_route(id_per, id_rt)
+
+
+         for route in itirerarys:
+             json_routes.append({
+                 "id_itir": route[1],
+                 "polyline": json.loads(route[0])
+             })
+
+         return jsonify({
+             "first_year_ice": first_year_ice,
+             "young_ice": young_ice,
+             "old_ice": old_ice,
+             "nilas_ice": nilas_ice,
+             "fast_ice": fast_ice,
+             "ice_field": ice_field,
+             "routes": json_routes
+         })
+
