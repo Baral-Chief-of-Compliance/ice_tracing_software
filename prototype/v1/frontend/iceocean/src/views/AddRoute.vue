@@ -89,18 +89,18 @@
                         </v-card-subtitle>
 
                         <v-card-text>
-                            <v-file-input class="mb-2" label="Припай"></v-file-input>
-                            <v-file-input class="my-2" label="Отд. поле"></v-file-input>
-                            <v-file-input class="my-2" label="Нилас"></v-file-input>
-                            <v-file-input class="my-2" label="Молодой"></v-file-input>
-                            <v-file-input class="my-2" label="Однолетний"></v-file-input>
-                            <v-file-input class="mt-2" label="Старый"></v-file-input>
+                            <v-file-input  @change="on_fast_ice_selected" class="mb-2" label="Припай"></v-file-input>
+                            <v-file-input @change="on_ice_field_selected" class="my-2" label="Отд. поле"></v-file-input>
+                            <v-file-input @change="on_nilas_ice_selected" class="my-2" label="Нилас"></v-file-input>
+                            <v-file-input @change="on_young_ice_selected" class="my-2" label="Молодой"></v-file-input>
+                            <v-file-input @change="on_first_year_ice_selected" class="my-2" label="Однолетний"></v-file-input>
+                            <v-file-input @change="on_old_ice_selected" class="mt-2" label="Старый"></v-file-input>
                         </v-card-text>
 
                         <v-card-actions>
                             <v-btn color="red" @click="dialog_load_from_file_ice_condition = false">Закрыть</v-btn>
                             <v-spacer></v-spacer>
-                            <v-btn color="green" @click="dialog_load_from_file_ice_condition = false">Загрузить</v-btn>
+                            <v-btn color="green" @click="onUploadIceConditionFromJSON">Загрузить</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -188,6 +188,7 @@
                     <yandex-map
                         :coords="[71.10679806433585, 126.47064037736162]"
                         :zoom="3"
+                        :controls="['zoomControl', 'typeSelector']"
                         @click="onClick"
                     >
 
@@ -302,8 +303,6 @@
                     </v-radio-group>
                 </v-form>
             </div>
-
-            {{ this.young_ice }}
 
         </v-container>
 
@@ -669,7 +668,14 @@ export default{
         first_year_ice: [],
         old_ice: [],
 
-        selectedPhoto: null
+        selectedPhoto: null,
+
+        selected_first_year_ice: null,
+        selected_young_ice: null,
+        selected_old_ice: null,
+        selected_nilas_ice: null,
+        selected_fast_ice: null,
+        selected_ice_field: null
     }),
 
     created(){
@@ -950,6 +956,30 @@ export default{
             this.selectedPhoto = event.target.files[0]
         },
 
+        on_first_year_ice_selected(event){
+            this.selected_first_year_ice = event.target.files[0]
+        },
+
+        on_young_ice_selected(event){
+            this.selected_young_ice = event.target.files[0]
+        },
+
+        on_old_ice_selected(event){
+            this.selected_old_ice = event.target.files[0]
+        },
+
+        on_nilas_ice_selected(event){
+            this.selected_nilas_ice = event.target.files[0]
+        },
+
+        on_fast_ice_selected(event){
+            this.selected_fast_ice = event.target.files[0]
+        },
+
+        on_ice_field_selected(event){
+            this.selected_ice_field = event.target.files[0]
+        },
+
         onUploadIceConditionFromPhoto(){
             const fd = new FormData()
             fd.append('image', this.selectedPhoto, this.selectedPhoto.name)
@@ -965,12 +995,38 @@ export default{
                 this.old_ice = response.data.old_ice,
                 this.nilas_ice = response.data.nilas_ice,
                 this.fast_ice = response.data.fast_ice,
-                this.ice_field = response.data.ice_field,
-                console.log(response)
-                
+                this.ice_field = response.data.ice_field                
             ))
 
             this.dialog_load_from_photo_ice_condition = false
+        },
+
+
+        onUploadIceConditionFromJSON(){
+            const fd = new FormData()
+            fd.append('first_year_ice', this.selected_first_year_ice, this.selected_first_year_ice.name)
+            fd.append('young_ice', this.selected_young_ice, this.selected_young_ice.name)
+            fd.append('old_ice', this.selected_old_ice, this.selected_old_ice.name)
+            fd.append('nilas_ice', this.selected_nilas_ice, this.selected_nilas_ice.name)
+            fd.append('fast_ice', this.selected_fast_ice, this.selected_fast_ice.name)
+            fd.append('ice_field', this.selected_ice_field, this.selected_ice_field.name)
+
+            axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/download_geojson/ice_conditions", 
+            fd,  {
+                    headers: {
+                        Authorization: `Bearer: ${localStorage.jwt}`  
+                    } 
+            })
+            .then(response => (
+                this.first_year_ice = response.data.first_year_ice,
+                this.young_ice = response.data.young_ice,
+                this.old_ice = response.data.old_ice,
+                this.nilas_ice = response.data.nilas_ice,
+                this.fast_ice = response.data.fast_ice,
+                this.ice_field = response.data.ice_field               
+            ))
+
+            this.dialog_load_from_file_ice_condition = false
         }
 
 

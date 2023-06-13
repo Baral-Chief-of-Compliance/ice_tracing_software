@@ -203,8 +203,6 @@ def ice_conditions_from_photo(id_per):
         fast_ice = t5.join()
         ice_field = t6.join()
 
-
-
         return jsonify({
             "first_year_ice": first_year_ice,
             "young_ice": young_ice,
@@ -214,4 +212,38 @@ def ice_conditions_from_photo(id_per):
             "ice_field": ice_field
         })
 
-        
+
+@generate_ice_conditions.route('/download_geojson/ice_conditions', methods=['POST'])
+@token_required
+def ice_conditions_from_geojson(id_per):
+    if request.method == 'POST':
+        sys.setrecursionlimit(5000)
+        first_year_ice_file = request.files['first_year_ice']
+        young_ice_file = request.files['young_ice']
+        old_ice_file = request.files['old_ice']
+        nilas_ice_file = request.files['nilas_ice']
+        fast_ice_file = request.files['fast_ice']
+        ice_field_file = request.files['ice_field']
+
+        first_year_ice_json = json.load(first_year_ice_file)
+        young_ice_json = json.load(young_ice_file)
+        old_ice_json = json.load(old_ice_file)
+        nilas_ice_json = json.load(nilas_ice_file)
+        fast_ice_json = json.load(fast_ice_file)
+        ice_field_json = json.load(ice_field_file)
+
+        first_year_ice = format_polygons(first_year_ice_json)
+        young_ice = format_polygons(young_ice_json)
+        old_ice = format_polygons(old_ice_json)
+        nilas_ice = format_polygons(nilas_ice_json)
+        fast_ice = format_polygons(fast_ice_json)
+        ice_field = format_polygons(ice_field_json)
+
+        return jsonify({
+            "first_year_ice": first_year_ice,
+            "young_ice": young_ice,
+            "old_ice": old_ice,
+            "nilas_ice": nilas_ice,
+            "fast_ice": fast_ice,
+            "ice_field": ice_field
+        })
