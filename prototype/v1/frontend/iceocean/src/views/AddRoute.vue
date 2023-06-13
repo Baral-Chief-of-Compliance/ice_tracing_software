@@ -107,7 +107,7 @@
 
                 <v-dialog
                     v-model="dialog_load_from_photo_ice_condition"
-                    width="450"
+                    width="700"
                 >
                     <template v-slot:activator="{ props }">
                         <v-btn v-bind="props" class="ml-5" color="purple-darken-4"><v-icon class="mr-2" icon="mdi-camera"></v-icon> Загрузить фото ледовой обстановки</v-btn>
@@ -118,7 +118,7 @@
                             <v-icon class="mr-2" icon="mdi-camera"></v-icon>Загрузить ледовую обстановку
                         </v-card-title>
                         <v-card-subtitle>
-                            из файла расширения jpg
+                            из файла расширения png
                         </v-card-subtitle>
 
                         <v-card-text>
@@ -131,33 +131,45 @@
                             >
                             </v-alert>
                             <span class="text-h6">Какого цвета должен быть лед на фотографии:</span>
-                            <v-col class="mt-2">
+                            <v-col class="my-2">
                                 <v-row>
-                                    <v-card width="60" height="40" color="#fffafa"></v-card><span class="mt-2 ml-2"><b>Припай</b> - #fffafa</span>
-                                </v-row>
-                                
-                                <v-row class="mt-5">
-                                    <v-card width="60" height="40" color="#b9b1b1"></v-card><span class="mt-2 ml-2"><b>Отд. поле</b> - #b9b1b1</span>
-                                </v-row>
-                                
-                                <v-row class="mt-5">
-                                    <v-card width="60" height="40" color="#0968f5"></v-card><span class="mt-2 ml-2"><b>Нилас</b> - #0968f5</span>
-                                </v-row>
-                                
-                                <v-row class="mt-5">
-                                    <v-card width="60" height="40" color="#f708f9"></v-card><span class="mt-2 ml-2"><b>Молодой лед</b> - #f708f9</span>
-                                </v-row>
-                                
-                                <v-row class="mt-5">
-                                    <v-card width="60" height="40" color="#00c8a1"></v-card><span class="mt-2 ml-2"><b>Однолетний лед</b> - #00c8a1</span>
-                                </v-row>
-                                
-                                <v-row class="mt-5">
-                                    <v-card width="60" height="40" color="#900001"></v-card><span class="mt-2 ml-2"><b>Старый лед</b> - #900001</span>
-                                </v-row>
-                                
-                            </v-col>
+                                    <v-col>
+                                        <div class="d-flex">
+                                            <v-card width="60" height="40" color="#fffafa"></v-card><span class="mt-2 ml-2"><b>Припай</b> - #fffafa</span>
+                                        </div>
 
+                                        <div class="d-flex mt-2">
+                                            <v-card width="60" height="40" color="#0968f5"></v-card><span class="mt-2 ml-2"><b>Нилас</b> - #0968f5</span>
+                                        </div>
+
+                                        <div class="d-flex mt-2">
+                                            <v-card width="60" height="40" color="#00c8a1"></v-card><span class="mt-2 ml-2"><b>Однолетний лед</b> - #00c8a1</span>
+                                        </div>
+                                        
+                                    </v-col>
+
+                                    <v-col>
+                                        <div class="d-flex">
+                                            <v-card class="ml-5" width="60" height="40" color="#b9b1b1"></v-card><span class="mt-2 ml-2"><b>Отд. поле</b> - #b9b1b1</span>
+                                        </div> 
+
+                                        <div class="d-flex mt-2">
+                                            <v-card class="ml-5" width="60" height="40" color="#f708f9"></v-card><span class="mt-2 ml-2"><b>Молодой лед</b> - #f708f9</span>
+                                        </div>
+
+                                        <div class="d-flex mt-2">
+                                            <v-card class="ml-5" width="60" height="40" color="#900001"></v-card><span class="mt-2 ml-2"><b>Старый лед</b> - #900001</span>
+                                        </div>
+                                    </v-col>
+                                    
+                                </v-row>
+                                                                
+                            </v-col >
+                            <span class="text-h6">Какого разрешение должна быть фотография:</span>
+                            <v-col>
+                                <span class="text-h5 text-center">1081 x 541</span>
+                            </v-col>
+                            <span class="text-h6">Прикрепить фотографию:</span>
                             <v-file-input class="mt-2" @change="onFileSelected" label="Карта мира со льдом"></v-file-input>
                         </v-card-text>
 
@@ -179,6 +191,55 @@
                         @click="onClick"
                     >
 
+                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+100000"
+                            :marker-id="index + 100000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#fffafa', opacity: 0.5}"
+                            :marker-stroke="{color: '#fffafa', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index+200000"
+                            :marker-id="index + 200000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#b9b1b1', opacity: 0.5}"
+                            :marker-stroke="{color: '#b9b1b1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index+300000"
+                            :marker-id="index + 300000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#0968f5', opacity: 0.5}"
+                            :marker-stroke="{color: '#0968f5', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index+400000"
+                            :marker-id="index + 400000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#f708f9', opacity: 0.5}"
+                            :marker-stroke="{color: '#f708f9', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index+500000"
+                            :marker-id="index + 500000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#00c8a1', opacity: 0.7}"
+                            :marker-stroke="{color: '#00c8a1', opacity: 1}"
+                        ></ymap-marker>
+
+                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index+600000"
+                            :marker-id="index + 600000"
+                            marker-type="Polygon"
+                            :coords="[polygon]"
+                            :markerFill="{color: '#900001', opacity: 0.7}"
+                            :marker-stroke="{color: '#900001', opacity: 1}"
+                            suppressMapOpenBlock: true
+                        ></ymap-marker>
+
                         <ymap-marker 
                             :coords="start_coords" 
                             marker-id="1" 
@@ -189,55 +250,6 @@
                             marker-id="2" 
                             :icon="{ color: 'red' }"
                         />
-
-                        <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+1000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#fffafa', opacity: 0.5}"
-                            :marker-stroke="{color: '#fffafa', opacity: 1}"
-                        ></ymap-marker>
-
-                        <ymap-marker v-for="(polygon, index) in ice_field" :key="index+2000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#b9b1b1', opacity: 0.5}"
-                            :marker-stroke="{color: '#b9b1b1', opacity: 1}"
-                        ></ymap-marker>
-
-                        <ymap-marker v-for="(polygon, index) in nilas_ice" :key="index+3000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#0968f5', opacity: 0.5}"
-                            :marker-stroke="{color: '#0968f5', opacity: 1}"
-                        ></ymap-marker>
-
-                        <ymap-marker v-for="(polygon, index) in young_ice" :key="index+4000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#f708f9', opacity: 0.5}"
-                            :marker-stroke="{color: '#f708f9', opacity: 1}"
-                        ></ymap-marker>
-
-                        <ymap-marker v-for="(polygon, index) in first_year_ice" :key="index+5000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#00c8a1', opacity: 0.7}"
-                            :marker-stroke="{color: '#00c8a1', opacity: 1}"
-                        ></ymap-marker>
-
-                        <ymap-marker v-for="(polygon, index) in old_ice" :key="index+6000"
-                            :marker-id="index"
-                            marker-type="Polygon"
-                            :coords="[polygon]"
-                            :markerFill="{color: '#900001', opacity: 0.7}"
-                            :marker-stroke="{color: '#900001', opacity: 1}"
-                            suppressMapOpenBlock: true
-                        ></ymap-marker>
 
                     </yandex-map>
                 </div>
@@ -290,6 +302,8 @@
                     </v-radio-group>
                 </v-form>
             </div>
+
+            {{ this.young_ice }}
 
         </v-container>
 
@@ -927,7 +941,8 @@ export default{
                 this.old_ice = response.data.old_ice,
                 this.nilas_ice = response.data.nilas_ice,
                 this.fast_ice = response.data.fast_ice,
-                this.ice_field = response.data.ice_field
+                this.ice_field = response.data.ice_field,
+                console.log(response)
             ))
         },
 
@@ -943,9 +958,17 @@ export default{
                     headers: {
                         Authorization: `Bearer: ${localStorage.jwt}`  
                     } 
-            }).then(res => {
-                console.log(res)
             })
+            .then(response => (
+                this.first_year_ice = response.data.first_year_ice,
+                this.young_ice = response.data.young_ice,
+                this.old_ice = response.data.old_ice,
+                this.nilas_ice = response.data.nilas_ice,
+                this.fast_ice = response.data.fast_ice,
+                this.ice_field = response.data.ice_field,
+                console.log(response)
+                
+            ))
 
             this.dialog_load_from_photo_ice_condition = false
         }

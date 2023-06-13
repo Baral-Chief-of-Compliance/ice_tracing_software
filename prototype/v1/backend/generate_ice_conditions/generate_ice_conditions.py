@@ -9,6 +9,8 @@ from ice.ice_object_border import clear
 from ice.create_polygon import clean_map
 from app import redis_data_base
 from PIL import Image
+import numpy as np
+from ice.create_ice_from_photo import create_ice_from_photo
 
 
 generate_ice_conditions = Blueprint('generate_ice_conditions', __name__)
@@ -166,10 +168,50 @@ def random_ice_conditions(id_per):
 @token_required
 def ice_conditions_from_photo(id_per):
     if request.method == 'POST':
+        sys.setrecursionlimit(5000)
         photo_ice_condition = request.files['image']
 
-        img = Image.open(photo_ice_condition)
-        img.show()
-        return "photo is add"
+        img = np.asarray(Image.open(photo_ice_condition).convert('RGB'))
+
+        map_ = generate_ice_conditions_db.get_map()
+
+        map_ = create_ice_from_photo(img, map_)
+
+        redis_thread = Thread(target=add_data_to_redis, args=(map_, id_per))
+        t1 = CustomThread(target=create_geojson, args=(map_, "first_year_ice"))
+        t2 = CustomThread(target=create_geojson, args=(map_, "young_ice"))
+        t3 = CustomThread(target=create_geojson, args=(map_, "old_ice"))
+        t4 = CustomThread(target=create_geojson, args=(map_, "nilas_ice"))
+        t5 = CustomThread(target=create_geojson, args=(map_, "fast_ice"))
+        t6 = CustomThread(target=create_geojson, args=(map_, "ice_field"))
+
+        redis_thread.start()
+
+        t1.start()
+        t2.start()
+        t3.start()
+        t4.start()
+        t5.start()
+        t6.start()
+
+        redis_thread.join()
+
+        first_year_ice = t1.join()
+        young_ice = t2.join()
+        old_ice = t3.join()
+        nilas_ice = t4.join()
+        fast_ice = t5.join()
+        ice_field = t6.join()
+
+
+
+        return jsonify({
+            "first_year_ice": first_year_ice,
+            "young_ice": young_ice,
+            "old_ice": old_ice,
+            "nilas_ice": nilas_ice,
+            "fast_ice": fast_ice,
+            "ice_field": ice_field
+        })
 
         
