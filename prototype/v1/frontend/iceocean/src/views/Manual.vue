@@ -28,13 +28,17 @@
                     </v-tab>
 
                     <v-tab value="option-3">
-                        Информация о маршруте
+                        Область построения 
                     </v-tab>
 
                     <v-tab value="option-4">
+                        Информация о маршруте
+                    </v-tab>
+
+                    <v-tab value="option-5">
                         История маршрута
                     </v-tab>
-                    <v-tab value="option-5">
+                    <v-tab value="option-6">
                         Аккаунт
                     </v-tab>
                 </v-tabs>
@@ -216,24 +220,172 @@
 
                                     <div class="my-5">После нажатия на кнопку <b>ЗАГРУЗИТЬ ФОТО ЛЕДОВОЙ ОБСТАНОВКИ</b> пользователю будет выведена форма для загрзки фото (выделено красным цветом на ниже представленном скриншоте)</div>
 
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить лед форма заполнения.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="my-5">При нажатии на форму появится проводник и пользователю необходимо выбрать фаил формата png с ледовой обстановкой и нажать кнопку открыть(выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить фото льда имя фаила.jpg"
+                                    >
+                                    </v-img>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить фото льда открыть.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="my-5">После прикрепления файла фото с ледовой обстановкой, пользователю необходимо нажать кнопку ЗАГРУЗИТЬ (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить фото льда нажать на кнопку загрузить.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="text-h4 mt-15 mb-5 text-left">Выбор исходного пункта и пункта назначения</div>
+
+                                    <div class="my-5">Всю манипулирование координатами исходного пункта и пунтка назначения происходит через блок (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить маршрут блок манипулирования.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="my-5">Ввести координаты можно вручную это значит, что необходимо заполнить поля долготы и широты для исходного пункта и для пунукта назначения (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить маршрут формы для долготы и широты.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="my-5">Либо указать на интерактивной карте, для этого необходимо в поле (выделено красным цветом на ниже представленном скриншоте) выбрать <b>Исходный пункт</b> или <b>Пункт назначения</b> какая точка выбраная, координатый той точки вы можете изменять при клике на карту</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить маршрут выбор за какую точку передвигаться по карте.jpg"
+                                    >
+                                    </v-img>
+                                    
+                                    <div class="text-h4 mt-15 mb-5 text-left">Переход на следующий шаг</div>
+                                    <div class="my-5">Пользователю необходимо нажать на кнопку <b>СЛЕДУЮЩИЙ ШАГ</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить маршрут 3-ий шаг.jpg"
+                                    >
+                                    </v-img>
+
+
                                     
                             </v-container>
                         </v-card-text>
                     </v-card>
                 </v-window-item>
+
                 <v-window-item  value="option-3">
                     <v-card flat >
                         <v-card-text>
-                        <p>
-                            Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
-                        </p>
+                            <div class="text-h4 mb-5 text-left">Область построения</div>
+                            <div class="my-5">Маршруты в данном программном средстве строятся в <b>области построения</b> (выделено красным цветом на ниже представленном скриншоте)</div>
 
-                        <p class="mb-0">
-                            Cras sagittis. Phasellus nec sem in justo pellentesque facilisis. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nam at tortor in tellus interdum sagittis.
-                        </p>
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/область построения сама область.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Панель манипулирования <b>областью построения</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/область построения манипулирования областью.jpg"
+                                    >
+                            </v-img>
+
+
+                            <div class="text-h4 mt-15 mb-5 text-left">Как взаимодействовать областью построения</div>
+                            <div class="my-5">При нажатии на <b>плюс</b> в <b>Левая сторона квадрата</b> двигает выделенную сторону квадрата <b>в лево</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/левая сторона квадрата плюс.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>минус</b> в <b>Левая сторона квадрата</b> двигает выделенную сторону квадрата <b>в право</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/левая сторона квадрата право.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>плюс</b> в <b>Правая сторона квадрата</b> двигает выделенную сторону квадрата <b>в право</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/правая сторона квадрата плюс.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>минус</b> в <b>Правая сторона квадрата</b> двигает выделенную сторону квадрата <b>в лево</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/правая сторона минус.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>плюс</b> в <b>Верхняя сторона квадрата</b> двигает выделенную сторону квадрата <b>в верх</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/верхняя сторона плюс.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>минус</b> в <b>Верхняя сторона квадрата</b> двигает выделенную сторону квадрата <b>вниз</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/верхня строна минус.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>плюс</b> в <b>Нижняя сторона квадрата</b> двигает выделенную сторону квадрата <b>вниз</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/нижняя сторона плюс.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">При нажатии на <b>минус</b> в <b>Нижняя сторона квадрата</b> двигает выделенную сторону квадрата <b>в верх</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/нижняя сторона минус.jpg"
+                                    >
+                            </v-img>
                         </v-card-text>
                     </v-card>
-                    </v-window-item>
+                </v-window-item>
+
+                <v-window-item  value="option-4">
+                    <v-card flat >
+                        <v-card-text>
+
+                        </v-card-text>
+                    </v-card>
+                </v-window-item>
                 </v-window>
             </div>
             </v-card>
