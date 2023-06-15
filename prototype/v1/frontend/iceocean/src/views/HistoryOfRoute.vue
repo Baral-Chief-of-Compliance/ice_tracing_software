@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <div class="text-h3 py-6 mx-10 text-left d-flex">История ледовой обстановки за маршрут маршрута</div>
+        <div class="text-h3 py-6 mx-10 text-left d-flex">История ледовой обстановки маршрута</div>
 
         <v-btn  variant="outlined" class="mx-10" :to="{name: 'RouteInfo', params: {id_rt: this.$route.params.id_rt }}">
             <v-icon icon="mdi-arrow-collapse-left" color="purple-darken-4" class="mr-2"></v-icon>назад
@@ -11,6 +11,7 @@
                     <div class="map">
                         <yandex-map
                             :coords="[start_latitude, start_longitude]"
+                            :controls="['zoomControl', 'typeSelector']"
                             :zoom="4"
                         >   
 
@@ -284,7 +285,7 @@ export default{
 
 <style scoped>
 .ymap-container {
-    width: 1400px;
+    width: 1700px;
     height: 600px;
 }
 

@@ -4,7 +4,7 @@
   >
     <v-card 
       width="400"
-      height="350"
+      height="300"
       class="mt-15"
     >
       <v-card-title class="text-h4">
@@ -17,7 +17,6 @@
         <v-btn class="mb-3 pa-5" color="purple-darken-4" block :to="{ name: 'Routes'}"  >Маршруты</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'GenerateIceConditions'}">Ледовая обстановка</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'Manual'}">Руководоство</v-btn>
-        <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block  >Материал</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block>Сообщить об ошибке</v-btn>
       </v-card-text>
     </v-card>

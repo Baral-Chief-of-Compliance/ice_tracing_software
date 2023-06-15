@@ -936,6 +936,13 @@ export default{
         },
 
         update_ice_condition(){
+            this.first_year_ice = []
+            this.young_ice = []
+            this.old_ice = []
+            this.nilas_ice = []
+            this.fast_ice = []
+            this.ice_field = []
+            
             axios.get("http://127.0.0.1:5000/iceocean/api/v1.0/random/ice_conditions", {
                 headers: {
                     Authorization: `Bearer: ${localStorage.jwt}`  
@@ -983,6 +990,14 @@ export default{
         onUploadIceConditionFromPhoto(){
             const fd = new FormData()
             fd.append('image', this.selectedPhoto, this.selectedPhoto.name)
+
+            this.first_year_ice = []
+            this.young_ice = []
+            this.old_ice = []
+            this.nilas_ice = []
+            this.fast_ice = []
+            this.ice_field = []
+
             axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/download_photo/ice_conditions", 
             fd,  {
                     headers: {
@@ -1010,6 +1025,13 @@ export default{
             fd.append('nilas_ice', this.selected_nilas_ice, this.selected_nilas_ice.name)
             fd.append('fast_ice', this.selected_fast_ice, this.selected_fast_ice.name)
             fd.append('ice_field', this.selected_ice_field, this.selected_ice_field.name)
+
+            this.first_year_ice = []
+            this.young_ice = []
+            this.old_ice = []
+            this.nilas_ice = []
+            this.fast_ice = []
+            this.ice_field = []
 
             axios.post("http://127.0.0.1:5000/iceocean/api/v1.0/download_geojson/ice_conditions", 
             fd,  {

@@ -11,7 +11,7 @@
                 <v-toolbar
                     color="purple-darken-4"
                 >
-                    <v-toolbar-title>Разделы меню</v-toolbar-title>
+                    <v-toolbar-title>Обзор</v-toolbar-title>
                 </v-toolbar>
                 <div class="d-flex flex-row">
                 <v-tabs
@@ -19,26 +19,30 @@
                     direction="vertical"
                     color="purple-darken-4"
                 >
-                    <v-tab value="option-1">
+                    <v-tab value="option-1" class="text-left my-2">
                         Маршруты
                     </v-tab>
 
-                    <v-tab value="option-2">
-                        Добавить маршрут
+                    <v-tab value="option-2" class="text-left my-2">
+                        Статусы <br> маршрутов
                     </v-tab>
 
-                    <v-tab value="option-3">
-                        Область построения 
+                    <v-tab value="option-3" class="text-left my-2">
+                        Добавить <br> маршрут
                     </v-tab>
 
-                    <v-tab value="option-4">
-                        Информация о маршруте
+                    <v-tab value="option-4" class="text-left my-2">
+                        Область <br> построения 
                     </v-tab>
 
-                    <v-tab value="option-5">
-                        История маршрута
+                    <v-tab value="option-5" class="text-left my-2">
+                        Информация <br>о маршруте
                     </v-tab>
-                    <v-tab value="option-6">
+
+                    <v-tab value="option-6" class="text-left my-2">
+                        История <br> маршрута
+                    </v-tab>
+                    <v-tab value="option-7" class="text-left my-2">
                         Аккаунт
                     </v-tab>
                 </v-tabs>
@@ -96,18 +100,9 @@
                                     </v-img>
 
                                     <div class="text-h4 mt-15 mb-5 text-left">Статусы маршрутов</div>
+                                    <div class="mb-5">Статусы маршрутов описаны в разделе <b>СТАТУСЫ МАРШРУТОВ</b></div>
 
-                                    <v-row class="mt-5 ml-2">
-                                        <v-card color="teal-accent-4" class="text-h5 px-10 py-2">в процессе</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что в данном маршруте есть промежуточные маршруты, но они еще не достигают финальную точку.</span>
-                                    </v-row>
 
-                                    <v-row class="mt-10 ml-2">
-                                        <v-card color="orange-accent-4" class="text-h5 px-10 py-2">завершение</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что построены все промежуточные маршруты, но не стоит дата завершения маршрута.</span>
-                                    </v-row>
-
-                                    <v-row class="mt-10 ml-2">
-                                        <v-card color="blue-grey" class="text-h5 px-10 py-2">завершён</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что построены все промежуточные маршруты и установлены все даты.</span>
-                                    </v-row>
                                     
                                     
                                     
@@ -117,7 +112,33 @@
                             </v-card-text>
                         </v-card>
                     </v-window-item>
-                <v-window-item value="option-2">
+
+
+                    <v-window-item value="option-2">
+                        <v-card flat>
+                            <v-card-text>
+                                <v-container>
+                                    <div class="text-h4 mb-5 text-left">Статусы маршрутов</div>
+                                    <div class="mb-5">В данном программном средстве используются статсу маршрутов</div>
+
+                                    <v-row class="mt-5 ml-2">
+                                        <v-card color="teal-accent-4" class="text-h5 px-6 py-2">в процессе</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что в данном маршруте есть промежуточные маршруты, но они еще не достигают финальную точку.</span>
+                                    </v-row>
+
+                                    <v-row class="mt-10 ml-2">
+                                        <v-card color="orange-accent-4" class="text-h5 px-6 py-2">завершение</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что построены все промежуточные маршруты, но не стоит дата завершения маршрута.</span>
+                                    </v-row>
+
+                                    <v-row class="mt-10 ml-2">
+                                        <v-card color="blue-grey" class="text-h5 px-7 py-2">завершён</v-card> <span class="text-h6 ml-2 mt-2">- статус показывающий, что построены все промежуточные маршруты и установлены все даты.</span>
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+                        </v-card>
+                    </v-window-item>
+
+
+                <v-window-item value="option-3">
                     <v-card flat>
                         <v-card-text>
                             <v-container>
@@ -283,6 +304,34 @@
                                     >
                                     </v-img>
 
+                                    <div class="text-h4 mt-15 mb-5 text-left">Область построения</div>
+                                    <div class="my-5">Пользовтаель должен выбрать <b>область построения</b>, как её настроить описано в разделе <b>область построения</b></div>
+
+
+                                    <div class="text-h4 mt-15 mb-5 text-left">Выбор даты отправления</div>
+                                    <div class="my-5">Дата устанавливает через поле (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/добавить маршрут форма даты.jpg"
+                                    >
+                                    </v-img>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/доюавить маршрут дата.jpg"
+                                    >
+                                    </v-img>
+
+                                    <div class="text-h4 mt-15 mb-5 text-left">Переход на следующий шаг</div>
+                                    <div class="my-5">После всех выше описанных дейтсвий пользователь должен нажать на кнопку <b>Построить маршрут</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                                    <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/Добавить маршрут кнопка построить маршрут.jpg"
+                                    >
+                                    </v-img>
+
 
                                     
                             </v-container>
@@ -290,7 +339,7 @@
                     </v-card>
                 </v-window-item>
 
-                <v-window-item  value="option-3">
+                <v-window-item  value="option-4">
                     <v-card flat >
                         <v-card-text>
                             <div class="text-h4 mb-5 text-left">Область построения</div>
@@ -379,10 +428,126 @@
                     </v-card>
                 </v-window-item>
 
-                <v-window-item  value="option-4">
+                <v-window-item  value="option-5">
                     <v-card flat >
                         <v-card-text>
+                            <div class="text-h4 mb-5 text-left">Информация о маршруте</div>
+                            <div class="my-5">После создания маршрута и выбора его в списке маршрутов перед пользователем отобразиться страница со всей информацией о маршруте(выделено красным цветом на ниже представленном скриншоте)</div>
 
+                            <v-img class="mt-5"
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/страница маршрут первая часть.jpg"
+                                    >
+                            </v-img>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/история маршрута вторая часть.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="text-h4 mt-15 mb-5 text-left">Статус "в процессе"</div>
+                            <div class="my-5">Опишем шаги у маршрута <b>в процессе</b>. Необходимо нажать на кнопку <b>ДА</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/информация о маршруте статус в процессе кнопка да.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Появится форма где необходимо указать дату достижения <b>зелёной точки</b>. После выбора даты необходимо пользователю нажать на кнопку <b>ДОСТИГНУТ</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/в процессе достигнут маршрут.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Далее пользователю необходимо построить область построения маршрута вокруг зелёной точки</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/в процессе область построения для зелёной точки.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Далее пользователю необходимо нажать на кнопку <b>Построить маршрут</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/в процессе построить маршрут.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="text-h4 mt-15 mb-5 text-left">Статус "в завершение"</div>
+                            <div class="my-5">Опишем шаги у маршрута <b>в процессе</b>. Необходимо нажать на кнопку <b>ДА</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/завершение кнопка да.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Появится форма где необходимо указать дату достижения <b>зелёной точки</b>. После выбора даты необходимо пользователю нажать на кнопку <b>ДОСТИГНУТ</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/завершение выбрать дату.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="text-h4 mt-15 mb-5 text-left">Статус "завершён"</div>
+
+                            <div class="my-5">Когда маршрут имеет статус "завершён", то пользовать никак не может взаимодействовать с маршрутом далее</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/завершён.jpg"
+                                    >
+                            </v-img>
+
+                            <div class="text-h4 mt-15 mb-5 text-left">История маршрута</div>
+                            <div class="my-5">Для того, чтобы узнать при какой ледовой обстановке был построен маршрут, то необходимо нажать на кнопку <b>История маршрута</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/маршрут история маршрута.jpg"
+                                    >
+                            </v-img>
+
+
+                        </v-card-text>
+                    </v-card>
+                </v-window-item>
+
+                <v-window-item  value="option-6">
+                    <v-card flat >
+                        <v-card-text>
+                            <div class="text-h4 mb-5 text-left">История маршрута</div>
+                            <div class="my-5">Перед пользователем будет представлена такая страница</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/история ледовойо обстановки.png"
+                                    >
+                            </v-img>
+
+                            <div class="text-h4 mb-5 text-left">Узнать ледовую обстановку часть маршрута</div>
+                            <div class="my-5">Для того, чтобы узнать ледовую обстановку при которой строилась часть маршрута, пользователю необходимо нажать на <b>блок маршрута</b> (выделено красным цветом на ниже представленном скриншоте)</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/история ледовой обстановки выбрать маршрут.png"
+                                    >
+                            </v-img>
+
+                            <div class="my-5">Пользователю будет показан лед, а также маршрут, который был построен при этой обстановке, выделен жёлтым</div>
+
+                            <v-img
+                                        :width="1000"
+                                        src="../assets/photo_for_manul/история ледовой обстановки показ льда.png"
+                                    >
+                            </v-img>
                         </v-card-text>
                     </v-card>
                 </v-window-item>
