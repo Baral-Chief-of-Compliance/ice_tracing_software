@@ -306,10 +306,10 @@
                                 </v-row>
                                                                 
                             </v-col >
-                            <span class="text-h6">Какого разрешение должна быть фотография:</span>
+                            <!-- <span class="text-h6">Какого разрешение должна быть фотография:</span>
                             <v-col>
                                 <span class="text-h5 text-center">1081 x 541</span>
-                            </v-col>
+                            </v-col> -->
                             <span class="text-h6">Прикрепить фотографию:</span>
                             <v-file-input class="mt-2" @change="onFileSelected" label="Карта мира со льдом"></v-file-input>
                         </v-card-text>
@@ -328,6 +328,7 @@
                     <yandex-map
                         :coords="[final_point_latitude, final_point_longitude]"
                         :zoom="4"
+                        :controls="['zoomControl', 'typeSelector']"
                     >
 
                         <ymap-marker 
@@ -633,6 +634,9 @@ export default{
         date_enter: "",
         stage: 0,
         dialog_loading: false,
+
+        dialog_load_from_file_ice_condition: false,
+        dialog_load_from_photo_ice_condition: false,
 
         min: 0,
         max: 20,

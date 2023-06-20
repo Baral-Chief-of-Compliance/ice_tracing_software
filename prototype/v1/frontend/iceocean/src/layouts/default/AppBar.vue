@@ -9,7 +9,9 @@
     contain
     ></v-img>
     <v-app-bar-title>
-      <div class="text-h4">ICEocean</div>
+      <v-btn :to="{ name: 'Home'}">
+        <div class="text-h4">ICEocean</div>
+      </v-btn>
       <!-- <v-icon icon="mdi-circle-slice-4" /> -->
     </v-app-bar-title>
     <div>
@@ -18,8 +20,14 @@
 
     <v-btn class="ml-2" variant="flat" color="red" @click="exitFromAcc">выйти</v-btn>
     <div class="ml-5 mr-15">
-      <v-icon  class="mr-3" icon="mdi-file-document" />
-      <v-icon  icon="mdi-message-alert" />
+      <v-btn :to="{ name: 'Manual'}">
+        <v-icon  class="mr-3" icon="mdi-file-document" />
+      </v-btn>
+      
+      <v-btn :to="{ name: 'Report'}">
+        <v-icon  icon="mdi-message-alert" />
+      </v-btn>
+
     </div>
   </v-app-bar>
 </template>

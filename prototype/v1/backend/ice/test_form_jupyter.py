@@ -147,6 +147,7 @@ def create_ice(map_):
 
     island_world_grad = add_color2(prep_world(world)).astype(np.uint8)
     # Image.fromarray(island_world_grad,'RGB').show()
+    # Image.fromarray(island_world_grad,'RGB').save("C://Users//Sparlex//Desktop//test_for_iceocean_2.png")
 
     return map_
 

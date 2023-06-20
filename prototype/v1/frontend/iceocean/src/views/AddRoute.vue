@@ -165,10 +165,10 @@
                                 </v-row>
                                                                 
                             </v-col >
-                            <span class="text-h6">Какого разрешение должна быть фотография:</span>
+                            <!-- <span class="text-h6">Какого разрешение должна быть фотография:</span>
                             <v-col>
                                 <span class="text-h5 text-center">1081 x 541</span>
-                            </v-col>
+                            </v-col> -->
                             <span class="text-h6">Прикрепить фотографию:</span>
                             <v-file-input class="mt-2" @change="onFileSelected" label="Карта мира со льдом"></v-file-input>
                         </v-card-text>
@@ -189,7 +189,7 @@
                         :coords="[71.10679806433585, 126.47064037736162]"
                         :zoom="3"
                         :controls="['zoomControl', 'typeSelector']"
-                        @click="onClick"
+                        @click="onClick, get_coords_form_input"
                     >
 
                         <ymap-marker v-for="(polygon, index) in fast_ice" :key="index+100000"
@@ -263,22 +263,22 @@
                     </div>
                     
 
-                    <v-text-field v-model="start_longitude" color="blue" label="Долгота" variant="underlined"></v-text-field>
+                    <v-text-field :rules="longitude_rules" v-model="start_longitude" color="blue" label="Долгота" variant="underlined"></v-text-field>
 
-                    <v-text-field v-model="start_latitude" color="blue" label="Широта" variant="underlined"></v-text-field>
+                    <v-text-field :rules="latitude_rules" v-model="start_latitude" color="blue" label="Широта" variant="underlined"></v-text-field>
 
-                    <!-- <v-btn @click="get_coords_form_input()" color="blue" class="mt-2">Применить координаты</v-btn> -->
+                    <v-btn @click="get_coords_start_form_input(this.start_latitude, this.start_longitude)" color="blue" class="mt-2">Применить координаты</v-btn>
 
                     <div class="d-flex justify-center pt-7">
                         <v-icon color="red" icon="mdi-map-marker" class="mr-2 mt-1"></v-icon>
                         <span class="text-h6">Пункт назначения:</span>
                     </div>
 
-                    <v-text-field v-model="end_longitude" color="red" label="Долгота" variant="underlined"></v-text-field>
+                    <v-text-field :rules="longitude_rules" v-model="end_longitude" color="red" label="Долгота" variant="underlined"></v-text-field>
          
-                    <v-text-field v-model="end_latitude" color="red" label="Широта" variant="underlined"></v-text-field>
+                    <v-text-field :rules="latitude_rules" v-model="end_latitude" color="red" label="Широта" variant="underlined"></v-text-field>
 
-                    <!-- <v-btn color="red" class="mt-2">Применить координаты</v-btn> -->
+                    <v-btn @click="get_coords_end_form_input(this.end_latitude, this.end_longitude)" color="red" class="mt-2">Применить координаты</v-btn>
 
                     
 
@@ -314,6 +314,7 @@
                     <yandex-map
                         :coords="start_coords"
                         :zoom="4"
+                        :controls="['zoomControl', 'typeSelector']"
                     >
 
                         <!-- <ymap-marker 
@@ -545,7 +546,7 @@
                 width="auto"
             >
                 <template v-slot:activator="{ props }">
-                    <v-btn block class="mx-8 pa-5 mt-8 text-h6" 
+                    <v-btn block class="mx-8 pa-5 mt-8 text-h6" v-if="date_start != ''"
                         color="purple-darken-4" 
                         v-bind="props">
                         Построить маршрут
@@ -578,7 +579,16 @@
             </v-btn>
             <v-spacer></v-spacer>
 
-            <v-btn @click="next" color="purple-darken-4"  v-if="stage != 2">
+            <v-btn @click="next" color="purple-darken-4"  v-if="
+                                                                stage != 2 
+                                                                && ship_name 
+                                                                != '' 
+                                                                && iceclass != ''
+                                                                && ((0 <= start_longitude && start_longitude <= 180) || (-179.999999 <= start_longitude && start_longitude <= -0.999999))
+                                                                && ((0 <= start_latitude && start_latitude <= 90) || (-89.999999 <= start_latitude && start_latitude <= -0.0000001))
+                                                                && ((0 <= end_longitude && end_longitude <= 180) || (-179.999999 <= end_longitude && end_longitude <= -0.999999))
+                                                                && ((0 <= end_latitude && end_latitude <= 90) || (-89.999999 <= end_latitude && end_latitude <= -0.0000001))
+                                                                && (start_longitude != '' && start_latitude != '' && end_longitude != '' && end_latitude != '')">
                 Следующий шаг
             </v-btn>
         </v-row>
@@ -611,6 +621,33 @@ import axios from 'axios';
 
 export default{
     data: () => ({
+
+        longitude_rules:[
+            value => {
+                if (value !="") return true
+
+                return "неправильно введена долгота"
+            },
+            value => {
+                if ((0 <= value && value <= 180) || (-179.999999 <= value && value <= -0.0000001)) return true
+                return "неправильно введена долгота"
+            }
+        ],
+
+        latitude_rules:[
+            value => {
+                if (value !="") return true
+
+                return "неправильно введена широта"
+            },
+            
+            value => {
+                if ((0 <= value && value <= 90) || (-89.999999 <= value && value <= -0.0000001)) return true
+                return "неправильно введена широта"
+            }
+        ],
+
+        status_next_stage: true,
         stage: 0,
 
         iceclass: "",
@@ -695,9 +732,30 @@ export default{
 
 
     methods: {
-        get_coords_form_input(){
-            this.start_latitude = this.start_latitude
-            this.start_longitude = this.start_longitude
+        get_coords_start_form_input(latitude, longitude){
+            axios.post('http://127.0.0.1:5000/iceocean/api/v1.0/get_coords_for_start_and_end',{
+                latitude: latitude,
+                longitude: longitude
+            }, {
+                    headers: {
+                        Authorization: `Bearer: ${localStorage.jwt}`  
+                    } 
+            }).then(response => (
+                this.start_coords = [response.data.latitude, response.data.longitude]
+            ))
+        },
+
+        get_coords_end_form_input(latitude, longitude){
+            axios.post('http://127.0.0.1:5000/iceocean/api/v1.0/get_coords_for_start_and_end',{
+                latitude: latitude,
+                longitude: longitude
+            }, {
+                    headers: {
+                        Authorization: `Bearer: ${localStorage.jwt}`  
+                    } 
+            }).then(response => (
+                this.end_coords = [response.data.latitude, response.data.longitude]
+            ))
         },
 
         get_fast_ice(){

@@ -17,7 +17,7 @@
         <v-btn class="mb-3 pa-5" color="purple-darken-4" block :to="{ name: 'Routes'}"  >Маршруты</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'GenerateIceConditions'}">Ледовая обстановка</v-btn>
         <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'Manual'}">Руководоство</v-btn>
-        <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block>Сообщить об ошибке</v-btn>
+        <v-btn class="mb-3 mt-3 pa-5" color="purple-darken-4" block :to="{ name: 'Report'}">Сообщить об ошибке</v-btn>
       </v-card-text>
     </v-card>
   </v-container>

@@ -289,4 +289,3 @@ def get_inf_about_ice_conditions_from_itir(id_per, id_itir, id_rt):
              "ice_field": ice_field,
              "routes": json_routes
          })
-

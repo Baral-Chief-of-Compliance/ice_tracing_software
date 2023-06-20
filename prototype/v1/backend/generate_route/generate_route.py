@@ -237,5 +237,19 @@ def add_route(id_per):
         return jsonify("path is generate")
 
 
+@generate_route.route('/get_coords_for_start_and_end', methods=['POST'])
+@token_required
+def get_coords_for_start_and_end(id_per):
+    latitude = request.json["latitude"]
+    longitude = request.json["longitude"]
+    print(latitude)
+    print(longitude)
+
+    return jsonify({
+        "latitude": float(latitude),
+        "longitude": float(longitude)
+    })
+
+
 
 

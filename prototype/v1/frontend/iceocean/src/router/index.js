@@ -10,6 +10,7 @@ import { isAuthorizedRouter } from '@/store/TokenStore'
 import Mistake from '@/views/Mistake.vue'
 import HistoryOfRoute from '@/views/HistoryOfRoute.vue'
 import Manual from '@/views/Manual.vue'
+import Report from '@/views/ReportBug.vue'
 
 
 const routes = [
@@ -86,6 +87,11 @@ const routes = [
         path: 'manual',
         name: 'Manual',
         component: Manual
+      },
+      {
+        path: 'report',
+        name: 'Report',
+        component: Report
       }
     ]
   }
